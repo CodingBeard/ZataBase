@@ -4039,7 +4039,13 @@ $as_echo "@%:@define HAVE_ZATABASE 1" >>confdefs.h
 	zatabase/db/exception.zep.c
 	zatabase/exception.zep.c
 	zatabase/storage/adapter/file.zep.c
-	zatabase/storage/exception.zep.c "
+	zatabase/storage/exception.zep.c
+	zatabase/table.zep.c
+	zatabase/table/column.zep.c
+	zatabase/table/exception.zep.c
+	zatabase/traverser.zep.c
+	zatabase/traverser/exception.zep.c
+	zatabase/traverser/row.zep.c "
 	
   ext_builddir=.
   ext_srcdir=$abs_srcdir

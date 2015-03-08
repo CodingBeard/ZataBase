@@ -48,6 +48,18 @@ zatabase/storage/adapter/file.lo: /media/Data/Documents/github/ZataBase/zatabase
 	$(LIBTOOL) --mode=compile $(CC)  -I. -I/media/Data/Documents/github/ZataBase/zatabase/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /media/Data/Documents/github/ZataBase/zatabase/ext/zatabase/storage/adapter/file.zep.c -o zatabase/storage/adapter/file.lo 
 zatabase/storage/exception.lo: /media/Data/Documents/github/ZataBase/zatabase/ext/zatabase/storage/exception.zep.c
 	$(LIBTOOL) --mode=compile $(CC)  -I. -I/media/Data/Documents/github/ZataBase/zatabase/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /media/Data/Documents/github/ZataBase/zatabase/ext/zatabase/storage/exception.zep.c -o zatabase/storage/exception.lo 
+zatabase/table.lo: /media/Data/Documents/github/ZataBase/zatabase/ext/zatabase/table.zep.c
+	$(LIBTOOL) --mode=compile $(CC)  -I. -I/media/Data/Documents/github/ZataBase/zatabase/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /media/Data/Documents/github/ZataBase/zatabase/ext/zatabase/table.zep.c -o zatabase/table.lo 
+zatabase/table/column.lo: /media/Data/Documents/github/ZataBase/zatabase/ext/zatabase/table/column.zep.c
+	$(LIBTOOL) --mode=compile $(CC)  -I. -I/media/Data/Documents/github/ZataBase/zatabase/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /media/Data/Documents/github/ZataBase/zatabase/ext/zatabase/table/column.zep.c -o zatabase/table/column.lo 
+zatabase/table/exception.lo: /media/Data/Documents/github/ZataBase/zatabase/ext/zatabase/table/exception.zep.c
+	$(LIBTOOL) --mode=compile $(CC)  -I. -I/media/Data/Documents/github/ZataBase/zatabase/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /media/Data/Documents/github/ZataBase/zatabase/ext/zatabase/table/exception.zep.c -o zatabase/table/exception.lo 
+zatabase/traverser.lo: /media/Data/Documents/github/ZataBase/zatabase/ext/zatabase/traverser.zep.c
+	$(LIBTOOL) --mode=compile $(CC)  -I. -I/media/Data/Documents/github/ZataBase/zatabase/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /media/Data/Documents/github/ZataBase/zatabase/ext/zatabase/traverser.zep.c -o zatabase/traverser.lo 
+zatabase/traverser/exception.lo: /media/Data/Documents/github/ZataBase/zatabase/ext/zatabase/traverser/exception.zep.c
+	$(LIBTOOL) --mode=compile $(CC)  -I. -I/media/Data/Documents/github/ZataBase/zatabase/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /media/Data/Documents/github/ZataBase/zatabase/ext/zatabase/traverser/exception.zep.c -o zatabase/traverser/exception.lo 
+zatabase/traverser/row.lo: /media/Data/Documents/github/ZataBase/zatabase/ext/zatabase/traverser/row.zep.c
+	$(LIBTOOL) --mode=compile $(CC)  -I. -I/media/Data/Documents/github/ZataBase/zatabase/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /media/Data/Documents/github/ZataBase/zatabase/ext/zatabase/traverser/row.zep.c -o zatabase/traverser/row.lo 
 $(phplibdir)/zatabase.la: ./zatabase.la
 	$(LIBTOOL) --mode=install cp ./zatabase.la $(phplibdir)
 

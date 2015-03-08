@@ -13,7 +13,13 @@ if test "$PHP_ZATABASE" = "yes"; then
 	zatabase/db/exception.zep.c
 	zatabase/exception.zep.c
 	zatabase/storage/adapter/file.zep.c
-	zatabase/storage/exception.zep.c "
+	zatabase/storage/exception.zep.c
+	zatabase/table.zep.c
+	zatabase/table/column.zep.c
+	zatabase/table/exception.zep.c
+	zatabase/traverser.zep.c
+	zatabase/traverser/exception.zep.c
+	zatabase/traverser/row.zep.c "
 	PHP_NEW_EXTENSION(zatabase, $zatabase_sources, $ext_shared,, )
 	PHP_SUBST(ZATABASE_SHARED_LIBADD)
 

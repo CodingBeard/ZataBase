@@ -201,6 +201,21 @@ class File {
     }
 
     /**
+    * Get a file handle
+    *
+    * @param string path
+    * @return mixed
+    */
+    public function getHandle(string! path)
+    {
+        if !this->isFile(path) {
+            throw new Exception("Attempting to read a non-existent file");
+        }
+
+        return fopen(this->absolutePath(path), "r");
+    }
+
+    /**
     * Remove a file
     *
     * @param string path

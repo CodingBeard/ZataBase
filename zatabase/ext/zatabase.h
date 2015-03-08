@@ -9,5 +9,11 @@
 #include "zatabase/exception.zep.h"
 #include "zatabase/storage/adapter/file.zep.h"
 #include "zatabase/storage/exception.zep.h"
+#include "zatabase/table.zep.h"
+#include "zatabase/table/column.zep.h"
+#include "zatabase/table/exception.zep.h"
+#include "zatabase/traverser.zep.h"
+#include "zatabase/traverser/exception.zep.h"
+#include "zatabase/traverser/row.zep.h"
 
 #endif
