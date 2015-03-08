@@ -26,7 +26,11 @@
 
 
 
+zend_class_entry *zatabase_exception_ce;
 zend_class_entry *zatabase_db_ce;
+zend_class_entry *zatabase_db_exception_ce;
+zend_class_entry *zatabase_storage_adapter_file_ce;
+zend_class_entry *zatabase_storage_exception_ce;
 
 ZEND_DECLARE_MODULE_GLOBALS(zatabase)
 
@@ -48,7 +52,11 @@ static PHP_MINIT_FUNCTION(zatabase)
 	setlocale(LC_ALL, "C");
 #endif
 
-	ZEPHIR_INIT(ZataBase_db);
+	ZEPHIR_INIT(ZataBase_Exception);
+	ZEPHIR_INIT(ZataBase_Db);
+	ZEPHIR_INIT(ZataBase_Db_Exception);
+	ZEPHIR_INIT(ZataBase_Storage_Adapter_File);
+	ZEPHIR_INIT(ZataBase_Storage_Exception);
 
 #if PHP_VERSION_ID < 50500
 	setlocale(LC_ALL, old_lc_all);

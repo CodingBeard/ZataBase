@@ -5,5 +5,9 @@
 #define ZEPHIR_CLASS_ENTRIES_H
 
 #include "zatabase/db.zep.h"
+#include "zatabase/db/exception.zep.h"
+#include "zatabase/exception.zep.h"
+#include "zatabase/storage/adapter/file.zep.h"
+#include "zatabase/storage/exception.zep.h"
 
 #endif

@@ -12,11 +12,10 @@
 #include <Zend/zend_interfaces.h>
 
 #include "kernel/main.h"
-#include "kernel/memory.h"
-#include "kernel/fcall.h"
-#include "kernel/operators.h"
-#include "ext/spl/spl_exceptions.h"
+#include "kernel/object.h"
 #include "kernel/exception.h"
+#include "ext/spl/spl_exceptions.h"
+#include "kernel/memory.h"
 
 
 /*
@@ -28,48 +27,57 @@
  * @copyright (c) 2015, Tim Marshall
  * @license New BSD License
  */
-ZEPHIR_INIT_CLASS(ZataBase_db) {
+/**
+* ZataBase\db
+* $db = new ZataBase\db([
+* 'database' => '/path/to/folder/',
+* 'user' => 'User',
+* 'pass' => 'Pass',
+* ]);
+*/
+ZEPHIR_INIT_CLASS(ZataBase_Db) {
 
-	ZEPHIR_REGISTER_CLASS(ZataBase, db, zatabase, db, zatabase_db_method_entry, 0);
+	ZEPHIR_REGISTER_CLASS(ZataBase, Db, zatabase, db, zatabase_db_method_entry, 0);
+
+	/**
+	 * Storage adapter
+	 * @var storage Storage\StorageInterface
+	 */
+	zend_declare_property_null(zatabase_db_ce, SL("storage"), ZEND_ACC_PROTECTED TSRMLS_CC);
+
+	/**
+	 * Location of the auth file
+	 * @var authFile string
+	 */
+	zend_declare_property_string(zatabase_db_ce, SL("authFile"), ".auth", ZEND_ACC_PROTECTED TSRMLS_CC);
 
 	return SUCCESS;
 
 }
 
-PHP_METHOD(ZataBase_db, __construct) {
+PHP_METHOD(ZataBase_Db, __construct) {
 
-	int ZEPHIR_LAST_CALL_STATUS;
-	zephir_nts_static zephir_fcall_cache_entry *_1 = NULL, *_2 = NULL, *_4 = NULL;
-	zval *directory_param = NULL, *_0 = NULL, _3;
-	zval *directory = NULL;
+	zval *parameters = NULL;
+	zval *adapter, *parameters_param = NULL;
 
-	ZEPHIR_MM_GROW();
-	zephir_fetch_params(1, 1, 0, &directory_param);
+	zephir_fetch_params(0, 2, 0, &adapter, &parameters_param);
 
-	if (unlikely(Z_TYPE_P(directory_param) != IS_STRING && Z_TYPE_P(directory_param) != IS_NULL)) {
-		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'directory' must be a string") TSRMLS_CC);
-		RETURN_MM_NULL();
+	parameters = parameters_param;
+
+
+
+	if (!(zephir_is_instance_of(adapter, SL("ZataBase\\Storage\\StorageInterface") TSRMLS_CC))) {
+		ZEPHIR_THROW_EXCEPTION_DEBUG_STRW(spl_ce_InvalidArgumentException, "Parameter 'adapter' must be an instance of 'ZataBase\\Storage\\StorageInterface'", "", 0);
+		return;
 	}
+	zephir_update_property_this(this_ptr, SL("storage"), adapter TSRMLS_CC);
 
-	if (likely(Z_TYPE_P(directory_param) == IS_STRING)) {
-		zephir_get_strval(directory, directory_param);
-	} else {
-		ZEPHIR_INIT_VAR(directory);
-		ZVAL_EMPTY_STRING(directory);
-	}
+}
+
+PHP_METHOD(ZataBase_Db, getStorage) {
 
 
-	ZEPHIR_CALL_FUNCTION(&_0, "is_dir", &_1, directory);
-	zephir_check_call_status();
-	if (!(zephir_is_true(_0))) {
-		ZEPHIR_CALL_FUNCTION(NULL, "mkdir", &_2, directory);
-		zephir_check_call_status();
-		ZEPHIR_SINIT_VAR(_3);
-		ZVAL_LONG(&_3, 770);
-		ZEPHIR_CALL_FUNCTION(NULL, "chmod", &_4, directory, &_3);
-		zephir_check_call_status();
-	}
-	ZEPHIR_MM_RESTORE();
+	RETURN_MEMBER(this_ptr, "storage");
 
 }
 

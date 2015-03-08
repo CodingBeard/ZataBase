@@ -10,14 +10,36 @@
 
 namespace ZataBase;
 
-class db {
+/**
+* ZataBase\db
+* $db = new ZataBase\db(new Zatabase\Storage\File(__DIR__ . '/database'), []);
+*/
+class Db {
 
-    public function __construct(const string! directory)
+    /**
+    * Storage adapter
+    * @var storage Storage\StorageInterface
+    */
+    protected storage;
+
+    /**
+    * Location of the auth file
+    * @var authFile string
+    */
+    protected authFile = ".auth";
+
+    /**
+    * Constructor
+    * @param array parameters
+    */
+    public function __construct(adapter, const array! parameters)
     {
-        if !is_dir(directory) {
-            mkdir(directory);
-            chmod(directory, 770);
-        }
+        let this->storage = adapter;
+    }
+
+    public function getStorage() -> <Storage\StorageInterface>
+    {
+        return this->storage;
     }
 
 }

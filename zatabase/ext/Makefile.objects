@@ -40,6 +40,14 @@ kernel/exit.lo: /media/Data/Documents/github/ZataBase/zatabase/ext/kernel/exit.c
 	$(LIBTOOL) --mode=compile $(CC)  -I. -I/media/Data/Documents/github/ZataBase/zatabase/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /media/Data/Documents/github/ZataBase/zatabase/ext/kernel/exit.c -o kernel/exit.lo 
 zatabase/db.lo: /media/Data/Documents/github/ZataBase/zatabase/ext/zatabase/db.zep.c
 	$(LIBTOOL) --mode=compile $(CC)  -I. -I/media/Data/Documents/github/ZataBase/zatabase/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /media/Data/Documents/github/ZataBase/zatabase/ext/zatabase/db.zep.c -o zatabase/db.lo 
+zatabase/db/exception.lo: /media/Data/Documents/github/ZataBase/zatabase/ext/zatabase/db/exception.zep.c
+	$(LIBTOOL) --mode=compile $(CC)  -I. -I/media/Data/Documents/github/ZataBase/zatabase/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /media/Data/Documents/github/ZataBase/zatabase/ext/zatabase/db/exception.zep.c -o zatabase/db/exception.lo 
+zatabase/exception.lo: /media/Data/Documents/github/ZataBase/zatabase/ext/zatabase/exception.zep.c
+	$(LIBTOOL) --mode=compile $(CC)  -I. -I/media/Data/Documents/github/ZataBase/zatabase/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /media/Data/Documents/github/ZataBase/zatabase/ext/zatabase/exception.zep.c -o zatabase/exception.lo 
+zatabase/storage/adapter/file.lo: /media/Data/Documents/github/ZataBase/zatabase/ext/zatabase/storage/adapter/file.zep.c
+	$(LIBTOOL) --mode=compile $(CC)  -I. -I/media/Data/Documents/github/ZataBase/zatabase/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /media/Data/Documents/github/ZataBase/zatabase/ext/zatabase/storage/adapter/file.zep.c -o zatabase/storage/adapter/file.lo 
+zatabase/storage/exception.lo: /media/Data/Documents/github/ZataBase/zatabase/ext/zatabase/storage/exception.zep.c
+	$(LIBTOOL) --mode=compile $(CC)  -I. -I/media/Data/Documents/github/ZataBase/zatabase/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /media/Data/Documents/github/ZataBase/zatabase/ext/zatabase/storage/exception.zep.c -o zatabase/storage/exception.lo 
 $(phplibdir)/zatabase.la: ./zatabase.la
 	$(LIBTOOL) --mode=install cp ./zatabase.la $(phplibdir)
 

@@ -9,7 +9,11 @@ if test "$PHP_ZATABASE" = "yes"; then
 	fi
 
 	AC_DEFINE(HAVE_ZATABASE, 1, [Whether you have Zatabase])
-	zatabase_sources="zatabase.c kernel/main.c kernel/memory.c kernel/exception.c kernel/hash.c kernel/debug.c kernel/backtrace.c kernel/object.c kernel/array.c kernel/extended/array.c kernel/string.c kernel/fcall.c kernel/require.c kernel/file.c kernel/operators.c kernel/concat.c kernel/variables.c kernel/filter.c kernel/iterator.c kernel/exit.c zatabase/db.zep.c "
+	zatabase_sources="zatabase.c kernel/main.c kernel/memory.c kernel/exception.c kernel/hash.c kernel/debug.c kernel/backtrace.c kernel/object.c kernel/array.c kernel/extended/array.c kernel/string.c kernel/fcall.c kernel/require.c kernel/file.c kernel/operators.c kernel/concat.c kernel/variables.c kernel/filter.c kernel/iterator.c kernel/exit.c zatabase/db.zep.c
+	zatabase/db/exception.zep.c
+	zatabase/exception.zep.c
+	zatabase/storage/adapter/file.zep.c
+	zatabase/storage/exception.zep.c "
 	PHP_NEW_EXTENSION(zatabase, $zatabase_sources, $ext_shared,, )
 	PHP_SUBST(ZATABASE_SHARED_LIBADD)
 
