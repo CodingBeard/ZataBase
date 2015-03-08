@@ -1,0 +1,10 @@
+ARG_ENABLE("zatabase", "enable zatabase", "no");
+
+if (PHP_ZATABASE != "no") {
+  EXTENSION("zatabase", "zatabase.c", null, "-I"+configure_module_dirname);
+  ADD_SOURCES(configure_module_dirname + "/kernel", "main.c memory.c exception.c hash.c debug.c backtrace.c object.c array.c string.c fcall.c require.c file.c operators.c concat.c variables.c filter.c iterator.c exit.c", "zatabase");
+  ADD_SOURCES(configure_module_dirname + "/kernel/extended", "array.c", "zatabase");
+  
+  ADD_SOURCES(configure_module_dirname + "/zatabase", "db.zep.c", "zatabase");
+  ADD_FLAG("CFLAGS_ZATABASE", "/D ZEPHIR_RELEASE");
+}

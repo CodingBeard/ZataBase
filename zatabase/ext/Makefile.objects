@@ -1,0 +1,48 @@
+zatabase.lo: /media/Data/Documents/github/ZataBase/zatabase/ext/zatabase.c
+	$(LIBTOOL) --mode=compile $(CC)  -I. -I/media/Data/Documents/github/ZataBase/zatabase/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /media/Data/Documents/github/ZataBase/zatabase/ext/zatabase.c -o zatabase.lo 
+kernel/main.lo: /media/Data/Documents/github/ZataBase/zatabase/ext/kernel/main.c
+	$(LIBTOOL) --mode=compile $(CC)  -I. -I/media/Data/Documents/github/ZataBase/zatabase/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /media/Data/Documents/github/ZataBase/zatabase/ext/kernel/main.c -o kernel/main.lo 
+kernel/memory.lo: /media/Data/Documents/github/ZataBase/zatabase/ext/kernel/memory.c
+	$(LIBTOOL) --mode=compile $(CC)  -I. -I/media/Data/Documents/github/ZataBase/zatabase/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /media/Data/Documents/github/ZataBase/zatabase/ext/kernel/memory.c -o kernel/memory.lo 
+kernel/exception.lo: /media/Data/Documents/github/ZataBase/zatabase/ext/kernel/exception.c
+	$(LIBTOOL) --mode=compile $(CC)  -I. -I/media/Data/Documents/github/ZataBase/zatabase/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /media/Data/Documents/github/ZataBase/zatabase/ext/kernel/exception.c -o kernel/exception.lo 
+kernel/hash.lo: /media/Data/Documents/github/ZataBase/zatabase/ext/kernel/hash.c
+	$(LIBTOOL) --mode=compile $(CC)  -I. -I/media/Data/Documents/github/ZataBase/zatabase/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /media/Data/Documents/github/ZataBase/zatabase/ext/kernel/hash.c -o kernel/hash.lo 
+kernel/debug.lo: /media/Data/Documents/github/ZataBase/zatabase/ext/kernel/debug.c
+	$(LIBTOOL) --mode=compile $(CC)  -I. -I/media/Data/Documents/github/ZataBase/zatabase/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /media/Data/Documents/github/ZataBase/zatabase/ext/kernel/debug.c -o kernel/debug.lo 
+kernel/backtrace.lo: /media/Data/Documents/github/ZataBase/zatabase/ext/kernel/backtrace.c
+	$(LIBTOOL) --mode=compile $(CC)  -I. -I/media/Data/Documents/github/ZataBase/zatabase/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /media/Data/Documents/github/ZataBase/zatabase/ext/kernel/backtrace.c -o kernel/backtrace.lo 
+kernel/object.lo: /media/Data/Documents/github/ZataBase/zatabase/ext/kernel/object.c
+	$(LIBTOOL) --mode=compile $(CC)  -I. -I/media/Data/Documents/github/ZataBase/zatabase/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /media/Data/Documents/github/ZataBase/zatabase/ext/kernel/object.c -o kernel/object.lo 
+kernel/array.lo: /media/Data/Documents/github/ZataBase/zatabase/ext/kernel/array.c
+	$(LIBTOOL) --mode=compile $(CC)  -I. -I/media/Data/Documents/github/ZataBase/zatabase/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /media/Data/Documents/github/ZataBase/zatabase/ext/kernel/array.c -o kernel/array.lo 
+kernel/extended/array.lo: /media/Data/Documents/github/ZataBase/zatabase/ext/kernel/extended/array.c
+	$(LIBTOOL) --mode=compile $(CC)  -I. -I/media/Data/Documents/github/ZataBase/zatabase/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /media/Data/Documents/github/ZataBase/zatabase/ext/kernel/extended/array.c -o kernel/extended/array.lo 
+kernel/string.lo: /media/Data/Documents/github/ZataBase/zatabase/ext/kernel/string.c
+	$(LIBTOOL) --mode=compile $(CC)  -I. -I/media/Data/Documents/github/ZataBase/zatabase/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /media/Data/Documents/github/ZataBase/zatabase/ext/kernel/string.c -o kernel/string.lo 
+kernel/fcall.lo: /media/Data/Documents/github/ZataBase/zatabase/ext/kernel/fcall.c
+	$(LIBTOOL) --mode=compile $(CC)  -I. -I/media/Data/Documents/github/ZataBase/zatabase/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /media/Data/Documents/github/ZataBase/zatabase/ext/kernel/fcall.c -o kernel/fcall.lo 
+kernel/require.lo: /media/Data/Documents/github/ZataBase/zatabase/ext/kernel/require.c
+	$(LIBTOOL) --mode=compile $(CC)  -I. -I/media/Data/Documents/github/ZataBase/zatabase/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /media/Data/Documents/github/ZataBase/zatabase/ext/kernel/require.c -o kernel/require.lo 
+kernel/file.lo: /media/Data/Documents/github/ZataBase/zatabase/ext/kernel/file.c
+	$(LIBTOOL) --mode=compile $(CC)  -I. -I/media/Data/Documents/github/ZataBase/zatabase/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /media/Data/Documents/github/ZataBase/zatabase/ext/kernel/file.c -o kernel/file.lo 
+kernel/operators.lo: /media/Data/Documents/github/ZataBase/zatabase/ext/kernel/operators.c
+	$(LIBTOOL) --mode=compile $(CC)  -I. -I/media/Data/Documents/github/ZataBase/zatabase/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /media/Data/Documents/github/ZataBase/zatabase/ext/kernel/operators.c -o kernel/operators.lo 
+kernel/concat.lo: /media/Data/Documents/github/ZataBase/zatabase/ext/kernel/concat.c
+	$(LIBTOOL) --mode=compile $(CC)  -I. -I/media/Data/Documents/github/ZataBase/zatabase/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /media/Data/Documents/github/ZataBase/zatabase/ext/kernel/concat.c -o kernel/concat.lo 
+kernel/variables.lo: /media/Data/Documents/github/ZataBase/zatabase/ext/kernel/variables.c
+	$(LIBTOOL) --mode=compile $(CC)  -I. -I/media/Data/Documents/github/ZataBase/zatabase/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /media/Data/Documents/github/ZataBase/zatabase/ext/kernel/variables.c -o kernel/variables.lo 
+kernel/filter.lo: /media/Data/Documents/github/ZataBase/zatabase/ext/kernel/filter.c
+	$(LIBTOOL) --mode=compile $(CC)  -I. -I/media/Data/Documents/github/ZataBase/zatabase/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /media/Data/Documents/github/ZataBase/zatabase/ext/kernel/filter.c -o kernel/filter.lo 
+kernel/iterator.lo: /media/Data/Documents/github/ZataBase/zatabase/ext/kernel/iterator.c
+	$(LIBTOOL) --mode=compile $(CC)  -I. -I/media/Data/Documents/github/ZataBase/zatabase/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /media/Data/Documents/github/ZataBase/zatabase/ext/kernel/iterator.c -o kernel/iterator.lo 
+kernel/exit.lo: /media/Data/Documents/github/ZataBase/zatabase/ext/kernel/exit.c
+	$(LIBTOOL) --mode=compile $(CC)  -I. -I/media/Data/Documents/github/ZataBase/zatabase/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /media/Data/Documents/github/ZataBase/zatabase/ext/kernel/exit.c -o kernel/exit.lo 
+zatabase/db.lo: /media/Data/Documents/github/ZataBase/zatabase/ext/zatabase/db.zep.c
+	$(LIBTOOL) --mode=compile $(CC)  -I. -I/media/Data/Documents/github/ZataBase/zatabase/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /media/Data/Documents/github/ZataBase/zatabase/ext/zatabase/db.zep.c -o zatabase/db.lo 
+$(phplibdir)/zatabase.la: ./zatabase.la
+	$(LIBTOOL) --mode=install cp ./zatabase.la $(phplibdir)
+
+./zatabase.la: $(shared_objects_zatabase) $(ZATABASE_SHARED_DEPENDENCIES)
+	$(LIBTOOL) --mode=link $(CC) $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS) $(LDFLAGS) -o $@ -export-dynamic -avoid-version -prefer-pic -module -rpath $(phplibdir) $(EXTRA_LDFLAGS) $(shared_objects_zatabase) $(ZATABASE_SHARED_LIBADD)
+
