@@ -1,7 +1,14 @@
 {
     "stubs": {
         "path": "ide\/%version%\/%namespace%\/",
-        "stubs-run-after-generate": true
+        "stubs-run-after-generate": true,
+        "hints": {
+            "ZataBase\\Di\\Injectable": [
+                "\\ZataBase\\Storage\\Adapter\\File $storage",
+                "\\ZataBase\\Schema $schema",
+                "\\ZataBase\\Traverser $traverser"
+            ]
+        }
     },
     "api": {
         "path": "doc\/%version%",

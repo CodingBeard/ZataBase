@@ -10,17 +10,11 @@
 
 namespace ZataBase;
 
-use Traverser\Exception;
+use ZataBase\Traverser\Exception;
+use ZataBase\Traverser\Row;
+use ZataBase\Di\Injectable;
 
-class Traverser {
-
-    /**
-    * Storage adapter
-    * @var Storage\StorageInterface
-    */
-    protected storage {
-        set, get
-    };
+class Traverser extends Injectable {
 
     /**
     * File handler
@@ -28,6 +22,14 @@ class Traverser {
     */
     protected handle {
         set, get
+    };
+
+    /**
+    * Table Name
+    * @var string
+    */
+    protected table {
+        get
     };
 
     /**
@@ -47,22 +49,14 @@ class Traverser {
     };
 
     /**
-    * Constructor
-    * @param Storage\Adapter\File adapter
-    */
-    public function __construct(<Storage\Adapter\File> adapter)
-    {
-        let this->storage = adapter;
-    }
-
-    /**
     * Set the table we will be traversing
     * @param Storage\Adapter\File adapter
     */
     public function setTable(const string! name)
     {
         var columns;
-        let this->handle = this->storage->getHandle(name);
+        let this->table = name;
+        let this->handle = this->{"storage"}->getHandle(name);
         let columns = fgets(this->handle);
         let this->dataStart = strlen(columns);
         let this->columnMap = json_decode(columns, true);
@@ -79,7 +73,7 @@ class Traverser {
             let count++;
             let json = json_decode(fgets(this->handle), true);
             if json[key] == value {
-                return new Traverser\Row(count, this->columnMap, json);
+                return new Row(count, this->table, this->columnMap, json);
             }
         }
         return false;

@@ -182,7 +182,7 @@ class File {
         /* Make sure we can write the file */
         this->addDir(dirname(path));
 
-        file_put_contents(this->absolutePath(path), content, LOCK_EX);
+        file_put_contents(this->absolutePath(path), content . PHP_EOL, LOCK_EX);
     }
 
     /**
@@ -245,7 +245,7 @@ class File {
             this->setFile(this->absolutePath(path), content);
         }
         else {
-            file_put_contents(this->absolutePath(path), PHP_EOL . content, FILE_APPEND | LOCK_EX);
+            file_put_contents(this->absolutePath(path), content . PHP_EOL, FILE_APPEND | LOCK_EX);
         }
     }
 

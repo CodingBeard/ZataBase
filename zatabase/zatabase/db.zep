@@ -10,27 +10,15 @@
 
 namespace ZataBase;
 
+use ZataBase\Di;
+use ZataBase\Di\Injectable;
+use ZataBase\Storage\Adapter\File;
+
 /**
 * ZataBase\db
-* $db = new ZataBase\db(new Zatabase\Storage\File(__DIR__ . '/database'), []);
+* $db = new ZataBase\db([__DIR__ . '/database']);
 */
-class Db {
-
-    /**
-    * Storage adapter
-    * @var Storage\StorageInterface
-    */
-    protected storage {
-        set, get
-    };
-
-    /**
-    * Traverser
-    * @var Traverser
-    */
-    protected traverser {
-        set, get
-    };
+class Db extends Injectable {
 
     /**
     * Location of the auth file
@@ -40,44 +28,19 @@ class Db {
 
     /**
     * Constructor
-    * @param Storage\File adapter
     * @param array parameters
     */
-    public function __construct(<Storage\Adapter\File> adapter, const array! parameters)
+    public function __construct(const array! parameters)
     {
-        let this->storage = adapter;
-        if !this->storage->isFile("tables") {
-            this->storage->setFile("tables", json_encode(["name", "columns", "increment", "relationships"]));
-        }
-        let this->traverser = new Traverser(this->storage);
-    }
+        var di;
+        let di = new Di();
+        di->set("storage", new File(parameters[0]), true);
+        di->set("schema", new Schema(), true);
+        di->set("traverser", new Traverser(), true);
+        this->setDI(di);
 
-    /**
-    * Create a table
-    */
-    public function createTable(<Table> table)
-    {
-        if !this->getTable(table->name) {
-            this->storage->appendLine("tables", table);
-        }
-        else {
-            throw new Exception("Table: '" . table->name . "' already exists.");
-        }
-    }
-
-    /**
-    * Instance a table from the tables' file
-    */
-    public function getTable(const string! name)
-    {
-        var row;
-        this->traverser->setTable("tables");
-        let row = this->traverser->findRow("name", name);
-        if row {
-            return new table(row->name, row->columns, row->increment, row->relationships);
-        }
-        else {
-            return false;
+        if !this->{"storage"}->isFile("tables") {
+            this->{"storage"}->setFile("tables", json_encode(["name", "columns", "increment", "relationships"]));
         }
     }
 

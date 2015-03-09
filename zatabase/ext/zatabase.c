@@ -26,9 +26,19 @@
 
 
 
+zend_class_entry *zatabase_di_injectionawareinterface_ce;
+zend_class_entry *zatabase_di_serviceinterface_ce;
+zend_class_entry *zatabase_diinterface_ce;
+zend_class_entry *zatabase_di_injectable_ce;
 zend_class_entry *zatabase_exception_ce;
 zend_class_entry *zatabase_db_ce;
 zend_class_entry *zatabase_db_exception_ce;
+zend_class_entry *zatabase_di_ce;
+zend_class_entry *zatabase_di_exception_ce;
+zend_class_entry *zatabase_di_service_builder_ce;
+zend_class_entry *zatabase_di_service_ce;
+zend_class_entry *zatabase_schema_ce;
+zend_class_entry *zatabase_schema_exception_ce;
 zend_class_entry *zatabase_storage_adapter_file_ce;
 zend_class_entry *zatabase_storage_exception_ce;
 zend_class_entry *zatabase_table_ce;
@@ -58,9 +68,19 @@ static PHP_MINIT_FUNCTION(zatabase)
 	setlocale(LC_ALL, "C");
 #endif
 
+	ZEPHIR_INIT(ZataBase_Di_InjectionAwareInterface);
+	ZEPHIR_INIT(ZataBase_DiInterface);
+	ZEPHIR_INIT(ZataBase_Di_ServiceInterface);
+	ZEPHIR_INIT(ZataBase_Di_Injectable);
 	ZEPHIR_INIT(ZataBase_Exception);
 	ZEPHIR_INIT(ZataBase_Db);
 	ZEPHIR_INIT(ZataBase_Db_Exception);
+	ZEPHIR_INIT(ZataBase_Di);
+	ZEPHIR_INIT(ZataBase_Di_Exception);
+	ZEPHIR_INIT(ZataBase_Di_Service);
+	ZEPHIR_INIT(ZataBase_Di_Service_Builder);
+	ZEPHIR_INIT(ZataBase_Schema);
+	ZEPHIR_INIT(ZataBase_Schema_Exception);
 	ZEPHIR_INIT(ZataBase_Storage_Adapter_File);
 	ZEPHIR_INIT(ZataBase_Storage_Exception);
 	ZEPHIR_INIT(ZataBase_Table);

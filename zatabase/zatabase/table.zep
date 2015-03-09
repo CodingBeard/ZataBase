@@ -10,7 +10,10 @@
 
 namespace ZataBase;
 
-class Table extends Db {
+use ZataBase\Di\Injectable;
+use ZataBase\Table\Column;
+
+class Table extends Injectable {
 
     /**
     * Table's name
@@ -49,7 +52,7 @@ class Table extends Db {
         let this->name = name;
         for column in columns {
             if is_array(column) {
-                let this->columns[] = new Table\Column(column["name"], column["type"], column["flags"]);
+                let this->columns[] = new Column(column["name"], column["type"], column["flags"]);
             }
             let this->columns[] = column;
         }

@@ -10,7 +10,9 @@
 
 namespace ZataBase\Table;
 
-class Column {
+use ZataBase\Di\Injectable;
+
+class Column extends Injectable {
 
     /**
     * Column's name
@@ -59,6 +61,11 @@ class Column {
     * @var int
     */
     const INCREMENT_FLAG = 1;
+
+    /**
+    * @var int
+    */
+    const UNIQUE_FLAG = 2;
 
     /**
     * Constructor
