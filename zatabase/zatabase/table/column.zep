@@ -18,19 +18,25 @@ class Column extends Injectable {
     * Column's name
     * @var string
     */
-    public name;
+    public name {
+        set, get
+    };
 
     /**
     * Column's type
     * @var int
     */
-    public type;
+    public type {
+        set, get
+    };
 
     /**
     * Column's flags
     * @var array
     */
-    public flags;
+    public flags {
+        set, get
+    };
 
     /**
     * @var int

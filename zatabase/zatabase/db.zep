@@ -21,26 +21,22 @@ use ZataBase\Storage\Adapter\File;
 class Db extends Injectable {
 
     /**
-    * Location of the auth file
-    * @var string
-    */
-    protected authFile = ".auth";
-
-    /**
     * Constructor
-    * @param array parameters
     */
-    public function __construct(const array! parameters)
+    public function __construct(const array! config)
     {
-        var di;
+        var di, conf;
+        let conf = json_decode(json_encode(config));
         let di = new Di();
-        di->set("storage", new File(parameters[0]), true);
+        di->set("config", conf, true);
+        di->set("storage", new File(conf->databaseDir), true);
+        di->set("execute", new Execute(), true);
         di->set("schema", new Schema(), true);
         di->set("traverser", new Traverser(), true);
         this->setDI(di);
 
-        if !this->{"storage"}->isFile("tables") {
-            this->{"storage"}->setFile("tables", json_encode(["name", "columns", "increment", "relationships"]));
+        if !this->{"storage"}->isFile(conf->schema->definitionFile) {
+            this->{"storage"}->setFile(conf->schema->definitionFile, json_encode(["name", "columns", "increment", "relationships"]));
         }
     }
 

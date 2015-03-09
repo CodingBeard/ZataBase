@@ -20,6 +20,10 @@ if test "$PHP_ZATABASE" = "yes"; then
 	zatabase/di/serviceinterface.zep.c
 	zatabase/diinterface.zep.c
 	zatabase/exception.zep.c
+	zatabase/execute.zep.c
+	zatabase/execute/exception.zep.c
+	zatabase/execute/insert.zep.c
+	zatabase/execute/querytype.zep.c
 	zatabase/schema.zep.c
 	zatabase/schema/exception.zep.c
 	zatabase/storage/adapter/file.zep.c

@@ -11,7 +11,7 @@ SHLIB_DL_SUFFIX_NAME = so
 ZEND_EXT_TYPE = zend_extension
 RE2C = re2c
 AWK = gawk
-shared_objects_zatabase = zatabase.lo kernel/main.lo kernel/memory.lo kernel/exception.lo kernel/hash.lo kernel/debug.lo kernel/backtrace.lo kernel/object.lo kernel/array.lo kernel/extended/array.lo kernel/string.lo kernel/fcall.lo kernel/require.lo kernel/file.lo kernel/operators.lo kernel/concat.lo kernel/variables.lo kernel/filter.lo kernel/iterator.lo kernel/exit.lo zatabase/db.lo zatabase/db/exception.lo zatabase/di.lo zatabase/di/exception.lo zatabase/di/injectable.lo zatabase/di/injectionawareinterface.lo zatabase/di/service.lo zatabase/di/service/builder.lo zatabase/di/serviceinterface.lo zatabase/diinterface.lo zatabase/exception.lo zatabase/schema.lo zatabase/schema/exception.lo zatabase/storage/adapter/file.lo zatabase/storage/exception.lo zatabase/table.lo zatabase/table/column.lo zatabase/table/exception.lo zatabase/traverser.lo zatabase/traverser/exception.lo zatabase/traverser/row.lo
+shared_objects_zatabase = zatabase.lo kernel/main.lo kernel/memory.lo kernel/exception.lo kernel/hash.lo kernel/debug.lo kernel/backtrace.lo kernel/object.lo kernel/array.lo kernel/extended/array.lo kernel/string.lo kernel/fcall.lo kernel/require.lo kernel/file.lo kernel/operators.lo kernel/concat.lo kernel/variables.lo kernel/filter.lo kernel/iterator.lo kernel/exit.lo zatabase/db.lo zatabase/db/exception.lo zatabase/di.lo zatabase/di/exception.lo zatabase/di/injectable.lo zatabase/di/injectionawareinterface.lo zatabase/di/service.lo zatabase/di/service/builder.lo zatabase/di/serviceinterface.lo zatabase/diinterface.lo zatabase/exception.lo zatabase/execute.lo zatabase/execute/exception.lo zatabase/execute/insert.lo zatabase/execute/querytype.lo zatabase/schema.lo zatabase/schema/exception.lo zatabase/storage/adapter/file.lo zatabase/storage/exception.lo zatabase/table.lo zatabase/table/column.lo zatabase/table/exception.lo zatabase/traverser.lo zatabase/traverser/exception.lo zatabase/traverser/row.lo
 PHP_PECL_EXTENSION = zatabase
 ZATABASE_SHARED_LIBADD =
 PHP_MODULES = $(phplibdir)/zatabase.la
@@ -239,6 +239,14 @@ zatabase/diinterface.lo: /media/Data/Documents/github/ZataBase/zatabase/ext/zata
 	$(LIBTOOL) --mode=compile $(CC)  -I. -I/media/Data/Documents/github/ZataBase/zatabase/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /media/Data/Documents/github/ZataBase/zatabase/ext/zatabase/diinterface.zep.c -o zatabase/diinterface.lo 
 zatabase/exception.lo: /media/Data/Documents/github/ZataBase/zatabase/ext/zatabase/exception.zep.c
 	$(LIBTOOL) --mode=compile $(CC)  -I. -I/media/Data/Documents/github/ZataBase/zatabase/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /media/Data/Documents/github/ZataBase/zatabase/ext/zatabase/exception.zep.c -o zatabase/exception.lo 
+zatabase/execute.lo: /media/Data/Documents/github/ZataBase/zatabase/ext/zatabase/execute.zep.c
+	$(LIBTOOL) --mode=compile $(CC)  -I. -I/media/Data/Documents/github/ZataBase/zatabase/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /media/Data/Documents/github/ZataBase/zatabase/ext/zatabase/execute.zep.c -o zatabase/execute.lo 
+zatabase/execute/exception.lo: /media/Data/Documents/github/ZataBase/zatabase/ext/zatabase/execute/exception.zep.c
+	$(LIBTOOL) --mode=compile $(CC)  -I. -I/media/Data/Documents/github/ZataBase/zatabase/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /media/Data/Documents/github/ZataBase/zatabase/ext/zatabase/execute/exception.zep.c -o zatabase/execute/exception.lo 
+zatabase/execute/insert.lo: /media/Data/Documents/github/ZataBase/zatabase/ext/zatabase/execute/insert.zep.c
+	$(LIBTOOL) --mode=compile $(CC)  -I. -I/media/Data/Documents/github/ZataBase/zatabase/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /media/Data/Documents/github/ZataBase/zatabase/ext/zatabase/execute/insert.zep.c -o zatabase/execute/insert.lo 
+zatabase/execute/querytype.lo: /media/Data/Documents/github/ZataBase/zatabase/ext/zatabase/execute/querytype.zep.c
+	$(LIBTOOL) --mode=compile $(CC)  -I. -I/media/Data/Documents/github/ZataBase/zatabase/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /media/Data/Documents/github/ZataBase/zatabase/ext/zatabase/execute/querytype.zep.c -o zatabase/execute/querytype.lo 
 zatabase/schema.lo: /media/Data/Documents/github/ZataBase/zatabase/ext/zatabase/schema.zep.c
 	$(LIBTOOL) --mode=compile $(CC)  -I. -I/media/Data/Documents/github/ZataBase/zatabase/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /media/Data/Documents/github/ZataBase/zatabase/ext/zatabase/schema.zep.c -o zatabase/schema.lo 
 zatabase/schema/exception.lo: /media/Data/Documents/github/ZataBase/zatabase/ext/zatabase/schema/exception.zep.c

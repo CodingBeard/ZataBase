@@ -21,7 +21,7 @@ class Schema extends Injectable {
     public function createTable(<Table> table)
     {
         if !this->getTable(table->name) {
-            this->{"storage"}->appendLine("tables", table);
+            table->create();
         }
         else {
             throw new Exception("Table: '" . table->name . "' already exists.");
@@ -35,10 +35,10 @@ class Schema extends Injectable {
     public function getTable(const string! name)
     {
         var row;
-        this->{"traverser"}->setTable("tables");
+        this->{"traverser"}->setTable("schema");
         let row = this->{"traverser"}->findRow("name", name);
         if row {
-            return new table(row->name, row->columns, row->increment, row->relationships);
+            return new table(row->name, row->columns, row->increment, row->relationships, row->id);
         }
         else {
             return false;
@@ -51,11 +51,10 @@ class Schema extends Injectable {
     */
     public function deleteTable(const string! name)
     {
-        var row;
-        this->{"traverser"}->setTable("tables");
-        let row = this->{"traverser"}->findRow("name", name);
-        if row {
-            row->delete();
+        var table;
+        let table = this->getTable(name);
+        if table {
+            table->delete();
         }
         else {
             return false;

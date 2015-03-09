@@ -4,18 +4,12 @@ namespace ZataBase;
 
 class Db extends \ZataBase\Di\Injectable
 {
-    /**
-     * Location of the auth file
-     *
-     * @var string
-     */
-    protected $authFile = ".auth";
 
     /**
      * Constructor
      *
-     * @param array $parameters 
+     * @param array $config 
      */
-	public function __construct($parameters) {}
+	public function __construct($config) {}
 
 }
