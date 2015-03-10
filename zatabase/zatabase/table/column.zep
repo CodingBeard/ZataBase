@@ -49,49 +49,49 @@ class Column extends Injectable {
     /**
     * @var int
     */
-    const INT_TYPE = 0;
+    const INT_TYPE = 1;
 
     /**
     * @var int
     */
-    const STRING_TYPE = 1;
+    const STRING_TYPE = 2;
 
     /**
     * @var int
     */
-    const TEXT_TYPE = 2;
+    const TEXT_TYPE = 3;
 
     /**
     * @var int
     */
-    const DATE_TYPE = 3;
+    const DATE_TYPE = 4;
 
     /**
     * @var int
     */
-    const JSON_TYPE = 3;
+    const JSON_TYPE = 5;
 
     /**
     * @var int
     */
-    const PRIMARY_FLAG = 0;
+    const PRIMARY_FLAG = 1;
 
     /**
     * @var int
     */
-    const INCREMENT_FLAG = 1;
+    const INCREMENT_FLAG = 2;
 
     /**
     * @var int
     */
-    const UNIQUE_FLAG = 2;
+    const UNIQUE_FLAG = 3;
 
     /**
     * Constructor
     * @param int type
     * @param array flags
     */
-    public function __construct(const string! name, const int! type, const array! flags = [], const int! key = -1)
+    public function __construct(const string! name, const int type, const array! flags = [], const int! key = -1)
     {
         let this->name = name;
         let this->type = type;

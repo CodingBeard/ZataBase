@@ -19,7 +19,7 @@ class Table extends Injectable {
     * Table's id in the schema
     * @var string
     */
-    public id {
+    public offset {
         set, get
     };
 
@@ -70,19 +70,25 @@ class Table extends Injectable {
     * @param int increment
     * @param array relationships
     */
-    public function __construct(const string! name, const array! columns = [], const int! increment = 0, const array! relationships = [], const int id = 0)
+    public function __construct(const string! name, const array! columns = [], int increment = 0, const array! relationships = [], const int offset = 0)
     {
-        var column;
-        let this->id = id;
+        var columnArray, column, columnCount = 0;
+        let this->offset = offset;
         let this->name = name;
-        for column in columns {
-            if typeof column == "array" {
-                let this->columns[] = new Column(column["name"], column["type"], column["flags"]);
-                let this->columnMap[] = column["name"];
+        for columnArray in columns {
+            if typeof columnArray == "array" {
+                let column = new Column(columnArray["name"], columnArray["type"], columnArray["flags"], columnCount);
             }
             else {
-                let this->columns[] = column;
-                let this->columnMap[] = column->name;
+                columnArray->setKey(columnCount);
+                let column = columnArray;
+            }
+            let this->columns[column->name] = column;
+            let this->columnMap[] = column->name;
+            if increment == 0 {
+                if column->hasFlag(Column::INCREMENT_FLAG) {
+                    let increment = 1;
+                }
             }
         }
         let this->increment = increment;
@@ -90,26 +96,23 @@ class Table extends Injectable {
     }
 
     /**
+    * Save Table
+    * TODO: replace
+    */
+    public function save() -> void
+    {
+
+    }
+
+    /**
     * Delete table
     */
     public function delete() -> void
     {
-        this->{"schema"}->deleteTable(this);
-    }
+        this->{"execute"}->delete(this->{"config"}->definitionName)
+            ->where("name")->equals(this->name)->done();
 
-    /**
-    * Check if this table has a certain column
-    */
-    public function hasColumn(const string! columnName) -> int|bool
-    {
-        var column;
-        for column in this->columns {
-            if column->name == columnName {
-                column->setKey(array_search(columnName, this->columnMap));
-                return column;
-            }
-        }
-        return false;
+        this->{"storage"}->removeFile(this->{"config"}->tablesDir . this->name);
     }
 
     /**
@@ -118,16 +121,66 @@ class Table extends Injectable {
     public function getHandle()
     {
         var handle;
-        let handle = this->{"storage"}->getHandle(this->{"config"}->tablesDir . "/" . this->name);
+        let handle = this->{"storage"}->getHandle(this->{"config"}->tablesDir . this->name);
         return handle;
     }
 
     /**
-    * Delete row
+    * Check if this table has a certain column
+    * @param string columnName
     */
-    public function deleteRow(const int! rowId) -> void
+    public function hasColumn(const string! columnName) -> int|bool
     {
-        this->{"storage"}->removeLine(this->{"config"}->tablesDir . "/" . this->name, rowId);
+        if isset(this->columns[columnName]) {
+            return this->columns[columnName];
+        }
+        return false;
+    }
+
+    /**
+    * Return the position of a column
+    * @param string columnName
+    */
+    public function columnKey(const string! columnName) -> int|bool
+    {
+        return array_search(columnName, this->columnMap);
+    }
+
+    /**
+    * Insert a row
+    * @param int rowId
+    */
+    public function insertRow(const array! row) -> void
+    {
+        if count(row) != count(this->columnMap) {
+            throw new Exception("Row should contain the same number of values as columns in the table: " . implode(", ", this->columnMap));
+        }
+        this->{"storage"}->appendLine(this->{"config"}->tablesDir . "/" . this->name, json_encode(row));
+    }
+
+    /**
+    * Insert rows
+    * @param int rowId
+    */
+    public function insertRows(const array! rows) -> void
+    {
+        var row, appendedRows = "";
+        for row in rows {
+            if count(row) != count(this->columnMap) {
+                throw new Exception("Row should contain the same number of values as columns in the table: " . implode(", ", this->columnMap));
+            }
+            let appendedRows .= json_encode(row) . PHP_EOL;
+        }
+        this->{"storage"}->appendLine(this->{"config"}->tablesDir . "/" . this->name, substr(appendedRows, 0, -1));
+    }
+
+    /**
+    * Delete a row
+    * @param int offset
+    */
+    public function deleteRow(const int! offset) -> void
+    {
+        this->{"storage"}->removeLine(this->{"config"}->tablesDir . "/" . this->name, offset);
     }
 
     /**

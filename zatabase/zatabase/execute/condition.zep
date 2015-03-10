@@ -17,6 +17,7 @@ use Zatabase\Execute\Condition\MoreThan;
 use Zatabase\Execute\Condition\LessThan;
 use Zatabase\Execute\Condition\Between;
 use Zatabase\Execute\Condition\Like;
+use Zatabase\Execute\Results;
 
 class Condition extends QueryType {
 
@@ -59,7 +60,7 @@ class Condition extends QueryType {
         var column;
         let column = this->table->hasColumn(columnName);
         if typeof column != "object" {
-            throw new Exception("Cannot select column: " . columnName . "' It does not exist.");
+            throw new Exception("Cannot select column: '" . columnName . "' It does not exist.");
         }
 
         let this->currentColumn = column;
@@ -180,43 +181,51 @@ class Condition extends QueryType {
 
     /**
     * Finished creating the query, check table for rows matching conditions
+    * TODO: move to table class
     */
     public function getMatchedRows() -> array|bool
     {
-        var handle, row, condition, rows;
+        var handle, row, condition, results, pointer = 0;
         bool match = true;
-        let rows = [];
+
         let handle = this->table->getHandle();
+        let results = new results(this->table);
+
         if typeof this->conditions == "array" {
+
+            let row = fgets(handle);
+
             while !feof(handle) {
-                let row = fgets(handle);
-                if strlen(row) {
-                    let match = true;
-                    let row = json_decode(row);
-                    for condition in this->conditions {
-                        if !condition->matches(row) {
-                            let match = false;
-                        }
-                    }
-                    if match {
-                        let rows[] = row;
+
+                let match = true;
+
+                let row = json_decode(row);
+
+                for condition in this->conditions {
+                    if !condition->matches(row) {
+                        let match = false;
                     }
                 }
+
+                if match {
+                    let results->rows[] = pointer;
+                }
+
+                let pointer = ftell(handle);
+                let row = fgets(handle);
             }
         }
         else {
+            let row = fgets(handle);
+
             while !feof(handle) {
+                let results->rows[] = pointer;
+                let pointer = ftell(handle);
                 let row = fgets(handle);
-                if strlen(row) {
-                    let rows[] = json_decode(row);
-                }
             }
         }
-        if count(rows) {
-            return rows;
-        }
-        return false;
+        return results;
     }
 
-    public function done() -> bool|array {}
+    public function done() -> <\ZataBase\Execute\Results>|bool {}
 }

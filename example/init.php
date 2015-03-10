@@ -29,44 +29,44 @@ try {
     ]));
 
     /* Literal insert with values for all columns */
-    $db->execute->insert('Users')->values(['Josh', 'Doe', '1994-07-04']);
+    $db->insert('Users')->values(['Josh', 'Doe', '1994-07-04']);
 
     /* Inserting multiple rows */
-    $db->execute->insert('Users')->values([
+    $db->insert('Users')->values([
         ['John', 'doe', '1994-07-05'],
         ['Jane', 'doe', '1994-07-06'],
     ]);
 
     /* Relative insert, with values for specific columns */
-    $db->execute->insert('Users')->values(['firstName' => 'Jim', 'lastName' => 'Doe']);
+    $db->insert('Users')->columns(['firstName', 'lastName'])->values(['Jim', 'Doe']);
 
     /* Inserting multiple rows */
-    $db->execute->insert('Users')->values([
-        ['firstName' => 'James', 'lastName' => 'Doe'],
-        ['firstName' => 'Joan', 'DoB' => '1994-07-07'],
+    $db->insert('Users')->columns(['firstName', 'lastName'])->values([
+        ['James', 'Doe'],
+        ['Joan', 'Doe'],
     ]);
 
     /* Select row(s), done tells the query builder we've finished adding conditions and to return the result */
-    $rows = $db->execute->select('Users')->done();
+    $rows = $db->select('Users')->done();
 
     /* Select row(s), conditionally */
-    $row = $db->execute->select('Users')
+    $row = $db->select('Users')
         ->where('firstName')->equals('Josh')
         ->done();
 
     /* andWhere is just an alias for where, they can be used interchangeably */
-    $row = $db->execute->select('Users')
+    $row = $db->select('Users')
         ->where('firstName')->equals('Josh')
         ->andWhere('lastName')->equals('Doe')
         ->done();
 
     /* not() can be set after where/andWhere to 'Not' the following condition */
-    $not = $db->execute->select('Users')
+    $not = $db->select('Users')
         ->where('firstName')->not()->equals('James')
         ->done();
 
     /* Where the column is within an array of values */
-    $within = $db->execute->select('Users')
+    $within = $db->select('Users')
         ->where('firstName')->within(['Jim', 'Joan'])
         ->done();
 
@@ -74,7 +74,7 @@ try {
      * DATE_TYPE will be strtotime(), all else will be intval()
      * If a second parameter is set to true, it will be inclusive E.G. >=
      */
-    $moreThan = $db->execute->select('Users')
+    $moreThan = $db->select('Users')
         ->where('DoB')->moreThan('1994-07-01')
         ->done();
 
@@ -82,7 +82,7 @@ try {
      * DATE_TYPE will be strtotime(), all else will be intval()
      * If a second parameter is set to true, it will be inclusive E.G. <=
      */
-    $lessThan = $db->execute->select('Users')
+    $lessThan = $db->select('Users')
         ->where('DoB')->lessThan('1994-07-07', true)
         ->done();
 
@@ -90,22 +90,25 @@ try {
      * DATE_TYPE will be strtotime(), all else will be intval()
      * If a second parameter is set to true, it will be inclusive E.G. <=
      */
-    $between = $db->execute->select('Users')
+    $between = $db->select('Users')
         ->where('DoB')->between('1994-07-01', '1994-07-06')
         ->done();
 
     /* Similar to mysql's LIKE, % and _ are multiple and single character wildcards */
-    $like = $db->execute->select('Users')
+    $like = $db->select('Users')
         ->where('firstName')->like('j%n')
         ->done();
 
-    /* Delete row(s) */
-    $db->execute->delete('Users')->done();
+    /* Access results */
+    foreach ($rows as $row) {
+        print_r($row);
+    }
 
     /* Delete row(s), conditionally Any of the above selectable conditions can be used here */
-    $db->execute->delete('Users')->where('firstName')->equals('Jim')->done();
+    $db->delete('Users')->where('firstName')->equals('Jim')->done();
 
-    print_r($rows);
+    /* Delete row(s) */
+    $db->delete('Users')->done();
 
 } catch (\Exception $e) {
     echo $e->getMessage() . PHP_EOL;

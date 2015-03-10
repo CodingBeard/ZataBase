@@ -4059,6 +4059,7 @@ $as_echo "#define HAVE_ZATABASE 1" >>confdefs.h
 	zatabase/execute/exception.zep.c
 	zatabase/execute/insert.zep.c
 	zatabase/execute/querytype.zep.c
+	zatabase/execute/results.zep.c
 	zatabase/execute/select.zep.c
 	zatabase/helper/arraytoobject.zep.c
 	zatabase/schema.zep.c

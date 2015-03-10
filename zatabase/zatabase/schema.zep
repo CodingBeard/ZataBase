@@ -48,6 +48,7 @@ class Schema extends Injectable {
     {
         if !this->getTable(table->name) {
             this->{"execute"}->insert(this->{"config"}->definitionName)->values(table->toArray());
+            this->refreshDefinition();
         }
         else {
             throw new Exception("Table: '" . table->name . "' already exists.");
@@ -60,16 +61,14 @@ class Schema extends Injectable {
     */
     public function getTable(const string! name) -> <Table>|bool
     {
-        var row = [], count = 0;
+        var row = [];
         rewind(this->handle);
+        let row = json_decode(fgets(this->handle), true);
         while !feof(this->handle) {
-            let count++;
-            let row = json_decode(fgets(this->handle), true);
-            if typeof row == "array" {
-                if row[0] == name {
-                    return new table(row[0], row[1], row[2], row[3], count);
-                }
+            if row[0] == name {
+                return new table(row[0], row[1], row[2], row[3], ftell(this->handle));
             }
+            let row = json_decode(fgets(this->handle), true);
         }
         return false;
     }
@@ -83,8 +82,7 @@ class Schema extends Injectable {
         var table;
         let table = this->getTable(name);
         if table {
-            this->{"storage"}->removeLine(this->{"config"}->definitionFile, table->id);
-            this->{"storage"}->removeFile(this->{"config"}->tablesDir . table->name);
+            table->delete();
             this->refreshDefinition();
         }
     }

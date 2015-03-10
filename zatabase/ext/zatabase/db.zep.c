@@ -18,6 +18,8 @@
 #include "kernel/concat.h"
 #include "kernel/operators.h"
 #include "kernel/array.h"
+#include "ext/spl/spl_exceptions.h"
+#include "kernel/exception.h"
 
 
 /*
@@ -88,7 +90,7 @@ PHP_METHOD(ZataBase_Db, __construct) {
 		ZEPHIR_INIT_VAR(_11);
 		ZVAL_STRING(_11, "name", ZEPHIR_TEMP_PARAM_COPY);
 		ZEPHIR_INIT_VAR(_12);
-		ZVAL_LONG(_12, 1);
+		ZVAL_LONG(_12, 2);
 		ZEPHIR_CALL_METHOD(NULL, _10, "__construct", &_13, _11, _12);
 		zephir_check_temp_parameter(_11);
 		zephir_check_call_status();
@@ -98,7 +100,7 @@ PHP_METHOD(ZataBase_Db, __construct) {
 		ZEPHIR_INIT_NVAR(_11);
 		ZVAL_STRING(_11, "columns", ZEPHIR_TEMP_PARAM_COPY);
 		ZEPHIR_INIT_NVAR(_12);
-		ZVAL_LONG(_12, 3);
+		ZVAL_LONG(_12, 5);
 		ZEPHIR_CALL_METHOD(NULL, _10, "__construct", &_13, _11, _12);
 		zephir_check_temp_parameter(_11);
 		zephir_check_call_status();
@@ -108,7 +110,7 @@ PHP_METHOD(ZataBase_Db, __construct) {
 		ZEPHIR_INIT_NVAR(_11);
 		ZVAL_STRING(_11, "increment", ZEPHIR_TEMP_PARAM_COPY);
 		ZEPHIR_INIT_NVAR(_12);
-		ZVAL_LONG(_12, 0);
+		ZVAL_LONG(_12, 1);
 		ZEPHIR_CALL_METHOD(NULL, _10, "__construct", &_13, _11, _12);
 		zephir_check_temp_parameter(_11);
 		zephir_check_call_status();
@@ -118,7 +120,7 @@ PHP_METHOD(ZataBase_Db, __construct) {
 		ZEPHIR_INIT_NVAR(_11);
 		ZVAL_STRING(_11, "relationships", ZEPHIR_TEMP_PARAM_COPY);
 		ZEPHIR_INIT_NVAR(_12);
-		ZVAL_LONG(_12, 3);
+		ZVAL_LONG(_12, 5);
 		ZEPHIR_CALL_METHOD(NULL, _10, "__construct", &_13, _11, _12);
 		zephir_check_temp_parameter(_11);
 		zephir_check_call_status();
@@ -175,6 +177,120 @@ PHP_METHOD(ZataBase_Db, __construct) {
 	ZEPHIR_CALL_METHOD(NULL, this_ptr, "setdi", NULL, di);
 	zephir_check_call_status();
 	ZEPHIR_MM_RESTORE();
+
+}
+
+/**
+ * Alias of Execute\Insert
+ *
+ * @param string tableName
+ */
+PHP_METHOD(ZataBase_Db, insert) {
+
+	int ZEPHIR_LAST_CALL_STATUS;
+	zval *tableName_param = NULL, *_1;
+	zval *tableName = NULL, *_0 = NULL;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &tableName_param);
+
+	if (unlikely(Z_TYPE_P(tableName_param) != IS_STRING && Z_TYPE_P(tableName_param) != IS_NULL)) {
+		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'tableName' must be a string") TSRMLS_CC);
+		RETURN_MM_NULL();
+	}
+
+	if (likely(Z_TYPE_P(tableName_param) == IS_STRING)) {
+		zephir_get_strval(tableName, tableName_param);
+	} else {
+		ZEPHIR_INIT_VAR(tableName);
+		ZVAL_EMPTY_STRING(tableName);
+	}
+
+
+	ZEPHIR_INIT_VAR(_0);
+	ZEPHIR_INIT_NVAR(_0);
+	ZVAL_STRING(_0, "execute", 1);
+	ZEPHIR_OBS_VAR(_1);
+	zephir_read_property_zval(&_1, this_ptr, _0, PH_NOISY_CC);
+	ZEPHIR_RETURN_CALL_METHOD(_1, "insert", NULL, tableName);
+	zephir_check_call_status();
+	RETURN_MM();
+
+}
+
+/**
+ * Alias of Execute\Select
+ *
+ * @param array parameters
+ */
+PHP_METHOD(ZataBase_Db, select) {
+
+	int ZEPHIR_LAST_CALL_STATUS;
+	zval *tableName_param = NULL, *_1;
+	zval *tableName = NULL, *_0 = NULL;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &tableName_param);
+
+	if (unlikely(Z_TYPE_P(tableName_param) != IS_STRING && Z_TYPE_P(tableName_param) != IS_NULL)) {
+		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'tableName' must be a string") TSRMLS_CC);
+		RETURN_MM_NULL();
+	}
+
+	if (likely(Z_TYPE_P(tableName_param) == IS_STRING)) {
+		zephir_get_strval(tableName, tableName_param);
+	} else {
+		ZEPHIR_INIT_VAR(tableName);
+		ZVAL_EMPTY_STRING(tableName);
+	}
+
+
+	ZEPHIR_INIT_VAR(_0);
+	ZEPHIR_INIT_NVAR(_0);
+	ZVAL_STRING(_0, "execute", 1);
+	ZEPHIR_OBS_VAR(_1);
+	zephir_read_property_zval(&_1, this_ptr, _0, PH_NOISY_CC);
+	ZEPHIR_RETURN_CALL_METHOD(_1, "select", NULL, tableName);
+	zephir_check_call_status();
+	RETURN_MM();
+
+}
+
+/**
+ * Alias of Execute\Delete
+ *
+ * @param array parameters
+ */
+PHP_METHOD(ZataBase_Db, delete) {
+
+	int ZEPHIR_LAST_CALL_STATUS;
+	zval *tableName_param = NULL, *_1;
+	zval *tableName = NULL, *_0 = NULL;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &tableName_param);
+
+	if (unlikely(Z_TYPE_P(tableName_param) != IS_STRING && Z_TYPE_P(tableName_param) != IS_NULL)) {
+		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'tableName' must be a string") TSRMLS_CC);
+		RETURN_MM_NULL();
+	}
+
+	if (likely(Z_TYPE_P(tableName_param) == IS_STRING)) {
+		zephir_get_strval(tableName, tableName_param);
+	} else {
+		ZEPHIR_INIT_VAR(tableName);
+		ZVAL_EMPTY_STRING(tableName);
+	}
+
+
+	ZEPHIR_INIT_VAR(_0);
+	ZEPHIR_INIT_NVAR(_0);
+	ZVAL_STRING(_0, "execute", 1);
+	ZEPHIR_OBS_VAR(_1);
+	zephir_read_property_zval(&_1, this_ptr, _0, PH_NOISY_CC);
+	ZEPHIR_RETURN_CALL_METHOD(_1, "delete", NULL, tableName);
+	zephir_check_call_status();
+	RETURN_MM();
 
 }
 

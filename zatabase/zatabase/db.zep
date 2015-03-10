@@ -48,4 +48,34 @@ class Db extends Injectable {
         this->setDI(di);
     }
 
+    /**
+    * Alias of Execute\Insert
+    *
+    * @param string tableName
+    */
+    public function insert(const string! tableName) -> <Execute\Insert>
+    {
+        return this->{"execute"}->insert(tableName);
+    }
+
+    /**
+    * Alias of Execute\Select
+    *
+    * @param array parameters
+    */
+    public function select(const string! tableName) -> <Execute\Select>
+    {
+        return this->{"execute"}->select(tableName);
+    }
+
+    /**
+    * Alias of Execute\Delete
+    *
+    * @param array parameters
+    */
+    public function delete(const string! tableName) -> <Execute\Select>
+    {
+        return this->{"execute"}->delete(tableName);
+    }
+
 }

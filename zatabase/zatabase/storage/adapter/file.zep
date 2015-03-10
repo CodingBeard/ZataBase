@@ -255,7 +255,7 @@ class File {
 
     /**
     * Add a line in a file
-    *
+    * TODO: convert to offset
     * @param string path
     * @param int line
     * @param string|int content
@@ -289,41 +289,33 @@ class File {
 
     /**
     * Read a specific line in a file
-    *
+    * TODO: convert to offset
     * @param string path
     * @param int line
     * @return string
     */
-    public function readLine(const string! path, const int! line) -> string
+    public function readLine(const string! path, const int! offset) -> string
     {
-        var read, readline, count = 0;
+        var read;
 
         if !this->isFile(path) {
             throw new Exception("Attempting to read a non-existent file: '" . path . "'.");
         }
 
         let read = fopen(this->absolutePath(path), "r");
-
-        while !feof(read) {
-            let count++;
-            let readline = fgets(read);
-            if count == line {
-                fclose(read);
-                return readline;
-            }
-        }
-        return "";
+        fseek(read, offset);
+        return fgets(read);
     }
 
     /**
     * Remove a specific line in a file
     *
     * @param string path
-    * @param int line
+    * @param int offset
     */
-    public function removeLine(const string! path, const int! line) -> void
+    public function removeLine(const string! path, const int! offset) -> void
     {
-        var absolutePath, read, write, count = 0;
+        var absolutePath, line, read, write;
         let absolutePath = this->absolutePath(path);
 
         if !this->isFile(path) {
@@ -331,11 +323,13 @@ class File {
         }
 
         let read = fopen(absolutePath, "r"), write = fopen(absolutePath . ".write", "w");
-
+        if offset != 0 {
+            let line = fgets(read);
+        }
         while !feof(read) {
-            let count++;
-            if count != line {
-                fputs(write, fgets(read));
+            if ftell(read) != offset {
+                fputs(write, line);
+                let line = fgets(read);
             }
             else {
                 fgets(read);

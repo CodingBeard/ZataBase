@@ -12,4 +12,30 @@ class Db extends \ZataBase\Di\Injectable
      */
 	public function __construct($config) {}
 
+    /**
+     * Alias of Execute\Insert
+     *
+     * @param string $tableName 
+     * @return Execute\Insert 
+     */
+	public function insert($tableName) {}
+
+    /**
+     * Alias of Execute\Select
+     *
+     * @param string $tableName 
+     * @param array $parameters 
+     * @return Execute\Select 
+     */
+	public function select($tableName) {}
+
+    /**
+     * Alias of Execute\Delete
+     *
+     * @param string $tableName 
+     * @param array $parameters 
+     * @return Execute\Select 
+     */
+	public function delete($tableName) {}
+
 }

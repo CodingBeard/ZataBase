@@ -14,6 +14,29 @@ class Insert extends QueryType
 {
 
     /**
+    * Columns to insert into
+    * @var string
+    */
+    protected columns = false {
+        set, get
+    };
+
+    /**
+    * Flesh out a row with nulls where it is missing columns
+    *
+    * @param array columns
+    */
+    public function columns(const array! columns) -> <Insert>
+    {
+        var column;
+        let this->columns = [];
+        for column in columns {
+            let this->columns[] = this->table->columnKey(column);
+        }
+        return this;
+    }
+
+    /**
     * Insert row/s into a table
     *
     * Values should be multi-dimensional if multiple rows are being inserted
@@ -25,7 +48,7 @@ class Insert extends QueryType
     */
     public function values(const array! values)
     {
-        var value;
+        var value, rows = [];
         if !this->table {
             throw new Exception("Cannot insert values without a selected table.");
         }
@@ -33,64 +56,48 @@ class Insert extends QueryType
         if isset(values[0]) {
             if typeof values[0] == "array" {
                 for value in values {
-                    if isset(value[0]) {
-                        this->insertLiteralValues(value);
+                    if isset(value[0]) && this->columns {
+                        let rows[] = this->fillNulls(value);
                     }
                     else {
-                        this->insertRelativeValues(value);
+                        let rows[] = value;
                     }
                 }
+                this->table->insertRows(rows);
+            }
+            elseif this->columns {
+                this->table->insertRow(this->fillNulls(values));
             }
             else {
-                this->insertLiteralValues(values);
+                this->table->insertRow(values);
             }
         }
         else {
-            this->insertRelativeValues(values);
+            this->table->insertRow(this->fillNulls(values));
         }
     }
 
     /**
-    * Insert a literal row into a table (all columns)
+    * Flesh out a row with nulls where it is missing columns
     *
-    * @param Table table
-    * @param array values numeric
-    */
-    protected function insertLiteralValues(const array! values)
-    {
-        if count(this->table->getColumnMap()) != count(values) {
-            throw new Exception("All fields are required when using a non-associative values array");
-        }
-        this->{"storage"}->appendLine(this->{"config"}->tablesDir . this->table->name, json_encode(values));
-    }
-
-    /**
-    * Insert a relative row into a table (specific columns)
-    *
-    * @param Table table
     * @param array values associative
     */
-    protected function insertRelativeValues(const array! values)
+    protected function fillNulls(const array! values) -> array
     {
-        var columnName, key, value;
+        var key = 0, value;
         array valuesWithNulls;
-
-        for key, value in values {
-            if typeof this->table->hasColumn(key) != "object" {
-                throw new Exception("Column: '" . key . "' does not exists in the column map of table: '" . this->table->name . "'.");
-            }
-        }
 
         let valuesWithNulls = [];
 
-        for columnName in this->table->getColumnMap() {
-            if fetch value, values[columnName] {
-                let valuesWithNulls[] = value;
-            }
-            else {
-                let valuesWithNulls[] = null;
-            }
+        while key < count(this->table->getColumnMap()) {
+            let valuesWithNulls[] = null;
+            let key++;
         }
-        this->{"storage"}->appendLine(this->{"config"}->tablesDir . this->table->name, json_encode(valuesWithNulls));
+
+        for key, value in values {
+            let valuesWithNulls[this->columns[key]] = value;
+        }
+
+        return valuesWithNulls;
     }
 }

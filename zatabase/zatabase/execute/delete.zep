@@ -15,14 +15,14 @@ class Delete extends Condition
     /**
     * Finished creating the query, check table for rows matching conditions
     */
-    public function done() -> bool
+    public function done() -> <\ZataBase\Execute\Results>|bool
     {
-        var row, rows;
+        var offset, results;
         if typeof this->conditions == "array" {
-            let rows = this->getMatchedRows();
-            if count(rows) {
-                for row in rows {
-                    this->table->deleteRow(row);
+            let results = this->getMatchedRows();
+            if results->count() {
+                for offset in results->rows {
+                    this->table->deleteRow(offset);
                 }
             }
         }

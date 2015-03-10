@@ -86,6 +86,8 @@ zatabase/execute/insert.lo: /home/tim/Documents/github/ZataBase/zatabase/ext/zat
 	$(LIBTOOL) --mode=compile $(CC)  -I. -I/home/tim/Documents/github/ZataBase/zatabase/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /home/tim/Documents/github/ZataBase/zatabase/ext/zatabase/execute/insert.zep.c -o zatabase/execute/insert.lo 
 zatabase/execute/querytype.lo: /home/tim/Documents/github/ZataBase/zatabase/ext/zatabase/execute/querytype.zep.c
 	$(LIBTOOL) --mode=compile $(CC)  -I. -I/home/tim/Documents/github/ZataBase/zatabase/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /home/tim/Documents/github/ZataBase/zatabase/ext/zatabase/execute/querytype.zep.c -o zatabase/execute/querytype.lo 
+zatabase/execute/results.lo: /home/tim/Documents/github/ZataBase/zatabase/ext/zatabase/execute/results.zep.c
+	$(LIBTOOL) --mode=compile $(CC)  -I. -I/home/tim/Documents/github/ZataBase/zatabase/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /home/tim/Documents/github/ZataBase/zatabase/ext/zatabase/execute/results.zep.c -o zatabase/execute/results.lo 
 zatabase/execute/select.lo: /home/tim/Documents/github/ZataBase/zatabase/ext/zatabase/execute/select.zep.c
 	$(LIBTOOL) --mode=compile $(CC)  -I. -I/home/tim/Documents/github/ZataBase/zatabase/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /home/tim/Documents/github/ZataBase/zatabase/ext/zatabase/execute/select.zep.c -o zatabase/execute/select.lo 
 zatabase/helper/arraytoobject.lo: /home/tim/Documents/github/ZataBase/zatabase/ext/zatabase/helper/arraytoobject.zep.c

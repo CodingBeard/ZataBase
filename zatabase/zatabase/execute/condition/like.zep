@@ -44,7 +44,6 @@ class Like {
         let this->matches = isNot ? false : true;
         let this->column = column;
         let this->pattern = "#^" . preg_replace(["#(?<!\\\\)%#is", "#(?<!\\\\)_#is"], ["(.*)", "(.)"], value) . "$#is";
-        echo this->pattern . PHP_EOL;
     }
 
     public function matches(const array! row) -> bool
