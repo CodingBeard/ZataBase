@@ -76,7 +76,7 @@ class Insert extends QueryType
         array valuesWithNulls;
 
         for key, value in values {
-            if typeof this->table->hasColumn(key) != "int" {
+            if typeof this->table->hasColumn(key) != "object" {
                 throw new Exception("Column: '" . key . "' does not exists in the column map of table: '" . this->table->name . "'.");
             }
         }

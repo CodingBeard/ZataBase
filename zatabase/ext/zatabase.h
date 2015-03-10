@@ -17,8 +17,13 @@
 #include "zatabase/exception.zep.h"
 #include "zatabase/execute.zep.h"
 #include "zatabase/execute/condition.zep.h"
+#include "zatabase/execute/condition/between.zep.h"
 #include "zatabase/execute/condition/equals.zep.h"
 #include "zatabase/execute/condition/exception.zep.h"
+#include "zatabase/execute/condition/lessthan.zep.h"
+#include "zatabase/execute/condition/like.zep.h"
+#include "zatabase/execute/condition/morethan.zep.h"
+#include "zatabase/execute/condition/within.zep.h"
 #include "zatabase/execute/delete.zep.h"
 #include "zatabase/execute/exception.zep.h"
 #include "zatabase/execute/insert.zep.h"
@@ -32,8 +37,5 @@
 #include "zatabase/table.zep.h"
 #include "zatabase/table/column.zep.h"
 #include "zatabase/table/exception.zep.h"
-#include "zatabase/traverser.zep.h"
-#include "zatabase/traverser/exception.zep.h"
-#include "zatabase/traverser/row.zep.h"
 
 #endif

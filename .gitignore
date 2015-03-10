@@ -31,3 +31,4 @@ ext/libtool
 
 .idea
 test
+example/database

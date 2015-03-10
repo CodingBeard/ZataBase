@@ -40,8 +40,13 @@ zend_class_entry *zatabase_di_exception_ce;
 zend_class_entry *zatabase_di_service_builder_ce;
 zend_class_entry *zatabase_di_service_ce;
 zend_class_entry *zatabase_execute_ce;
+zend_class_entry *zatabase_execute_condition_between_ce;
 zend_class_entry *zatabase_execute_condition_equals_ce;
 zend_class_entry *zatabase_execute_condition_exception_ce;
+zend_class_entry *zatabase_execute_condition_lessthan_ce;
+zend_class_entry *zatabase_execute_condition_like_ce;
+zend_class_entry *zatabase_execute_condition_morethan_ce;
+zend_class_entry *zatabase_execute_condition_within_ce;
 zend_class_entry *zatabase_execute_delete_ce;
 zend_class_entry *zatabase_execute_exception_ce;
 zend_class_entry *zatabase_execute_insert_ce;
@@ -54,9 +59,6 @@ zend_class_entry *zatabase_storage_exception_ce;
 zend_class_entry *zatabase_table_ce;
 zend_class_entry *zatabase_table_column_ce;
 zend_class_entry *zatabase_table_exception_ce;
-zend_class_entry *zatabase_traverser_ce;
-zend_class_entry *zatabase_traverser_exception_ce;
-zend_class_entry *zatabase_traverser_row_ce;
 
 ZEND_DECLARE_MODULE_GLOBALS(zatabase)
 
@@ -92,8 +94,13 @@ static PHP_MINIT_FUNCTION(zatabase)
 	ZEPHIR_INIT(ZataBase_Di_Service);
 	ZEPHIR_INIT(ZataBase_Di_Service_Builder);
 	ZEPHIR_INIT(ZataBase_Execute);
+	ZEPHIR_INIT(ZataBase_Execute_Condition_Between);
 	ZEPHIR_INIT(ZataBase_Execute_Condition_Equals);
 	ZEPHIR_INIT(ZataBase_Execute_Condition_Exception);
+	ZEPHIR_INIT(ZataBase_Execute_Condition_LessThan);
+	ZEPHIR_INIT(ZataBase_Execute_Condition_Like);
+	ZEPHIR_INIT(ZataBase_Execute_Condition_MoreThan);
+	ZEPHIR_INIT(ZataBase_Execute_Condition_Within);
 	ZEPHIR_INIT(ZataBase_Execute_Delete);
 	ZEPHIR_INIT(ZataBase_Execute_Exception);
 	ZEPHIR_INIT(ZataBase_Execute_Insert);
@@ -106,9 +113,6 @@ static PHP_MINIT_FUNCTION(zatabase)
 	ZEPHIR_INIT(ZataBase_Table);
 	ZEPHIR_INIT(ZataBase_Table_Column);
 	ZEPHIR_INIT(ZataBase_Table_Exception);
-	ZEPHIR_INIT(ZataBase_Traverser);
-	ZEPHIR_INIT(ZataBase_Traverser_Exception);
-	ZEPHIR_INIT(ZataBase_Traverser_Row);
 
 #if PHP_VERSION_ID < 50500
 	setlocale(LC_ALL, old_lc_all);

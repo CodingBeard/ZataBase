@@ -216,14 +216,14 @@ configure:3838: found /usr/bin/gawk
 configure:3849: result: gawk
 configure:3892: checking whether to enable zatabase
 configure:3931: result: yes, shared
-configure:4369: checking whether HAVE_BUNDLED_PCRE is declared
-configure:4369: gcc -c -O2 -fvisibility=hidden -Wparentheses -flto -DZEPHIR_RELEASE=1  -I/usr/include/php5 -I/usr/include/php5/main -I/usr/include/php5/TSRM -I/usr/include/php5/Zend -I/usr/include/php5/ext -I/usr/include/php5/ext/date/lib conftest.c >&5
+configure:4371: checking whether HAVE_BUNDLED_PCRE is declared
+configure:4371: gcc -c -O2 -fvisibility=hidden -Wparentheses -flto -DZEPHIR_RELEASE=1  -I/usr/include/php5 -I/usr/include/php5/main -I/usr/include/php5/TSRM -I/usr/include/php5/Zend -I/usr/include/php5/ext -I/usr/include/php5/ext/date/lib conftest.c >&5
 conftest.c: In function 'main':
 conftest.c:21:10: error: 'HAVE_BUNDLED_PCRE' undeclared (first use in this function)
    (void) HAVE_BUNDLED_PCRE;
           ^
 conftest.c:21:10: note: each undeclared identifier is reported only once for each function it appears in
-configure:4369: $? = 1
+configure:4371: $? = 1
 configure: failed program was:
 | /* confdefs.h */
 | #define PACKAGE_NAME ""
@@ -252,15 +252,15 @@ configure: failed program was:
 |   ;
 |   return 0;
 | }
-configure:4369: result: no
-configure:4415: checking whether HAVE_JSON is declared
-configure:4415: gcc -c -O2 -fvisibility=hidden -Wparentheses -flto -DZEPHIR_RELEASE=1  -I/usr/include/php5 -I/usr/include/php5/main -I/usr/include/php5/TSRM -I/usr/include/php5/Zend -I/usr/include/php5/ext -I/usr/include/php5/ext/date/lib conftest.c >&5
+configure:4371: result: no
+configure:4417: checking whether HAVE_JSON is declared
+configure:4417: gcc -c -O2 -fvisibility=hidden -Wparentheses -flto -DZEPHIR_RELEASE=1  -I/usr/include/php5 -I/usr/include/php5/main -I/usr/include/php5/TSRM -I/usr/include/php5/Zend -I/usr/include/php5/ext -I/usr/include/php5/ext/date/lib conftest.c >&5
 conftest.c: In function 'main':
 conftest.c:21:10: error: 'HAVE_JSON' undeclared (first use in this function)
    (void) HAVE_JSON;
           ^
 conftest.c:21:10: note: each undeclared identifier is reported only once for each function it appears in
-configure:4415: $? = 1
+configure:4417: $? = 1
 configure: failed program was:
 | /* confdefs.h */
 | #define PACKAGE_NAME ""
@@ -289,187 +289,187 @@ configure: failed program was:
 |   ;
 |   return 0;
 | }
-configure:4415: result: no
-configure:4542: checking how to print strings
-configure:4569: result: printf
-configure:4590: checking for a sed that does not truncate output
-configure:4654: result: /bin/sed
-configure:4672: checking for fgrep
-configure:4734: result: /bin/grep -F
-configure:4769: checking for ld used by gcc
-configure:4836: result: /usr/bin/ld
-configure:4843: checking if the linker (/usr/bin/ld) is GNU ld
-configure:4858: result: yes
-configure:4870: checking for BSD- or MS-compatible name lister (nm)
-configure:4919: result: /usr/bin/nm -B
-configure:5049: checking the name lister (/usr/bin/nm -B) interface
-configure:5056: gcc -c -O2 -fvisibility=hidden -Wparentheses -flto -DZEPHIR_RELEASE=1  conftest.c >&5
-configure:5059: /usr/bin/nm -B "conftest.o"
+configure:4417: result: no
+configure:4544: checking how to print strings
+configure:4571: result: printf
+configure:4592: checking for a sed that does not truncate output
+configure:4656: result: /bin/sed
+configure:4674: checking for fgrep
+configure:4736: result: /bin/grep -F
+configure:4771: checking for ld used by gcc
+configure:4838: result: /usr/bin/ld
+configure:4845: checking if the linker (/usr/bin/ld) is GNU ld
+configure:4860: result: yes
+configure:4872: checking for BSD- or MS-compatible name lister (nm)
+configure:4921: result: /usr/bin/nm -B
+configure:5051: checking the name lister (/usr/bin/nm -B) interface
+configure:5058: gcc -c -O2 -fvisibility=hidden -Wparentheses -flto -DZEPHIR_RELEASE=1  conftest.c >&5
+configure:5061: /usr/bin/nm -B "conftest.o"
 /usr/bin/nm: conftest.o: plugin needed to handle lto object
-configure:5062: output
+configure:5064: output
 0000000000000001 C __gnu_lto_slim
 0000000000000001 C __gnu_lto_v1
-configure:5069: result: BSD nm
-configure:5072: checking whether ln -s works
-configure:5076: result: yes
-configure:5084: checking the maximum length of command line arguments
-configure:5215: result: 1572864
-configure:5232: checking whether the shell understands some XSI constructs
-configure:5242: result: yes
-configure:5246: checking whether the shell understands "+="
-configure:5252: result: yes
-configure:5287: checking how to convert x86_64-unknown-linux-gnu file names to x86_64-unknown-linux-gnu format
-configure:5327: result: func_convert_file_noop
-configure:5334: checking how to convert x86_64-unknown-linux-gnu file names to toolchain format
-configure:5354: result: func_convert_file_noop
-configure:5361: checking for /usr/bin/ld option to reload object files
-configure:5368: result: -r
-configure:5442: checking for objdump
-configure:5458: found /usr/bin/objdump
-configure:5469: result: objdump
-configure:5501: checking how to recognize dependent libraries
-configure:5699: result: pass_all
-configure:5784: checking for dlltool
-configure:5814: result: no
-configure:5844: checking how to associate runtime and link libraries
-configure:5871: result: printf %s\n
-configure:5931: checking for ar
-configure:5947: found /usr/bin/ar
-configure:5958: result: ar
-configure:5995: checking for archiver @FILE support
-configure:6012: gcc -c -O2 -fvisibility=hidden -Wparentheses -flto -DZEPHIR_RELEASE=1  conftest.c >&5
-configure:6012: $? = 0
-configure:6015: ar cru libconftest.a @conftest.lst >&5
+configure:5071: result: BSD nm
+configure:5074: checking whether ln -s works
+configure:5078: result: yes
+configure:5086: checking the maximum length of command line arguments
+configure:5217: result: 1572864
+configure:5234: checking whether the shell understands some XSI constructs
+configure:5244: result: yes
+configure:5248: checking whether the shell understands "+="
+configure:5254: result: yes
+configure:5289: checking how to convert x86_64-unknown-linux-gnu file names to x86_64-unknown-linux-gnu format
+configure:5329: result: func_convert_file_noop
+configure:5336: checking how to convert x86_64-unknown-linux-gnu file names to toolchain format
+configure:5356: result: func_convert_file_noop
+configure:5363: checking for /usr/bin/ld option to reload object files
+configure:5370: result: -r
+configure:5444: checking for objdump
+configure:5460: found /usr/bin/objdump
+configure:5471: result: objdump
+configure:5503: checking how to recognize dependent libraries
+configure:5701: result: pass_all
+configure:5786: checking for dlltool
+configure:5816: result: no
+configure:5846: checking how to associate runtime and link libraries
+configure:5873: result: printf %s\n
+configure:5933: checking for ar
+configure:5949: found /usr/bin/ar
+configure:5960: result: ar
+configure:5997: checking for archiver @FILE support
+configure:6014: gcc -c -O2 -fvisibility=hidden -Wparentheses -flto -DZEPHIR_RELEASE=1  conftest.c >&5
+configure:6014: $? = 0
+configure:6017: ar cru libconftest.a @conftest.lst >&5
 BFD: conftest.o: plugin needed to handle lto object
-configure:6018: $? = 0
-configure:6023: ar cru libconftest.a @conftest.lst >&5
+configure:6020: $? = 0
+configure:6025: ar cru libconftest.a @conftest.lst >&5
 ar: conftest.o: No such file or directory
-configure:6026: $? = 1
-configure:6038: result: @
-configure:6096: checking for strip
-configure:6112: found /usr/bin/strip
-configure:6123: result: strip
-configure:6195: checking for ranlib
-configure:6211: found /usr/bin/ranlib
-configure:6222: result: ranlib
-configure:6299: checking for gawk
-configure:6326: result: gawk
-configure:6366: checking command to parse /usr/bin/nm -B output from gcc object
-configure:6486: gcc -c -O2 -fvisibility=hidden -Wparentheses -flto -DZEPHIR_RELEASE=1  conftest.c >&5
-configure:6489: $? = 0
-configure:6493: /usr/bin/nm -B conftest.o \| sed -n -e 's/^.*[ ]\([ABCDGIRSTW][ABCDGIRSTW]*\)[ ][ ]*\([_A-Za-z][_A-Za-z0-9]*\)$/\1 \2 \2/p' | sed '/ __gnu_lto/d' \> conftest.nm
+configure:6028: $? = 1
+configure:6040: result: @
+configure:6098: checking for strip
+configure:6114: found /usr/bin/strip
+configure:6125: result: strip
+configure:6197: checking for ranlib
+configure:6213: found /usr/bin/ranlib
+configure:6224: result: ranlib
+configure:6301: checking for gawk
+configure:6328: result: gawk
+configure:6368: checking command to parse /usr/bin/nm -B output from gcc object
+configure:6488: gcc -c -O2 -fvisibility=hidden -Wparentheses -flto -DZEPHIR_RELEASE=1  conftest.c >&5
+configure:6491: $? = 0
+configure:6495: /usr/bin/nm -B conftest.o \| sed -n -e 's/^.*[ ]\([ABCDGIRSTW][ABCDGIRSTW]*\)[ ][ ]*\([_A-Za-z][_A-Za-z0-9]*\)$/\1 \2 \2/p' | sed '/ __gnu_lto/d' \> conftest.nm
 /usr/bin/nm: conftest.o: plugin needed to handle lto object
-configure:6496: $? = 0
+configure:6498: $? = 0
 cannot run sed -n -e 's/^.*[	 ]\([ABCDGIRSTW][ABCDGIRSTW]*\)[	 ][	 ]*\([_A-Za-z][_A-Za-z0-9]*\)$/\1 \2 \2/p' | sed '/ __gnu_lto/d'
-configure:6486: gcc -c -O2 -fvisibility=hidden -Wparentheses -flto -DZEPHIR_RELEASE=1  conftest.c >&5
-configure:6489: $? = 0
-configure:6493: /usr/bin/nm -B conftest.o \| sed -n -e 's/^.*[ ]\([ABCDGIRSTW][ABCDGIRSTW]*\)[ ][ ]*_\([_A-Za-z][_A-Za-z0-9]*\)$/\1 _\2 \2/p' | sed '/ __gnu_lto/d' \> conftest.nm
+configure:6488: gcc -c -O2 -fvisibility=hidden -Wparentheses -flto -DZEPHIR_RELEASE=1  conftest.c >&5
+configure:6491: $? = 0
+configure:6495: /usr/bin/nm -B conftest.o \| sed -n -e 's/^.*[ ]\([ABCDGIRSTW][ABCDGIRSTW]*\)[ ][ ]*_\([_A-Za-z][_A-Za-z0-9]*\)$/\1 _\2 \2/p' | sed '/ __gnu_lto/d' \> conftest.nm
 /usr/bin/nm: conftest.o: plugin needed to handle lto object
-configure:6496: $? = 0
+configure:6498: $? = 0
 cannot run sed -n -e 's/^.*[	 ]\([ABCDGIRSTW][ABCDGIRSTW]*\)[	 ][	 ]*_\([_A-Za-z][_A-Za-z0-9]*\)$/\1 _\2 \2/p' | sed '/ __gnu_lto/d'
-configure:6600: result: failed
-configure:6640: checking for sysroot
-configure:6670: result: no
-configure:6747: gcc -c -O2 -fvisibility=hidden -Wparentheses -flto -DZEPHIR_RELEASE=1  conftest.c >&5
-configure:6750: $? = 0
-configure:6939: checking for mt
-configure:6955: found /bin/mt
-configure:6966: result: mt
-configure:6989: checking if mt is a manifest tool
-configure:6995: mt '-?'
-configure:7003: result: no
-configure:7640: checking for ANSI C header files
-configure:7660: gcc -c -O2 -fvisibility=hidden -Wparentheses -flto -DZEPHIR_RELEASE=1  conftest.c >&5
-configure:7660: $? = 0
-configure:7733: gcc -o conftest -O2 -fvisibility=hidden -Wparentheses -flto -DZEPHIR_RELEASE=1   conftest.c  >&5
-configure:7733: $? = 0
-configure:7733: ./conftest
-configure:7733: $? = 0
-configure:7744: result: yes
-configure:7757: checking for sys/types.h
-configure:7757: gcc -c -O2 -fvisibility=hidden -Wparentheses -flto -DZEPHIR_RELEASE=1  conftest.c >&5
-configure:7757: $? = 0
-configure:7757: result: yes
-configure:7757: checking for sys/stat.h
-configure:7757: gcc -c -O2 -fvisibility=hidden -Wparentheses -flto -DZEPHIR_RELEASE=1  conftest.c >&5
-configure:7757: $? = 0
-configure:7757: result: yes
-configure:7757: checking for stdlib.h
-configure:7757: gcc -c -O2 -fvisibility=hidden -Wparentheses -flto -DZEPHIR_RELEASE=1  conftest.c >&5
-configure:7757: $? = 0
-configure:7757: result: yes
-configure:7757: checking for string.h
-configure:7757: gcc -c -O2 -fvisibility=hidden -Wparentheses -flto -DZEPHIR_RELEASE=1  conftest.c >&5
-configure:7757: $? = 0
-configure:7757: result: yes
-configure:7757: checking for memory.h
-configure:7757: gcc -c -O2 -fvisibility=hidden -Wparentheses -flto -DZEPHIR_RELEASE=1  conftest.c >&5
-configure:7757: $? = 0
-configure:7757: result: yes
-configure:7757: checking for strings.h
-configure:7757: gcc -c -O2 -fvisibility=hidden -Wparentheses -flto -DZEPHIR_RELEASE=1  conftest.c >&5
-configure:7757: $? = 0
-configure:7757: result: yes
-configure:7757: checking for inttypes.h
-configure:7757: gcc -c -O2 -fvisibility=hidden -Wparentheses -flto -DZEPHIR_RELEASE=1  conftest.c >&5
-configure:7757: $? = 0
-configure:7757: result: yes
-configure:7757: checking for stdint.h
-configure:7757: gcc -c -O2 -fvisibility=hidden -Wparentheses -flto -DZEPHIR_RELEASE=1  conftest.c >&5
-configure:7757: $? = 0
-configure:7757: result: yes
-configure:7757: checking for unistd.h
-configure:7757: gcc -c -O2 -fvisibility=hidden -Wparentheses -flto -DZEPHIR_RELEASE=1  conftest.c >&5
-configure:7757: $? = 0
-configure:7757: result: yes
-configure:7771: checking for dlfcn.h
-configure:7771: gcc -c -O2 -fvisibility=hidden -Wparentheses -flto -DZEPHIR_RELEASE=1  conftest.c >&5
-configure:7771: $? = 0
-configure:7771: result: yes
-configure:7977: checking for objdir
-configure:7992: result: .libs
-configure:8263: checking if gcc supports -fno-rtti -fno-exceptions
-configure:8281: gcc -c -O2 -fvisibility=hidden -Wparentheses -flto -DZEPHIR_RELEASE=1  -fno-rtti -fno-exceptions conftest.c >&5
+configure:6602: result: failed
+configure:6642: checking for sysroot
+configure:6672: result: no
+configure:6749: gcc -c -O2 -fvisibility=hidden -Wparentheses -flto -DZEPHIR_RELEASE=1  conftest.c >&5
+configure:6752: $? = 0
+configure:6941: checking for mt
+configure:6957: found /bin/mt
+configure:6968: result: mt
+configure:6991: checking if mt is a manifest tool
+configure:6997: mt '-?'
+configure:7005: result: no
+configure:7642: checking for ANSI C header files
+configure:7662: gcc -c -O2 -fvisibility=hidden -Wparentheses -flto -DZEPHIR_RELEASE=1  conftest.c >&5
+configure:7662: $? = 0
+configure:7735: gcc -o conftest -O2 -fvisibility=hidden -Wparentheses -flto -DZEPHIR_RELEASE=1   conftest.c  >&5
+configure:7735: $? = 0
+configure:7735: ./conftest
+configure:7735: $? = 0
+configure:7746: result: yes
+configure:7759: checking for sys/types.h
+configure:7759: gcc -c -O2 -fvisibility=hidden -Wparentheses -flto -DZEPHIR_RELEASE=1  conftest.c >&5
+configure:7759: $? = 0
+configure:7759: result: yes
+configure:7759: checking for sys/stat.h
+configure:7759: gcc -c -O2 -fvisibility=hidden -Wparentheses -flto -DZEPHIR_RELEASE=1  conftest.c >&5
+configure:7759: $? = 0
+configure:7759: result: yes
+configure:7759: checking for stdlib.h
+configure:7759: gcc -c -O2 -fvisibility=hidden -Wparentheses -flto -DZEPHIR_RELEASE=1  conftest.c >&5
+configure:7759: $? = 0
+configure:7759: result: yes
+configure:7759: checking for string.h
+configure:7759: gcc -c -O2 -fvisibility=hidden -Wparentheses -flto -DZEPHIR_RELEASE=1  conftest.c >&5
+configure:7759: $? = 0
+configure:7759: result: yes
+configure:7759: checking for memory.h
+configure:7759: gcc -c -O2 -fvisibility=hidden -Wparentheses -flto -DZEPHIR_RELEASE=1  conftest.c >&5
+configure:7759: $? = 0
+configure:7759: result: yes
+configure:7759: checking for strings.h
+configure:7759: gcc -c -O2 -fvisibility=hidden -Wparentheses -flto -DZEPHIR_RELEASE=1  conftest.c >&5
+configure:7759: $? = 0
+configure:7759: result: yes
+configure:7759: checking for inttypes.h
+configure:7759: gcc -c -O2 -fvisibility=hidden -Wparentheses -flto -DZEPHIR_RELEASE=1  conftest.c >&5
+configure:7759: $? = 0
+configure:7759: result: yes
+configure:7759: checking for stdint.h
+configure:7759: gcc -c -O2 -fvisibility=hidden -Wparentheses -flto -DZEPHIR_RELEASE=1  conftest.c >&5
+configure:7759: $? = 0
+configure:7759: result: yes
+configure:7759: checking for unistd.h
+configure:7759: gcc -c -O2 -fvisibility=hidden -Wparentheses -flto -DZEPHIR_RELEASE=1  conftest.c >&5
+configure:7759: $? = 0
+configure:7759: result: yes
+configure:7773: checking for dlfcn.h
+configure:7773: gcc -c -O2 -fvisibility=hidden -Wparentheses -flto -DZEPHIR_RELEASE=1  conftest.c >&5
+configure:7773: $? = 0
+configure:7773: result: yes
+configure:7979: checking for objdir
+configure:7994: result: .libs
+configure:8265: checking if gcc supports -fno-rtti -fno-exceptions
+configure:8283: gcc -c -O2 -fvisibility=hidden -Wparentheses -flto -DZEPHIR_RELEASE=1  -fno-rtti -fno-exceptions conftest.c >&5
 cc1: warning: command line option '-fno-rtti' is valid for C++/ObjC++ but not for C
-configure:8285: $? = 0
-configure:8298: result: no
-configure:8625: checking for gcc option to produce PIC
-configure:8632: result: -fPIC -DPIC
-configure:8640: checking if gcc PIC flag -fPIC -DPIC works
-configure:8658: gcc -c -O2 -fvisibility=hidden -Wparentheses -flto -DZEPHIR_RELEASE=1  -fPIC -DPIC -DPIC conftest.c >&5
-configure:8662: $? = 0
-configure:8675: result: yes
-configure:8704: checking if gcc static flag -static works
-configure:8732: result: yes
-configure:8747: checking if gcc supports -c -o file.o
-configure:8768: gcc -c -O2 -fvisibility=hidden -Wparentheses -flto -DZEPHIR_RELEASE=1  -o out/conftest2.o conftest.c >&5
-configure:8772: $? = 0
-configure:8794: result: yes
-configure:8802: checking if gcc supports -c -o file.o
-configure:8849: result: yes
-configure:8882: checking whether the gcc linker (/usr/bin/ld -m elf_x86_64) supports shared libraries
-configure:10039: result: yes
-configure:10076: checking whether -lc should be explicitly linked in
-configure:10084: gcc -c -O2 -fvisibility=hidden -Wparentheses -flto -DZEPHIR_RELEASE=1  conftest.c >&5
-configure:10087: $? = 0
-configure:10102: gcc -shared  -fPIC -DPIC conftest.o  -v -Wl,-soname -Wl,conftest -o conftest 2\>\&1 \| /bin/grep  -lc  \>/dev/null 2\>\&1
-configure:10105: $? = 0
-configure:10119: result: no
-configure:10279: checking dynamic linker characteristics
-configure:10779: gcc -o conftest -O2 -fvisibility=hidden -Wparentheses -flto -DZEPHIR_RELEASE=1   -Wl,-rpath -Wl,/foo conftest.c  >&5
-configure:10779: $? = 0
-configure:11013: result: GNU/Linux ld.so
-configure:11120: checking how to hardcode library paths into programs
-configure:11145: result: immediate
-configure:11685: checking whether stripping libraries is possible
-configure:11690: result: yes
-configure:11725: checking if libtool supports shared libraries
-configure:11727: result: yes
-configure:11730: checking whether to build shared libraries
-configure:11751: result: yes
-configure:11754: checking whether to build static libraries
-configure:11758: result: no
-configure:12034: creating ./config.status
+configure:8287: $? = 0
+configure:8300: result: no
+configure:8627: checking for gcc option to produce PIC
+configure:8634: result: -fPIC -DPIC
+configure:8642: checking if gcc PIC flag -fPIC -DPIC works
+configure:8660: gcc -c -O2 -fvisibility=hidden -Wparentheses -flto -DZEPHIR_RELEASE=1  -fPIC -DPIC -DPIC conftest.c >&5
+configure:8664: $? = 0
+configure:8677: result: yes
+configure:8706: checking if gcc static flag -static works
+configure:8734: result: yes
+configure:8749: checking if gcc supports -c -o file.o
+configure:8770: gcc -c -O2 -fvisibility=hidden -Wparentheses -flto -DZEPHIR_RELEASE=1  -o out/conftest2.o conftest.c >&5
+configure:8774: $? = 0
+configure:8796: result: yes
+configure:8804: checking if gcc supports -c -o file.o
+configure:8851: result: yes
+configure:8884: checking whether the gcc linker (/usr/bin/ld -m elf_x86_64) supports shared libraries
+configure:10041: result: yes
+configure:10078: checking whether -lc should be explicitly linked in
+configure:10086: gcc -c -O2 -fvisibility=hidden -Wparentheses -flto -DZEPHIR_RELEASE=1  conftest.c >&5
+configure:10089: $? = 0
+configure:10104: gcc -shared  -fPIC -DPIC conftest.o  -v -Wl,-soname -Wl,conftest -o conftest 2\>\&1 \| /bin/grep  -lc  \>/dev/null 2\>\&1
+configure:10107: $? = 0
+configure:10121: result: no
+configure:10281: checking dynamic linker characteristics
+configure:10781: gcc -o conftest -O2 -fvisibility=hidden -Wparentheses -flto -DZEPHIR_RELEASE=1   -Wl,-rpath -Wl,/foo conftest.c  >&5
+configure:10781: $? = 0
+configure:11015: result: GNU/Linux ld.so
+configure:11122: checking how to hardcode library paths into programs
+configure:11147: result: immediate
+configure:11687: checking whether stripping libraries is possible
+configure:11692: result: yes
+configure:11727: checking if libtool supports shared libraries
+configure:11729: result: yes
+configure:11732: checking whether to build shared libraries
+configure:11753: result: yes
+configure:11756: checking whether to build static libraries
+configure:11760: result: no
+configure:12036: creating ./config.status
 
 ## ---------------------- ##
 ## Running config.status. ##

@@ -49,7 +49,7 @@ PHP_METHOD(ZataBase_Db, __construct) {
 	zephir_fcall_cache_entry *_13 = NULL;
 	zval *_9;
 	int ZEPHIR_LAST_CALL_STATUS;
-	zval *config, *di, *storage, *_0, *_1, *_2, *_3, *_4 = NULL, *_5, *_6 = NULL, *_7 = NULL, *_8, *_10 = NULL, *_11 = NULL, *_12 = NULL, *_14;
+	zval *config, *di, *storage, *_0, *_1, *_2, *_3, *_4 = NULL, *_5, *_6 = NULL, *_7 = NULL, *_8, *_10 = NULL, *_11 = NULL, *_12 = NULL;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &config);
@@ -171,19 +171,6 @@ PHP_METHOD(ZataBase_Db, __construct) {
 	ZVAL_BOOL(_12, 1);
 	ZEPHIR_CALL_METHOD(NULL, di, "set", NULL, _11, _10, _12);
 	zephir_check_temp_parameter(_11);
-	zephir_check_call_status();
-	ZEPHIR_INIT_NVAR(_11);
-	object_init_ex(_11, zatabase_traverser_ce);
-	if (zephir_has_constructor(_11 TSRMLS_CC)) {
-		ZEPHIR_CALL_METHOD(NULL, _11, "__construct", NULL);
-		zephir_check_call_status();
-	}
-	ZEPHIR_INIT_NVAR(_12);
-	ZVAL_STRING(_12, "traverser", ZEPHIR_TEMP_PARAM_COPY);
-	ZEPHIR_INIT_VAR(_14);
-	ZVAL_BOOL(_14, 1);
-	ZEPHIR_CALL_METHOD(NULL, di, "set", NULL, _12, _11, _14);
-	zephir_check_temp_parameter(_12);
 	zephir_check_call_status();
 	ZEPHIR_CALL_METHOD(NULL, this_ptr, "setdi", NULL, di);
 	zephir_check_call_status();

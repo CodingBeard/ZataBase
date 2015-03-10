@@ -1,5 +1,5 @@
 /*
- * ZataBase\Execute\Condition\Equals
+ * ZataBase\Execute\Condition\Within
  *
  * @category 
  * @package ZataBase
@@ -10,7 +10,7 @@
 
 namespace ZataBase\Execute\Condition;
 
-class Equals {
+class Within {
 
     /**
     * True by default, false if this condition is notted
@@ -21,7 +21,7 @@ class Equals {
     };
 
     /**
-    * Column ID
+    * Column
     * @var int
     */
     protected column {
@@ -29,27 +29,30 @@ class Equals {
     };
 
     /**
-    * Value to check against
+    * Values to check against
     * @var mixed
     */
-    protected value {
+    protected values {
         set, get
     };
 
     /**
     * @param string tableName
     */
-    public function __construct(const bool! isNot, const <\Zatabase\Table\Column> column, const var value)
+    public function __construct(const bool! isNot, const <\Zatabase\Table\Column> column, const array! values)
     {
         let this->matches = isNot ? false : true;
         let this->column = column;
-        let this->value = value;
+        let this->values = values;
     }
 
     public function matches(const array! row) -> bool
     {
-        if row[this->column->getKey()] == this->value {
-            return this->matches;
+        var value;
+        for value in this->values {
+            if row[this->column->getKey()] == value {
+                return this->matches;
+            }
         }
         return !this->matches;
     }

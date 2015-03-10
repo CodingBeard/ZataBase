@@ -4048,8 +4048,13 @@ $as_echo "@%:@define HAVE_ZATABASE 1" >>confdefs.h
 	zatabase/exception.zep.c
 	zatabase/execute.zep.c
 	zatabase/execute/condition.zep.c
+	zatabase/execute/condition/between.zep.c
 	zatabase/execute/condition/equals.zep.c
 	zatabase/execute/condition/exception.zep.c
+	zatabase/execute/condition/lessthan.zep.c
+	zatabase/execute/condition/like.zep.c
+	zatabase/execute/condition/morethan.zep.c
+	zatabase/execute/condition/within.zep.c
 	zatabase/execute/delete.zep.c
 	zatabase/execute/exception.zep.c
 	zatabase/execute/insert.zep.c
@@ -4062,10 +4067,7 @@ $as_echo "@%:@define HAVE_ZATABASE 1" >>confdefs.h
 	zatabase/storage/exception.zep.c
 	zatabase/table.zep.c
 	zatabase/table/column.zep.c
-	zatabase/table/exception.zep.c
-	zatabase/traverser.zep.c
-	zatabase/traverser/exception.zep.c
-	zatabase/traverser/row.zep.c "
+	zatabase/table/exception.zep.c "
 	
   ext_builddir=.
   ext_srcdir=$abs_srcdir

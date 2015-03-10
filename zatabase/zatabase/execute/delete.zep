@@ -15,24 +15,20 @@ class Delete extends Condition
     /**
     * Finished creating the query, check table for rows matching conditions
     */
-    public function done() -> array|bool
+    public function done() -> bool
     {
-        var handle, row, condition, count = 0;
-        let handle = this->table->getHandle();
-        if count(this->conditions) {
-            while !feof(handle) {
-                let count++;
-                let row = json_decode(fgets(handle));
-                for condition in this->conditions {
-                    if condition->matches(row) {
-                        this->table->deleteRow(count);
-                    }
+        var row, rows;
+        if typeof this->conditions == "array" {
+            let rows = this->getMatchedRows();
+            if count(rows) {
+                for row in rows {
+                    this->table->deleteRow(row);
                 }
             }
         }
         else {
             this->table->deleteAllRows();
         }
-        return false;
+        return true;
     }
 }

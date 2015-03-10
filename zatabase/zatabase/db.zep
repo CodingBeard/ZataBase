@@ -45,7 +45,6 @@ class Db extends Injectable {
         di->set("storage", storage, true);
         di->set("execute", new Execute(), true);
         di->set("schema", new Schema(config->definitionFile), true);
-        di->set("traverser", new Traverser(), true);
         this->setDI(di);
     }
 

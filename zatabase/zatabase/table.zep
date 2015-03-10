@@ -102,7 +102,14 @@ class Table extends Injectable {
     */
     public function hasColumn(const string! columnName) -> int|bool
     {
-        return array_search(columnName, this->columnMap);
+        var column;
+        for column in this->columns {
+            if column->name == columnName {
+                column->setKey(array_search(columnName, this->columnMap));
+                return column;
+            }
+        }
+        return false;
     }
 
     /**

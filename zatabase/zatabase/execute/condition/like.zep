@@ -1,5 +1,5 @@
 /*
- * ZataBase\Execute\Condition\Equals
+ * ZataBase\Execute\Condition\Like
  *
  * @category 
  * @package ZataBase
@@ -10,7 +10,7 @@
 
 namespace ZataBase\Execute\Condition;
 
-class Equals {
+class Like {
 
     /**
     * True by default, false if this condition is notted
@@ -29,10 +29,10 @@ class Equals {
     };
 
     /**
-    * Value to check against
+    * Pattern to check against
     * @var mixed
     */
-    protected value {
+    protected pattern {
         set, get
     };
 
@@ -43,12 +43,13 @@ class Equals {
     {
         let this->matches = isNot ? false : true;
         let this->column = column;
-        let this->value = value;
+        let this->pattern = "#^" . preg_replace(["#(?<!\\\\)%#is", "#(?<!\\\\)_#is"], ["(.*)", "(.)"], value) . "$#is";
+        echo this->pattern . PHP_EOL;
     }
 
     public function matches(const array! row) -> bool
     {
-        if row[this->column->getKey()] == this->value {
+        if preg_match(this->pattern, row[this->column->getKey()]) {
             return this->matches;
         }
         return !this->matches;

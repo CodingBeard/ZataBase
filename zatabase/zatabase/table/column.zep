@@ -39,6 +39,14 @@ class Column extends Injectable {
     };
 
     /**
+    * Column's key
+    * @var array
+    */
+    public key {
+        set, get
+    };
+
+    /**
     * @var int
     */
     const INT_TYPE = 0;
@@ -83,11 +91,14 @@ class Column extends Injectable {
     * @param int type
     * @param array flags
     */
-    public function __construct(const string! name, const int! type, const array! flags = [])
+    public function __construct(const string! name, const int! type, const array! flags = [], const int! key = -1)
     {
         let this->name = name;
         let this->type = type;
         let this->flags = flags;
+        if key != -1 {
+            let this->key = key;
+        }
     }
 
     /**
