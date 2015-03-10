@@ -1,5 +1,5 @@
 /*
- * ZataBase\Execute\Select
+ * ZataBase\Execute\Delete
  *
  * @category 
  * @package ZataBase
@@ -10,38 +10,28 @@
 
 namespace ZataBase\Execute;
 
-class Select extends Condition
+class Delete extends Condition
 {
-
     /**
     * Finished creating the query, check table for rows matching conditions
-    * TODO: implement a resultset object
     */
     public function done() -> array|bool
     {
-        var handle, row, condition, results;
-        let results = [];
+        var handle, row, condition, count = 0;
         let handle = this->table->getHandle();
         if count(this->conditions) {
             while !feof(handle) {
+                let count++;
                 let row = json_decode(fgets(handle));
                 for condition in this->conditions {
                     if condition->matches(row) {
-                        let results[] = row;
+                        this->table->deleteRow(count);
                     }
                 }
             }
         }
         else {
-            while !feof(handle) {
-                let row = fgets(handle);
-                if strlen(row) {
-                    let results[] = json_decode(row);
-                }
-            }
-        }
-        if count(results) {
-            return results;
+            this->table->deleteAllRows();
         }
         return false;
     }

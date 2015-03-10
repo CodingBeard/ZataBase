@@ -194,7 +194,7 @@ class File {
     public function readFile(string! path) -> string
     {
         if !this->isFile(path) {
-            throw new Exception("Attempting to read a non-existent file");
+            throw new Exception("Attempting to read a non-existent file: '" . path . "'.");
         }
 
         return file_get_contents(this->absolutePath(path));
@@ -209,7 +209,7 @@ class File {
     public function getHandle(string! path)
     {
         if !this->isFile(path) {
-            throw new Exception("Attempting to read a non-existent file");
+            throw new Exception("Attempting to read a non-existent file: '" . path . "'.");
         }
 
         return fopen(this->absolutePath(path), "r");
@@ -222,6 +222,10 @@ class File {
     */
     public function removeFile(const string! path) -> void
     {
+        /* Nothing to do here */
+        if !this->isFile(path) {
+            return;
+        }
         /* Check we can delete it */
         if this->isWritable(path) {
             unlink(this->absolutePath(path));
@@ -295,7 +299,7 @@ class File {
         var read, readline, count = 0;
 
         if !this->isFile(path) {
-            throw new Exception("Attempting to read a non-existent file");
+            throw new Exception("Attempting to read a non-existent file: '" . path . "'.");
         }
 
         let read = fopen(this->absolutePath(path), "r");
@@ -323,7 +327,7 @@ class File {
         let absolutePath = this->absolutePath(path);
 
         if !this->isFile(path) {
-            throw new Exception("Attempting to delete from a non-existent file");
+            throw new Exception("Attempting to delete from a non-existent file: '" . path . "'.");
         }
 
         let read = fopen(absolutePath, "r"), write = fopen(absolutePath . ".write", "w");

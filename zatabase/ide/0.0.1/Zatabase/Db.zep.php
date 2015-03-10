@@ -8,7 +8,7 @@ class Db extends \ZataBase\Di\Injectable
     /**
      * Constructor
      *
-     * @param array $config 
+     * @param mixed $config 
      */
 	public function __construct($config) {}
 

@@ -25,27 +25,28 @@ class Db extends Injectable {
     /**
     * Constructor
     */
-    public function __construct(const array! config)
+    public function __construct(const var! config)
     {
-        var di, conf;
-        let conf = json_decode(json_encode(config));
-        let di = new Di();
-        di->set("config", conf, true);
-        di->set("storage", new File(conf->databaseDir), true);
-        di->set("execute", new Execute(), true);
-        di->set("schema", new Schema(), true);
-        di->set("traverser", new Traverser(), true);
-        this->setDI(di);
+        var di, storage;
+        let storage = new File(config->databaseDir);
+        let config->definitionFile = config->tablesDir . config->definitionName;
 
-        if !this->{"storage"}->isFile(conf->schema->definitionFile) {
-            this->{"storage"}->setFile(conf->schema->definitionFile, json_encode(["name", "columns", "increment", "relationships"]));
-            this->{"storage"}->appendLine(conf->schema->definitionFile, new Table("Schema", [
+        if !storage->isFile(config->definitionFile) {
+            storage->setFile(config->definitionFile, new Table(config->definitionName, [
                 new Column("name", Column::STRING_TYPE),
                 new Column("columns", Column::JSON_TYPE),
                 new Column("increment", Column::INT_TYPE),
                 new Column("relationships", Column::JSON_TYPE)
             ]));
         }
+
+        let di = new Di();
+        di->set("config", config, true);
+        di->set("storage", storage, true);
+        di->set("execute", new Execute(), true);
+        di->set("schema", new Schema(config->definitionFile), true);
+        di->set("traverser", new Traverser(), true);
+        this->setDI(di);
     }
 
 }

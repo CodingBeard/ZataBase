@@ -13,6 +13,7 @@ namespace ZataBase;
 use ZataBase\Di\Injectable;
 use ZataBase\Execute\Insert;
 use ZataBase\Execute\Select;
+use ZataBase\Execute\Delete;
 
 class Execute extends Injectable {
 
@@ -46,6 +47,22 @@ class Execute extends Injectable {
             throw new Exception("Cannot select from table: '" . tableName . "'. It does not exist.");
         }
         return new Select(table);
+    }
+
+    /**
+    * Set a table to delete from
+    *
+    * @param array parameters
+    */
+    public function delete(const string! tableName) -> <Execute\Select>
+    {
+        var table;
+
+        let table = this->{"schema"}->getTable(tableName);
+        if !table {
+            throw new Exception("Cannot delete from table: '" . tableName . "'. It does not exist.");
+        }
+        return new Delete(table);
     }
 
 }

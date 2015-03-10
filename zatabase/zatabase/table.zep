@@ -90,21 +90,11 @@ class Table extends Injectable {
     }
 
     /**
-    * Create table
-    */
-    public function create() -> void
-    {
-        this->{"storage"}->appendLine(this->{"config"}->schema->definitionFile, this);
-        this->{"storage"}->setFile(this->{"config"}->schema->tablesDir . "/" . this->name, json_encode(this->getColumnMap()));
-    }
-
-    /**
     * Delete table
     */
     public function delete() -> void
     {
-        this->{"storage"}->removeLine(this->{"config"}->schema->definitionFile, this->id + 1);
-        this->{"storage"}->removeFile(this->{"config"}->schema->tablesDir . this->name);
+        this->{"schema"}->deleteTable(this);
     }
 
     /**
@@ -120,7 +110,25 @@ class Table extends Injectable {
     */
     public function getHandle()
     {
-        return this->{"storage"}->getHandle(this->{"config"}->schema->tablesDir . "/" . this->name);
+        var handle;
+        let handle = this->{"storage"}->getHandle(this->{"config"}->tablesDir . "/" . this->name);
+        return handle;
+    }
+
+    /**
+    * Delete row
+    */
+    public function deleteRow(const int! rowId) -> void
+    {
+        this->{"storage"}->removeLine(this->{"config"}->tablesDir . "/" . this->name, rowId);
+    }
+
+    /**
+    * Delete all rows
+    */
+    public function deleteAllRows() -> void
+    {
+        this->{"storage"}->removeFile(this->{"config"}->tablesDir . "/" . this->name);
     }
 
     /**
@@ -129,5 +137,13 @@ class Table extends Injectable {
     public function __toString()
     {
         return json_encode([this->name, this->columns, this->increment, this->relationships]);
+    }
+
+    /**
+    * Array self
+    */
+    public function toArray() -> array
+    {
+        return [this->name, this->columns, this->increment, this->relationships];
     }
 }

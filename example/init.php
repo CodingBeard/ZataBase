@@ -37,8 +37,14 @@ try {
         ['Jane', 'doe', '1994-07-06'],
     ]);
 
+    /* Delete row(s) */
+    $db->execute->delete('Users')->done();
+
     /* Relative insert, with values for specific columns */
     $db->execute->insert('Users')->values(['firstName' => 'Jim', 'lastName' => 'Doe']);
+
+    /* Delete row(s), conditionally */
+    $db->execute->delete('Users')->where('firstName')->equals('Jim')->done();
 
     /* Inserting multiple rows */
     $db->execute->insert('Users')->values([
@@ -50,7 +56,9 @@ try {
     $rows = $db->execute->select('Users')->done();
 
     /* Select row(s), conditionally */
-    $row = $db->execute->select('Users')->where('firstName')->equals('Tim')->done();
+    $row = $db->execute->select('Users')->where('firstName')->equals('Josh')->done();
+
+    print_r($rows);
 
 } catch (\Exception $e) {
     echo $e->getMessage() . PHP_EOL;

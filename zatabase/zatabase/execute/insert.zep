@@ -61,7 +61,7 @@ class Insert extends QueryType
         if count(this->table->getColumnMap()) != count(values) {
             throw new Exception("All fields are required when using a non-associative values array");
         }
-        this->{"storage"}->appendLine(this->{"config"}->schema->tablesDir . this->table->name, json_encode(values));
+        this->{"storage"}->appendLine(this->{"config"}->tablesDir . this->table->name, json_encode(values));
     }
 
     /**
@@ -91,6 +91,6 @@ class Insert extends QueryType
                 let valuesWithNulls[] = null;
             }
         }
-        this->{"storage"}->appendLine(this->{"config"}->schema->tablesDir . this->table->name, json_encode(valuesWithNulls));
+        this->{"storage"}->appendLine(this->{"config"}->tablesDir . this->table->name, json_encode(valuesWithNulls));
     }
 }
