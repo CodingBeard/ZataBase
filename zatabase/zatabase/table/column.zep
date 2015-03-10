@@ -61,6 +61,11 @@ class Column extends Injectable {
     /**
     * @var int
     */
+    const JSON_TYPE = 3;
+
+    /**
+    * @var int
+    */
     const PRIMARY_FLAG = 0;
 
     /**

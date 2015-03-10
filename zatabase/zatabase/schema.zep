@@ -32,7 +32,7 @@ class Schema extends Injectable {
     * Instance a table from the tables' file
     * @param string name
     */
-    public function getTable(const string! name)
+    public function getTable(const string! name) -> <Table>|bool
     {
         var row;
         this->{"traverser"}->setTable("schema");

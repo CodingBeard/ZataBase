@@ -13,6 +13,8 @@ namespace ZataBase;
 use ZataBase\Di;
 use ZataBase\Di\Injectable;
 use ZataBase\Storage\Adapter\File;
+use ZataBase\Table;
+use ZataBase\Table\Column;
 
 /**
 * ZataBase\db
@@ -37,6 +39,12 @@ class Db extends Injectable {
 
         if !this->{"storage"}->isFile(conf->schema->definitionFile) {
             this->{"storage"}->setFile(conf->schema->definitionFile, json_encode(["name", "columns", "increment", "relationships"]));
+            this->{"storage"}->appendLine(conf->schema->definitionFile, new Table("Schema", [
+                new Column("name", Column::STRING_TYPE),
+                new Column("columns", Column::JSON_TYPE),
+                new Column("increment", Column::INT_TYPE),
+                new Column("relationships", Column::JSON_TYPE)
+            ]));
         }
     }
 

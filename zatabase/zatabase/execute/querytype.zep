@@ -26,7 +26,7 @@ class QueryType extends Injectable {
     /**
     * @param string tableName
     */
-    public function __construct(<Table> table)
+    public function __construct(<\Zatabase\Table> table)
     {
         let this->table = table;
     }

@@ -72,20 +72,18 @@ class Insert extends QueryType
     */
     protected function insertRelativeValues(const array! values)
     {
-        var columnMap, columnName, key, value;
+        var columnName, key, value;
         array valuesWithNulls;
 
-        let columnMap = this->table->getColumnMap();
-
         for key, value in values {
-            if !in_array(key, columnMap) {
+            if typeof this->table->hasColumn(key) != "int" {
                 throw new Exception("Column: '" . key . "' does not exists in the column map of table: '" . this->table->name . "'.");
             }
         }
 
         let valuesWithNulls = [];
 
-        for columnName in columnMap {
+        for columnName in this->table->getColumnMap() {
             if fetch value, values[columnName] {
                 let valuesWithNulls[] = value;
             }

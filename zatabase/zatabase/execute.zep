@@ -12,6 +12,7 @@ namespace ZataBase;
 
 use ZataBase\Di\Injectable;
 use ZataBase\Execute\Insert;
+use ZataBase\Execute\Select;
 
 class Execute extends Injectable {
 
@@ -29,6 +30,22 @@ class Execute extends Injectable {
             throw new Exception("Cannot insert into table: '" . tableName . "'. It does not exist.");
         }
         return new Insert(table);
+    }
+
+    /**
+    * Set a table to select from
+    *
+    * @param array parameters
+    */
+    public function select(const string! tableName) -> <Execute\Select>
+    {
+        var table;
+
+        let table = this->{"schema"}->getTable(tableName);
+        if !table {
+            throw new Exception("Cannot select from table: '" . tableName . "'. It does not exist.");
+        }
+        return new Select(table);
     }
 
 }

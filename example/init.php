@@ -18,19 +18,18 @@ try {
     $config = include __DIR__ . "/config.php";
     $db = new Db($config);
 
+    /* Delete a table */
+    $db->schema->deleteTable('Users');
+
     /* Create a table */
-    $db->schema->createTable($table = new Table('Users', [
+    $db->schema->createTable(new Table('Users', [
         new Column('firstName', Column::STRING_TYPE),
         new Column('lastName', Column::STRING_TYPE),
         new Column('DoB', Column::DATE_TYPE),
     ]));
 
-    /* Delete a table */
-    $db->schema->deleteTable('Users');
-
-
     /* Literal insert with values for all columns */
-    $db->execute->insert('Users')->values(['Tim', 'Marshall', '1994-07-04']);
+    $db->execute->insert('Users')->values(['Josh', 'Doe', '1994-07-04']);
 
     /* Inserting multiple rows */
     $db->execute->insert('Users')->values([
@@ -46,6 +45,12 @@ try {
         ['firstName' => 'James', 'lastName' => 'Doe'],
         ['firstName' => 'Joan', 'DoB' => '1994-07-07'],
     ]);
+
+    /* Select row(s) */
+    $rows = $db->execute->select('Users')->done();
+
+    /* Select row(s), conditionally */
+    $row = $db->execute->select('Users')->where('firstName')->equals('Tim')->done();
 
 } catch (\Exception $e) {
     echo $e->getMessage() . PHP_EOL;

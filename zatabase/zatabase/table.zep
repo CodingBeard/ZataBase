@@ -40,6 +40,14 @@ class Table extends Injectable {
     };
 
     /**
+    * Table's column map
+    * @var array
+    */
+    public columnMap {
+        set, get
+    };
+
+    /**
     * Table's increment counter
     * @var int
     */
@@ -70,9 +78,11 @@ class Table extends Injectable {
         for column in columns {
             if typeof column == "array" {
                 let this->columns[] = new Column(column["name"], column["type"], column["flags"]);
+                let this->columnMap[] = column["name"];
             }
             else {
                 let this->columns[] = column;
+                let this->columnMap[] = column->name;
             }
         }
         let this->increment = increment;
@@ -82,7 +92,7 @@ class Table extends Injectable {
     /**
     * Create table
     */
-    public function create()
+    public function create() -> void
     {
         this->{"storage"}->appendLine(this->{"config"}->schema->definitionFile, this);
         this->{"storage"}->setFile(this->{"config"}->schema->tablesDir . "/" . this->name, json_encode(this->getColumnMap()));
@@ -91,22 +101,26 @@ class Table extends Injectable {
     /**
     * Delete table
     */
-    public function delete()
+    public function delete() -> void
     {
         this->{"storage"}->removeLine(this->{"config"}->schema->definitionFile, this->id + 1);
         this->{"storage"}->removeFile(this->{"config"}->schema->tablesDir . this->name);
     }
 
     /**
-    * Return array of columnMap
+    * Check if this table has a certain column
     */
-    public function getColumnMap() -> array
+    public function hasColumn(const string! columnName) -> int|bool
     {
-        var column, names = [];
-        for column in this->columns {
-            let names[] = column->name;
-        }
-        return names;
+        return array_search(columnName, this->columnMap);
+    }
+
+    /**
+    * get the file handler for this table
+    */
+    public function getHandle()
+    {
+        return this->{"storage"}->getHandle(this->{"config"}->schema->tablesDir . "/" . this->name);
     }
 
     /**
