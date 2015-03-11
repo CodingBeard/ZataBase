@@ -22,7 +22,7 @@ class Select extends Condition
     public function done() -> <\ZataBase\Execute\Results>|bool
     {
         var results;
-        let results = this->getMatchedRows();
+        let results = this->table->selectRows(this->conditions);
         if results->count() {
             return results;
         }
@@ -33,34 +33,32 @@ class Select extends Condition
     * Get the maximum value of a column
     * @param string columnName
     */
-    public function max(const string! columnName)
+    public function max(const string! columnName) -> string|int
     {
-        var column, columnKey, handle, value = [], highest = 0, highestValue = "0000-00-00";
+        var column, columnKey, rows, row, highest = 0, highestValue = "0000-00-00";
+
         let column = this->table->hasColumn(columnName);
         if typeof column != "object" {
             throw new Exception("Cannot select max from column: '" . columnName . "' It does not exist.");
         }
 
         let columnKey = column->getKey();
-        let handle = this->table->getHandle();
+        let rows = this->table->selectRows();
+
         if column->type == Column::DATE_TYPE {
-            let value = json_decode(fgets(handle));
-            while !feof(handle) {
-                if strtotime(value[columnKey]) > highest {
-                    let highest = strtotime(value[columnKey]);
-                    let highestValue = value[columnKey];
+            for row in iterator(rows) {
+                if strtotime(row[columnKey]) > highest {
+                    let highest = strtotime(row[columnKey]);
+                    let highestValue = row[columnKey];
                 }
-                let value = json_decode(fgets(handle));
             }
         }
         else {
-            let value = json_decode(fgets(handle));
-            while !feof(handle) {
-                if intval(value[columnKey]) > highest {
-                    let highest = intval(value[columnKey]);
-                    let highestValue = value[columnKey];
+            for row in iterator(rows) {
+                if intval(row[columnKey]) > highest {
+                    let highest = intval(row[columnKey]);
+                    let highestValue = row[columnKey];
                 }
-                let value = json_decode(fgets(handle));
             }
         }
         return highestValue;
@@ -70,36 +68,32 @@ class Select extends Condition
     * Get the minimum value of a column
     * @param string columnName
     */
-    public function min(const string! columnName)
+    public function min(const string! columnName) -> string|int
     {
-        var column, columnKey, handle, value = [], count = 0, lowest = 0, lowestValue = "0000-00-00";
+        var column, columnKey, rows, key, row, lowest = 0, lowestValue = "9999-99-99";
+
         let column = this->table->hasColumn(columnName);
         if typeof column != "object" {
             throw new Exception("Cannot select max from column: '" . columnName . "' It does not exist.");
         }
 
         let columnKey = column->getKey();
-        let handle = this->table->getHandle();
+        let rows = this->table->selectRows();
+
         if column->type == Column::DATE_TYPE {
-            let value = json_decode(fgets(handle));
-            while !feof(handle) {
-                if strtotime(value[columnKey]) < lowest || count == 0 {
-                    let lowest = strtotime(value[columnKey]);
-                    let lowestValue = value[columnKey];
+            for key, row in iterator(rows) {
+                if strtotime(row[columnKey]) < lowest || key == 0 {
+                    let lowest = strtotime(row[columnKey]);
+                    let lowestValue = row[columnKey];
                 }
-                let count++;
-                let value = json_decode(fgets(handle));
             }
         }
         else {
-            let value = json_decode(fgets(handle));
-            while !feof(handle) {
-                if intval(value[columnKey]) < lowest || count == 0 {
-                    let lowest = intval(value[columnKey]);
-                    let lowestValue = value[columnKey];
+            for key, row in iterator(rows) {
+                if intval(row[columnKey]) < lowest || key == 0 {
+                    let lowest = intval(row[columnKey]);
+                    let lowestValue = row[columnKey];
                 }
-                let count++;
-                let value = json_decode(fgets(handle));
             }
         }
         return lowestValue;

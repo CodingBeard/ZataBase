@@ -12,5 +12,4 @@
 return new ZataBase\Helper\ArrayToObject([
     "databaseDir" => __DIR__ . "/database", /* Location of the database */
     "tablesDir" => "tables/",               /* Location of table files */
-    "definitionName" => "Schema",           /* Name of file table definitions are stored in */
 ]);

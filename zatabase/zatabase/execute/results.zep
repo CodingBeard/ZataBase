@@ -44,15 +44,6 @@ class Results implements \SeekableIterator, \ArrayAccess {
     {
         let this->table = table;
         let this->position = 0;
-        this->refreshHandle();
-    }
-
-    /**
-    * refresh the file handle
-    */
-    protected function refreshHandle()
-    {
-        let this->handle = this->table->getHandle();
     }
 
     /**
@@ -69,8 +60,8 @@ class Results implements \SeekableIterator, \ArrayAccess {
     */
     public function getRow(var offset = false) -> bool|array
     {
-        fseek(this->handle, this->rows[offset]);
-        return json_decode(fgets(this->handle));
+        this->table->file->seek(this->rows[offset]);
+        return json_decode(this->table->file->current());
     }
 
 

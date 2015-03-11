@@ -10,7 +10,9 @@
 
 namespace ZataBase;
 
+use Zatabase\Execute\Results;
 use ZataBase\Di\Injectable;
+use ZataBase\Helper\FileHandler;
 use ZataBase\Table\Column;
 
 class Table extends Injectable {
@@ -20,6 +22,14 @@ class Table extends Injectable {
     * @var string
     */
     public offset {
+        set, get
+    };
+
+    /**
+    * Table's file handler
+    * @var \SplFileObject
+    */
+    public file {
         set, get
     };
 
@@ -70,14 +80,13 @@ class Table extends Injectable {
     * @param int increment
     * @param array relationships
     */
-    public function __construct(const string! name, const array! columns = [], int increment = 0, const array! relationships = [], const int offset = 0)
+    public function __construct(const string! name, const array! columns = [], int increment = 0, const array! relationships = [], const var offset = false)
     {
         var columnArray, column, columnCount = 0;
-        let this->offset = offset;
-        let this->name = name;
+
         for columnArray in columns {
-            if typeof columnArray == "array" {
-                let column = new Column(columnArray["name"], columnArray["type"], columnArray["flags"], columnCount);
+            if get_class(columnArray) == "stdClass" {
+                let column = new Column(columnArray->name, columnArray->type, columnArray->flags, columnCount);
             }
             else {
                 columnArray->setKey(columnCount);
@@ -85,44 +94,14 @@ class Table extends Injectable {
             }
             let this->columns[column->name] = column;
             let this->columnMap[] = column->name;
-            if increment == 0 {
-                if column->hasFlag(Column::INCREMENT_FLAG) {
-                    let increment = 1;
-                }
-            }
+            let columnCount++;
         }
+
+        let this->name = name;
         let this->increment = increment;
         let this->relationships = relationships;
-    }
-
-    /**
-    * Save Table
-    * TODO: replace
-    */
-    public function save() -> void
-    {
-
-    }
-
-    /**
-    * Delete table
-    */
-    public function delete() -> void
-    {
-        this->{"execute"}->delete(this->{"config"}->definitionName)
-            ->where("name")->equals(this->name)->done();
-
-        this->{"storage"}->removeFile(this->{"config"}->tablesDir . this->name);
-    }
-
-    /**
-    * get the file handler for this table
-    */
-    public function getHandle()
-    {
-        var handle;
-        let handle = this->{"storage"}->getHandle(this->{"config"}->tablesDir . this->name);
-        return handle;
+        let this->offset = offset;
+        this->refresh();
     }
 
     /**
@@ -146,6 +125,41 @@ class Table extends Injectable {
         return array_search(columnName, this->columnMap);
     }
 
+    public function selectRows(const var conditions = [])
+    {
+        var row, condition, results;
+        bool match = true;
+
+        let results = new Results(this);
+
+        if count(conditions) {
+            while this->file->valid() {
+
+                let match = true;
+
+                let row = json_decode(this->file->current());
+
+                if typeof row == "array" {
+                    for condition in conditions {
+                        if !condition->matches(row) {
+                            let match = false;
+                        }
+                    }
+
+                    if match {
+                        let results->rows[] = this->file->key();
+                    }
+                }
+
+                this->file->next();
+            }
+        }
+        else {
+            let results->rows = range(0, this->file->count());
+        }
+        return results;
+    }
+
     /**
     * Insert a row
     * @param int rowId
@@ -155,7 +169,7 @@ class Table extends Injectable {
         if count(row) != count(this->columnMap) {
             throw new Exception("Row should contain the same number of values as columns in the table: " . implode(", ", this->columnMap));
         }
-        this->{"storage"}->appendLine(this->{"config"}->tablesDir . "/" . this->name, json_encode(row));
+        this->file->append(json_encode(row));
     }
 
     /**
@@ -171,16 +185,16 @@ class Table extends Injectable {
             }
             let appendedRows .= json_encode(row) . PHP_EOL;
         }
-        this->{"storage"}->appendLine(this->{"config"}->tablesDir . "/" . this->name, substr(appendedRows, 0, -1));
+        this->file->append(substr(appendedRows, 0, -1));
     }
 
     /**
-    * Delete a row
+    * Delete row(s)
     * @param int offset
     */
-    public function deleteRow(const int! offset) -> void
+    public function deleteRows(const var offsets) -> void
     {
-        this->{"storage"}->removeLine(this->{"config"}->tablesDir . "/" . this->name, offset);
+        this->file->delete(offsets);
     }
 
     /**
@@ -188,7 +202,7 @@ class Table extends Injectable {
     */
     public function deleteAllRows() -> void
     {
-        this->{"storage"}->removeFile(this->{"config"}->tablesDir . "/" . this->name);
+        this->file->ftruncate(0);
     }
 
     /**
@@ -196,14 +210,30 @@ class Table extends Injectable {
     */
     public function __toString()
     {
-        return json_encode([this->name, this->columns, this->increment, this->relationships]);
+        return serialize(this);
     }
 
     /**
-    * Array self
+    * Properties to serialize
     */
-    public function toArray() -> array
+    public function __sleep()
     {
-        return [this->name, this->columns, this->increment, this->relationships];
+        return ["name", "columns", "columnMap", "increment", "relationships"];
+    }
+
+    /**
+    * Refresh the file handler on wakeup
+    */
+    public function __wakeup()
+    {
+        this->refresh();
+    }
+
+    /**
+    * Refresh the file handler
+    */
+    public function refresh()
+    {
+        let this->file = new FileHandler(this->{"storage"}->path(this->{"config"}->tablesDir . this->name), "c+");
     }
 }

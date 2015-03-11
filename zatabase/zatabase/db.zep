@@ -13,8 +13,6 @@ namespace ZataBase;
 use ZataBase\Di;
 use ZataBase\Di\Injectable;
 use ZataBase\Storage\Adapter\File;
-use ZataBase\Table;
-use ZataBase\Table\Column;
 
 /**
 * ZataBase\db
@@ -29,15 +27,10 @@ class Db extends Injectable {
     {
         var di, storage;
         let storage = new File(config->databaseDir);
-        let config->definitionFile = config->tablesDir . config->definitionName;
+        let config->definitionFile = config->tablesDir . "Schema";
 
-        if !storage->isFile(config->definitionFile) {
-            storage->setFile(config->definitionFile, new Table(config->definitionName, [
-                new Column("name", Column::STRING_TYPE),
-                new Column("columns", Column::JSON_TYPE),
-                new Column("increment", Column::INT_TYPE),
-                new Column("relationships", Column::JSON_TYPE)
-            ]));
+        if !storage->isDir(config->tablesDir) {
+            storage->addDir(config->tablesDir);
         }
 
         let di = new Di();

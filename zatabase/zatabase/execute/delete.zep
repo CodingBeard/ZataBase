@@ -17,13 +17,11 @@ class Delete extends Condition
     */
     public function done() -> <\ZataBase\Execute\Results>|bool
     {
-        var offset, results;
+        var results;
         if typeof this->conditions == "array" {
-            let results = this->getMatchedRows();
+            let results = this->table->selectRows(this->conditions);
             if results->count() {
-                for offset in results->rows {
-                    this->table->deleteRow(offset);
-                }
+                this->table->deleteRows(results->rows);
             }
         }
         else {

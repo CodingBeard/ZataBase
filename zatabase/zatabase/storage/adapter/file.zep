@@ -11,6 +11,7 @@
 namespace ZataBase\Storage\Adapter;
 
 use ZataBase\Storage\Exception;
+use ZataBase\Helper\FileHandler;
 
 class File {
 
@@ -52,7 +53,7 @@ class File {
     * @param string path
     * @return string
     */
-    public function absolutePath(const string! path) -> string
+    public function path(const string! path) -> string
     {
         var absolutePath = "";
 
@@ -81,7 +82,7 @@ class File {
     */
     public function isWritable(const string! path) -> bool
     {
-        return is_writable(this->absolutePath(path));
+        return is_writable(this->path(path));
     }
 
     /**
@@ -91,7 +92,7 @@ class File {
     */
     public function isDir(const string! path) -> bool
     {
-        return is_dir(this->absolutePath(path));
+        return is_dir(this->path(path));
     }
 
     /**
@@ -111,10 +112,10 @@ class File {
 
         /* Check we have permissions to do that */
         if this->isWritable(dirname(path)) {
-            mkdir(this->absolutePath(path));
+            mkdir(this->path(path));
         }
         else {
-            throw new Exception("Cannot create folder in dir: '" . dirname(this->absolutePath(path)) . "'. Bad Permissions.");
+            throw new Exception("Cannot create folder in dir: '" . dirname(this->path(path)) . "'. Bad Permissions.");
         }
     }
 
@@ -132,7 +133,7 @@ class File {
 
         /* Check for files within the dir */
         var files = [], file = "";
-        let files = scandir(this->absolutePath(path));
+        let files = scandir(this->path(path));
 
         /* If files, recursively delete  */
         if count(files) {
@@ -141,7 +142,7 @@ class File {
                     continue;
                 }
 
-                let file = this->absolutePath(path . DIRECTORY_SEPARATOR . file);
+                let file = this->path(path . DIRECTORY_SEPARATOR . file);
 
                 if this->isDir(file) {
                     this->removeDir(file);
@@ -154,7 +155,7 @@ class File {
 
         /* Check we have permissions to do so */
         if this->isWritable(path) {
-            rmdir(this->absolutePath(path));
+            rmdir(this->path(path));
         }
         else {
             throw new Exception("Cannot delete folder: '" . dirname(path) . "'. Bad Permissions.");
@@ -168,7 +169,20 @@ class File {
     */
     public function isFile(const string! path) -> bool
     {
-        return is_file(this->absolutePath(path));
+        return is_file(this->path(path));
+    }
+
+    /**
+    * Touch a file
+    *
+    * @param string path
+    */
+    public function touch(const string! path) -> void
+    {
+        /* Make sure we can write the file */
+        this->addDir(dirname(path));
+
+        touch(this->path(path));
     }
 
     /**
@@ -182,7 +196,7 @@ class File {
         /* Make sure we can write the file */
         this->addDir(dirname(path));
 
-        file_put_contents(this->absolutePath(path), content . PHP_EOL, LOCK_EX);
+        file_put_contents(this->path(path), content . PHP_EOL, LOCK_EX);
     }
 
     /**
@@ -197,7 +211,7 @@ class File {
             throw new Exception("Attempting to read a non-existent file: '" . path . "'.");
         }
 
-        return file_get_contents(this->absolutePath(path));
+        return file_get_contents(this->path(path));
     }
 
     /**
@@ -209,10 +223,10 @@ class File {
     public function getHandle(string! path)
     {
         if !this->isFile(path) {
-            throw new Exception("Attempting to read a non-existent file: '" . path . "'.");
+            this->touch(path);
         }
 
-        return fopen(this->absolutePath(path), "r");
+        return new FileHandler(this->path(path), "c+");
     }
 
     /**
@@ -228,117 +242,12 @@ class File {
         }
         /* Check we can delete it */
         if this->isWritable(path) {
-            unlink(this->absolutePath(path));
+            unlink(this->path(path));
         }
         else {
-            throw new Exception("Cannot delete file: '" . this->absolutePath(path) . "'. Bad Permissions.");
+            throw new Exception("Cannot delete file: '" . this->path(path) . "'. Bad Permissions.");
         }
 
-    }
-
-    /**
-    * Append a line to a file
-    *
-    * @param string path
-    * @param string|int content
-    */
-    public function appendLine(const string! path, const var content = "") -> void
-    {
-        /* Create a new file if one doesn't exist */
-        if !this->isFile(this->absolutePath(path)) {
-            this->setFile(this->absolutePath(path), content);
-        }
-        else {
-            file_put_contents(this->absolutePath(path), content . PHP_EOL, FILE_APPEND | LOCK_EX);
-        }
-    }
-
-    /**
-    * Add a line in a file
-    * TODO: convert to offset
-    * @param string path
-    * @param int line
-    * @param string|int content
-    */
-    public function addLine(const string! path, const int! line, const var content = "") -> void
-    {
-        var absolutePath, read, write, count = 0;
-        let absolutePath = this->absolutePath(path);
-
-        /* Create a new file if one doesn't exist */
-        if !this->isFile(path) {
-            file_put_contents(absolutePath, content);
-        }
-        else {
-            let read = fopen(absolutePath, "r"), write = fopen(absolutePath . ".write", "w");
-
-            while !feof(read) {
-                let count++;
-                if count == line {
-                    fputs(write, content . PHP_EOL);
-                }
-
-                fputs(write, fgets(read));
-            }
-            fclose(read);
-            fclose(write);
-
-            rename(absolutePath . ".write", absolutePath);
-        }
-    }
-
-    /**
-    * Read a specific line in a file
-    * TODO: convert to offset
-    * @param string path
-    * @param int line
-    * @return string
-    */
-    public function readLine(const string! path, const int! offset) -> string
-    {
-        var read;
-
-        if !this->isFile(path) {
-            throw new Exception("Attempting to read a non-existent file: '" . path . "'.");
-        }
-
-        let read = fopen(this->absolutePath(path), "r");
-        fseek(read, offset);
-        return fgets(read);
-    }
-
-    /**
-    * Remove a specific line in a file
-    *
-    * @param string path
-    * @param int offset
-    */
-    public function removeLine(const string! path, const int! offset) -> void
-    {
-        var absolutePath, line, read, write;
-        let absolutePath = this->absolutePath(path);
-
-        if !this->isFile(path) {
-            throw new Exception("Attempting to delete from a non-existent file: '" . path . "'.");
-        }
-
-        let read = fopen(absolutePath, "r"), write = fopen(absolutePath . ".write", "w");
-        if offset != 0 {
-            let line = fgets(read);
-        }
-        while !feof(read) {
-            if ftell(read) != offset {
-                fputs(write, line);
-                let line = fgets(read);
-            }
-            else {
-                fgets(read);
-            }
-        }
-        fclose(read);
-        fclose(write);
-
-        rename(absolutePath . ".write", absolutePath);
     }
 
 }

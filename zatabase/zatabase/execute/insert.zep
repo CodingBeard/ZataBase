@@ -46,7 +46,7 @@ class Insert extends QueryType
     *
     * @param array values
     */
-    public function values(const array! values)
+    public function values(const array! values) -> int
     {
         var value, rows = [];
         if !this->table {
@@ -63,17 +63,17 @@ class Insert extends QueryType
                         let rows[] = value;
                     }
                 }
-                this->table->insertRows(rows);
+                return this->table->insertRows(rows);
             }
             elseif this->columns {
-                this->table->insertRow(this->fillNulls(values));
+                return this->table->insertRow(this->fillNulls(values));
             }
             else {
-                this->table->insertRow(values);
+                return this->table->insertRow(values);
             }
         }
         else {
-            this->table->insertRow(this->fillNulls(values));
+            return this->table->insertRow(this->fillNulls(values));
         }
     }
 

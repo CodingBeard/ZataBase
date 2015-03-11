@@ -11,6 +11,8 @@
 namespace ZataBase;
 
 use ZataBase\Di\Injectable;
+use ZataBase\Table;
+use ZataBase\Table\Column;
 
 class Schema extends Injectable {
 
@@ -18,7 +20,7 @@ class Schema extends Injectable {
     * Definition File handler
     * @var mixed
     */
-    protected handle {
+    protected file {
         set, get
     };
 
@@ -28,16 +30,46 @@ class Schema extends Injectable {
     */
     public function __construct(const string! definitionFile)
     {
-        let this->handle = this->{"storage"}->getHandle(definitionFile);
+        let this->file = this->{"storage"}->getHandle(definitionFile);
+        if !this->getTable("Schema") {
+            this->file->append(new Table("Schema", [
+                new Column("name", Column::STRING_TYPE),
+                new Column("columns", Column::JSON_TYPE),
+                new Column("increment", Column::INT_TYPE),
+                new Column("relationships", Column::JSON_TYPE)
+            ]));
+        }
     }
 
     /**
     * Refresh the definition file handler
     * @param string
     */
-    public function refreshDefinition()
+    public function refresh()
     {
-        let this->handle = this->{"storage"}->getHandle(this->{"config"}->definitionFile);
+        let this->file = this->{"storage"}->getHandle(this->{"config"}->definitionFile);
+    }
+
+    /**
+    * Instance a table from the tables' file
+    * @param string name
+    */
+    public function getTable(const string! name) -> <Table>|bool
+    {
+        var row, table;
+        this->file->rewind();
+        while this->file->valid() {
+            let row = this->file->current();
+            let table = unserialize(row);
+            if typeof table == "object" {
+                if table->name == name {
+                    table->setOffset(this->file->key());
+                    return table;
+                }
+            }
+            this->file->next();
+        }
+        return false;
     }
 
     /**
@@ -47,30 +79,12 @@ class Schema extends Injectable {
     public function createTable(<Table> table)
     {
         if !this->getTable(table->name) {
-            this->{"execute"}->insert(this->{"config"}->definitionName)->values(table->toArray());
-            this->refreshDefinition();
+            this->file->append(table);
+            this->refresh();
         }
         else {
             throw new Exception("Table: '" . table->name . "' already exists.");
         }
-    }
-
-    /**
-    * Instance a table from the tables' file
-    * @param string name
-    */
-    public function getTable(const string! name) -> <Table>|bool
-    {
-        var row = [];
-        rewind(this->handle);
-        let row = json_decode(fgets(this->handle), true);
-        while !feof(this->handle) {
-            if row[0] == name {
-                return new table(row[0], row[1], row[2], row[3], ftell(this->handle));
-            }
-            let row = json_decode(fgets(this->handle), true);
-        }
-        return false;
     }
 
     /**
@@ -82,8 +96,8 @@ class Schema extends Injectable {
         var table;
         let table = this->getTable(name);
         if table {
-            table->delete();
-            this->refreshDefinition();
+            this->file->delete(table->offset);
+            this->refresh();
         }
     }
 
