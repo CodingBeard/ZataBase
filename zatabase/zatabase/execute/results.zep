@@ -60,7 +60,7 @@ class Results implements \SeekableIterator, \ArrayAccess {
     */
     public function getRow(var offset = false) -> bool|array
     {
-        this->table->file->seek(this->rows[offset]);
+        this->table->file->fseek(this->rows[offset]);
         return json_decode(this->table->file->current());
     }
 

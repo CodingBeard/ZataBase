@@ -53,7 +53,7 @@ class FileHandler extends \SplFileObject {
         let rewrite = new self(this->getRealPath() . ".write", "w");
         this->rewind();
         while this->valid() {
-            if !in_array(this->key(), offsets) {
+            if !in_array(this->ftell(), offsets) {
                 rewrite->fwrite(this->current());
             }
             this->current();

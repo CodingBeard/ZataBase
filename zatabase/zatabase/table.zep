@@ -147,7 +147,7 @@ class Table extends Injectable {
                     }
 
                     if match {
-                        let results->rows[] = this->file->key();
+                        let results->rows[] = this->file->ftell();
                     }
                 }
 
@@ -155,7 +155,11 @@ class Table extends Injectable {
             }
         }
         else {
-            let results->rows = range(0, this->file->count());
+            while this->file->valid() {
+                let results->rows[] = this->file->ftell();
+                this->file->current();
+                this->file->next();
+            }
         }
         return results;
     }

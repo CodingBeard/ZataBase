@@ -63,7 +63,7 @@ class Schema extends Injectable {
             let table = unserialize(row);
             if typeof table == "object" {
                 if table->name == name {
-                    table->setOffset(this->file->key());
+                    table->setOffset(this->file->ftell());
                     return table;
                 }
             }
