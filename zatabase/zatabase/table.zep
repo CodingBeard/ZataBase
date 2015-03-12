@@ -98,36 +98,48 @@ class Table extends Injectable {
     */
     public function __construct(const string! name, const array! columns = [], const array! relationships = [], const var offset = false)
     {
-        var columnArray, column;
-        int columnCount;
-        let columnCount = 0;
+        var column;
 
-        for columnArray in columns {
-            if get_class(columnArray) == "stdClass" {
-                let column = new Column(columnArray->name, columnArray->type, columnArray->flags, columnCount);
-            }
-            else {
-                columnArray->setKey(columnCount);
-                let column = columnArray;
-            }
+        let this->columns = [];
 
-            if column->hasFlag(Column::INCREMENT_FLAG) {
-                if this->increment {
-                    throw new Exception("A table may only have one auto-incrementing value.");
-                }
-                let this->increment = true;
-                let this->incrementKey = columnCount;
-                let this->incrementValue = 1;
-            }
-
-            let this->columns[column->name] = column;
-            let this->columnMap[] = column->name;
-            let columnCount++;
+        for column in columns {
+            this->addColumn(column);
         }
 
         let this->name = name;
         let this->relationships = relationships;
         this->refresh();
+    }
+
+    /**
+    * Check if this table has a certain column
+    * @param string columnName
+    */
+    public function addColumn(const var column) -> void
+    {
+        var columnObject, columnCount;
+
+        let columnCount = count(this->columns);
+
+        if typeof column == "array" {
+            let columnObject = new Column(column["name"], column["type"], column["flags"], columnCount);
+        }
+        else {
+            column->setKey(columnCount);
+            let columnObject = column;
+        }
+
+        if columnObject->hasFlag(Column::INCREMENT_FLAG) {
+            if this->increment {
+                throw new Exception("A table may only have one auto-incrementing value.");
+            }
+            let this->increment = true;
+            let this->incrementKey = columnCount;
+            let this->incrementValue = this->{"schema"}->getIncrement(this->name);
+        }
+
+        let this->columns[columnObject->name] = columnObject;
+        let this->columnMap[] = columnObject->name;
     }
 
     /**
@@ -273,32 +285,7 @@ class Table extends Injectable {
     */
     public function __toString()
     {
-        return serialize(this);
-    }
-
-    /**
-    * Properties to serialize
-    */
-    public function __sleep()
-    {
-        if this->increment {
-            this->{"schema"}->setIncrement(this->name, this->incrementKey, this->incrementValue);
-        }
-        return ["name", "columns", "columnMap", "relationships", "increment"];
-    }
-
-    /**
-    * Refresh the file handler on wakeup
-    */
-    public function __wakeup()
-    {
-        var increment;
-        this->refresh();
-        if this->increment {
-            let increment = this->{"schema"}->getIncrement(this->name);
-            let this->incrementKey = increment[0];
-            let this->incrementValue = increment[1];
-        }
+        return json_encode([this->name, this->columns, this->relationships]);
     }
 
     /**

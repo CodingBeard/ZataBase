@@ -54,6 +54,7 @@ class Update extends Condition
 
     /**
     * Finished creating the query, check table for rows matching conditions and update the results
+    * TODO: Implement callback instead of rewriting the file for every updated row
     */
     public function done() -> bool
     {
@@ -65,7 +66,7 @@ class Update extends Condition
             for rowCount, result in iterator(results) {
 
                 let offset = results->getOffset(rowCount);
-                echo offset . PHP_EOL;
+
                 for columnCount, columnKey in this->columns {
                     let result[columnKey] = this->values[columnCount];
                 }

@@ -19,7 +19,9 @@ class File {
     * Scope of the database
     * @var string
     */
-    protected scope = "";
+    protected scope {
+        get, set
+    };
 
     /**
     * Constructor

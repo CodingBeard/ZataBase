@@ -13,37 +13,59 @@ class Db extends \ZataBase\Di\Injectable
 	public function __construct($config) {}
 
     /**
-     * Alias of Execute\Insert
+     * Alias of Schema::createTable
+     *
+     * @param Table $table 
+     */
+	public function createTable(\ZataBase\Table $table) {}
+
+    /**
+     * Alias of Schema::deleteTable
      *
      * @param string $tableName 
-     * @return Execute\Insert 
+     */
+	public function deleteTable($tableName) {}
+
+    /**
+     * Alias of Schema::alterTable
+     *
+     * @param string $tableName 
+     * @return \ZataBase\Schema\Alter 
+     */
+	public function alterTable($tableName) {}
+
+    /**
+     * Alias of Execute::insert
+     *
+     * @param string $tableName 
+     * @return \ZataBase\Execute\Insert 
      */
 	public function insert($tableName) {}
 
     /**
-     * Alias of Execute\Select
+     * Alias of Execute::select
      *
      * @param string $tableName 
      * @param array $parameters 
-     * @return Execute\Select 
+     * @return \ZataBase\Execute\Select 
      */
 	public function select($tableName) {}
 
     /**
-     * Alias of Execute\Delete
+     * Alias of Execute::delete
      *
      * @param string $tableName 
      * @param array $parameters 
-     * @return Execute\Select 
+     * @return \ZataBase\Execute\Select 
      */
 	public function delete($tableName) {}
 
     /**
-     * Alias of Execute\Update
+     * Alias of Execute::update
      *
      * @param string $tableName 
      * @param array $parameters 
-     * @return Execute\Update 
+     * @return \ZataBase\Execute\Update 
      */
 	public function update($tableName) {}
 

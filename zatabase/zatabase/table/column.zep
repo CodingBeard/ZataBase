@@ -120,7 +120,7 @@ class Column extends Injectable {
     */
     public function __toString()
     {
-        return serialize([this->name, this->type, this->flags]);
+        return json_encode([this->name, this->type, this->flags]);
     }
 
 }

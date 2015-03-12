@@ -11,6 +11,7 @@
 namespace ZataBase;
 
 use ZataBase\Di\Injectable;
+use ZataBase\Schema\Alter;
 use ZataBase\Table;
 use ZataBase\Table\Column;
 
@@ -74,14 +75,19 @@ class Schema extends Injectable {
     */
     public function getTable(const string! name) -> <Table>|bool
     {
-        var row, table;
+        var line, row, table;
+        let row = [];
         this->handlers["schema"]->rewind();
+
         while this->handlers["schema"]->valid() {
-            let row = this->handlers["schema"]->current();
-            let table = unserialize(row);
-            if typeof table == "object" {
-                if table->name == name {
-                    table->setOffset(this->handlers["schema"]->ftell());
+
+            let line = this->handlers["schema"]->current();
+            let row = json_decode(line, true);
+
+            if typeof row == "array" {
+                if row[0] == name {
+                    let table = new Table(row[0], row[1], row[2]);
+                    table->setOffset(this->handlers["schema"]->ftell() - strlen(line));
                     return table;
                 }
             }
@@ -107,7 +113,7 @@ class Schema extends Injectable {
 
     /**
     * Delete a table
-    * @param Table table
+    * @param string name
     */
     public function deleteTable(const string! name)
     {
@@ -117,6 +123,19 @@ class Schema extends Injectable {
             this->handlers["schema"]->delete(table->offset);
             table->deleteAllRows();
             this->refresh();
+        }
+    }
+
+    /**
+    * Delete a table
+    * @param string name
+    */
+    public function alterTable(const string! name)
+    {
+        var table;
+        let table = this->getTable(name);
+        if table {
+            return new Alter(table);
         }
     }
 

@@ -16,8 +16,8 @@
 #include "kernel/fcall.h"
 #include "kernel/object.h"
 #include "kernel/operators.h"
-#include "ext/spl/spl_exceptions.h"
 #include "kernel/exception.h"
+#include "ext/spl/spl_exceptions.h"
 
 
 /*
@@ -121,7 +121,114 @@ PHP_METHOD(ZataBase_Db, __construct) {
 }
 
 /**
- * Alias of Execute\Insert
+ * Alias of Schema::createTable
+ *
+ * @param Table table
+ */
+PHP_METHOD(ZataBase_Db, createTable) {
+
+	int ZEPHIR_LAST_CALL_STATUS;
+	zval *_0 = NULL;
+	zval *table, *_1;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &table);
+
+
+
+	if (!(zephir_instance_of_ev(table, zatabase_table_ce TSRMLS_CC))) {
+		ZEPHIR_THROW_EXCEPTION_DEBUG_STR(spl_ce_InvalidArgumentException, "Parameter 'table' must be an instance of 'ZataBase\\Table'", "", 0);
+		return;
+	}
+	ZEPHIR_INIT_VAR(_0);
+	ZEPHIR_INIT_NVAR(_0);
+	ZVAL_STRING(_0, "schema", 1);
+	ZEPHIR_OBS_VAR(_1);
+	zephir_read_property_zval(&_1, this_ptr, _0, PH_NOISY_CC);
+	ZEPHIR_CALL_METHOD(NULL, _1, "createtable", NULL, table);
+	zephir_check_call_status();
+	ZEPHIR_MM_RESTORE();
+
+}
+
+/**
+ * Alias of Schema::deleteTable
+ *
+ * @param string tableName
+ */
+PHP_METHOD(ZataBase_Db, deleteTable) {
+
+	int ZEPHIR_LAST_CALL_STATUS;
+	zval *tableName_param = NULL, *_1;
+	zval *tableName = NULL, *_0 = NULL;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &tableName_param);
+
+	if (unlikely(Z_TYPE_P(tableName_param) != IS_STRING && Z_TYPE_P(tableName_param) != IS_NULL)) {
+		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'tableName' must be a string") TSRMLS_CC);
+		RETURN_MM_NULL();
+	}
+
+	if (likely(Z_TYPE_P(tableName_param) == IS_STRING)) {
+		zephir_get_strval(tableName, tableName_param);
+	} else {
+		ZEPHIR_INIT_VAR(tableName);
+		ZVAL_EMPTY_STRING(tableName);
+	}
+
+
+	ZEPHIR_INIT_VAR(_0);
+	ZEPHIR_INIT_NVAR(_0);
+	ZVAL_STRING(_0, "schema", 1);
+	ZEPHIR_OBS_VAR(_1);
+	zephir_read_property_zval(&_1, this_ptr, _0, PH_NOISY_CC);
+	ZEPHIR_CALL_METHOD(NULL, _1, "deletetable", NULL, tableName);
+	zephir_check_call_status();
+	ZEPHIR_MM_RESTORE();
+
+}
+
+/**
+ * Alias of Schema::alterTable
+ *
+ * @param string tableName
+ */
+PHP_METHOD(ZataBase_Db, alterTable) {
+
+	int ZEPHIR_LAST_CALL_STATUS;
+	zval *tableName_param = NULL, *_1;
+	zval *tableName = NULL, *_0 = NULL;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &tableName_param);
+
+	if (unlikely(Z_TYPE_P(tableName_param) != IS_STRING && Z_TYPE_P(tableName_param) != IS_NULL)) {
+		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'tableName' must be a string") TSRMLS_CC);
+		RETURN_MM_NULL();
+	}
+
+	if (likely(Z_TYPE_P(tableName_param) == IS_STRING)) {
+		zephir_get_strval(tableName, tableName_param);
+	} else {
+		ZEPHIR_INIT_VAR(tableName);
+		ZVAL_EMPTY_STRING(tableName);
+	}
+
+
+	ZEPHIR_INIT_VAR(_0);
+	ZEPHIR_INIT_NVAR(_0);
+	ZVAL_STRING(_0, "schema", 1);
+	ZEPHIR_OBS_VAR(_1);
+	zephir_read_property_zval(&_1, this_ptr, _0, PH_NOISY_CC);
+	ZEPHIR_RETURN_CALL_METHOD(_1, "altertable", NULL, tableName);
+	zephir_check_call_status();
+	RETURN_MM();
+
+}
+
+/**
+ * Alias of Execute::insert
  *
  * @param string tableName
  */
@@ -159,7 +266,7 @@ PHP_METHOD(ZataBase_Db, insert) {
 }
 
 /**
- * Alias of Execute\Select
+ * Alias of Execute::select
  *
  * @param array parameters
  */
@@ -197,7 +304,7 @@ PHP_METHOD(ZataBase_Db, select) {
 }
 
 /**
- * Alias of Execute\Delete
+ * Alias of Execute::delete
  *
  * @param array parameters
  */
@@ -235,7 +342,7 @@ PHP_METHOD(ZataBase_Db, delete) {
 }
 
 /**
- * Alias of Execute\Update
+ * Alias of Execute::update
  *
  * @param array parameters
  */

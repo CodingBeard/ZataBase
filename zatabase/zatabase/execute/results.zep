@@ -19,12 +19,6 @@ class Results implements \SeekableIterator, \ArrayAccess {
     protected table;
 
     /**
-    * Table's file handle
-    * @var string
-    */
-    protected handle;
-
-    /**
     * Internal row position
     * @var array
     */

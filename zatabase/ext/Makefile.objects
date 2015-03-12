@@ -94,10 +94,14 @@ zatabase/execute/update.lo: /home/tim/Documents/github/ZataBase/zatabase/ext/zat
 	$(LIBTOOL) --mode=compile $(CC)  -I. -I/home/tim/Documents/github/ZataBase/zatabase/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /home/tim/Documents/github/ZataBase/zatabase/ext/zatabase/execute/update.zep.c -o zatabase/execute/update.lo 
 zatabase/helper/arraytoobject.lo: /home/tim/Documents/github/ZataBase/zatabase/ext/zatabase/helper/arraytoobject.zep.c
 	$(LIBTOOL) --mode=compile $(CC)  -I. -I/home/tim/Documents/github/ZataBase/zatabase/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /home/tim/Documents/github/ZataBase/zatabase/ext/zatabase/helper/arraytoobject.zep.c -o zatabase/helper/arraytoobject.lo 
+zatabase/helper/exception.lo: /home/tim/Documents/github/ZataBase/zatabase/ext/zatabase/helper/exception.zep.c
+	$(LIBTOOL) --mode=compile $(CC)  -I. -I/home/tim/Documents/github/ZataBase/zatabase/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /home/tim/Documents/github/ZataBase/zatabase/ext/zatabase/helper/exception.zep.c -o zatabase/helper/exception.lo 
 zatabase/helper/filehandler.lo: /home/tim/Documents/github/ZataBase/zatabase/ext/zatabase/helper/filehandler.zep.c
 	$(LIBTOOL) --mode=compile $(CC)  -I. -I/home/tim/Documents/github/ZataBase/zatabase/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /home/tim/Documents/github/ZataBase/zatabase/ext/zatabase/helper/filehandler.zep.c -o zatabase/helper/filehandler.lo 
 zatabase/schema.lo: /home/tim/Documents/github/ZataBase/zatabase/ext/zatabase/schema.zep.c
 	$(LIBTOOL) --mode=compile $(CC)  -I. -I/home/tim/Documents/github/ZataBase/zatabase/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /home/tim/Documents/github/ZataBase/zatabase/ext/zatabase/schema.zep.c -o zatabase/schema.lo 
+zatabase/schema/alter.lo: /home/tim/Documents/github/ZataBase/zatabase/ext/zatabase/schema/alter.zep.c
+	$(LIBTOOL) --mode=compile $(CC)  -I. -I/home/tim/Documents/github/ZataBase/zatabase/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /home/tim/Documents/github/ZataBase/zatabase/ext/zatabase/schema/alter.zep.c -o zatabase/schema/alter.lo 
 zatabase/schema/exception.lo: /home/tim/Documents/github/ZataBase/zatabase/ext/zatabase/schema/exception.zep.c
 	$(LIBTOOL) --mode=compile $(CC)  -I. -I/home/tim/Documents/github/ZataBase/zatabase/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /home/tim/Documents/github/ZataBase/zatabase/ext/zatabase/schema/exception.zep.c -o zatabase/schema/exception.lo 
 zatabase/storage/adapter/file.lo: /home/tim/Documents/github/ZataBase/zatabase/ext/zatabase/storage/adapter/file.zep.c
@@ -110,6 +114,8 @@ zatabase/table/column.lo: /home/tim/Documents/github/ZataBase/zatabase/ext/zatab
 	$(LIBTOOL) --mode=compile $(CC)  -I. -I/home/tim/Documents/github/ZataBase/zatabase/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /home/tim/Documents/github/ZataBase/zatabase/ext/zatabase/table/column.zep.c -o zatabase/table/column.lo 
 zatabase/table/exception.lo: /home/tim/Documents/github/ZataBase/zatabase/ext/zatabase/table/exception.zep.c
 	$(LIBTOOL) --mode=compile $(CC)  -I. -I/home/tim/Documents/github/ZataBase/zatabase/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /home/tim/Documents/github/ZataBase/zatabase/ext/zatabase/table/exception.zep.c -o zatabase/table/exception.lo 
+zatabase/0__closure.lo: /home/tim/Documents/github/ZataBase/zatabase/ext/zatabase/0__closure.zep.c
+	$(LIBTOOL) --mode=compile $(CC)  -I. -I/home/tim/Documents/github/ZataBase/zatabase/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /home/tim/Documents/github/ZataBase/zatabase/ext/zatabase/0__closure.zep.c -o zatabase/0__closure.lo 
 $(phplibdir)/zatabase.la: ./zatabase.la
 	$(LIBTOOL) --mode=install cp ./zatabase.la $(phplibdir)
 

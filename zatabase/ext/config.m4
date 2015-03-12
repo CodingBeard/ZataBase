@@ -37,14 +37,17 @@ if test "$PHP_ZATABASE" = "yes"; then
 	zatabase/execute/select.zep.c
 	zatabase/execute/update.zep.c
 	zatabase/helper/arraytoobject.zep.c
+	zatabase/helper/exception.zep.c
 	zatabase/helper/filehandler.zep.c
 	zatabase/schema.zep.c
+	zatabase/schema/alter.zep.c
 	zatabase/schema/exception.zep.c
 	zatabase/storage/adapter/file.zep.c
 	zatabase/storage/exception.zep.c
 	zatabase/table.zep.c
 	zatabase/table/column.zep.c
-	zatabase/table/exception.zep.c "
+	zatabase/table/exception.zep.c
+	zatabase/0__closure.zep.c "
 	PHP_NEW_EXTENSION(zatabase, $zatabase_sources, $ext_shared,, )
 	PHP_SUBST(ZATABASE_SHARED_LIBADD)
 

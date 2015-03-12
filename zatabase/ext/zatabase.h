@@ -32,13 +32,16 @@
 #include "zatabase/execute/select.zep.h"
 #include "zatabase/execute/update.zep.h"
 #include "zatabase/helper/arraytoobject.zep.h"
+#include "zatabase/helper/exception.zep.h"
 #include "zatabase/helper/filehandler.zep.h"
 #include "zatabase/schema.zep.h"
+#include "zatabase/schema/alter.zep.h"
 #include "zatabase/schema/exception.zep.h"
 #include "zatabase/storage/adapter/file.zep.h"
 #include "zatabase/storage/exception.zep.h"
 #include "zatabase/table.zep.h"
 #include "zatabase/table/column.zep.h"
 #include "zatabase/table/exception.zep.h"
+#include "zatabase/0__closure.zep.h"
 
 #endif

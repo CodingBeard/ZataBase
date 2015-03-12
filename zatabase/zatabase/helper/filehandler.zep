@@ -53,10 +53,10 @@ class FileHandler extends \SplFileObject {
         let rewrite = new self(this->getRealPath() . ".write", "w");
         this->rewind();
         while this->valid() {
-            this->current();
             if !in_array(this->ftell(), offsets) {
                 rewrite->fwrite(this->current());
             }
+            this->current();
             this->next();
         }
         rename(this->getRealPath() . ".write", this->getRealPath());
@@ -99,6 +99,43 @@ class FileHandler extends \SplFileObject {
             }
             this->current();
             this->next();
+        }
+        rename(this->getRealPath() . ".write", this->getRealPath());
+        parent::__construct(this->getRealPath(), "c+");
+    }
+
+    /**
+    * Perform a callback on line(s) of a file
+    * @param int offset line number
+    */
+    public function callback(const <\Closure> callback, const array arguments = [], const var offsets = false)
+    {
+        var rewrite, line;
+
+        let rewrite = new self(this->getRealPath() . ".write", "w");
+        this->rewind();
+        if typeof offsets == "array" {
+            while this->valid() {
+                let line = this->current();
+                if strlen(line) {
+                    if in_array(this->ftell(), offsets) {
+                        rewrite->fwrite(call_user_func_array(callback, array_merge([line], arguments)));
+                    }
+                    else {
+                        rewrite->fwrite(line);
+                    }
+                }
+                this->next();
+            }
+        }
+        else {
+            while this->valid() {
+                let line = this->current();
+                if strlen(line) {
+                    rewrite->fwrite(call_user_func_array(callback, array_merge([line], arguments)));
+                }
+                this->next();
+            }
         }
         rename(this->getRealPath() . ".write", this->getRealPath());
         parent::__construct(this->getRealPath(), "c+");

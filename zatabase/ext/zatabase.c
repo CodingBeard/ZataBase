@@ -33,6 +33,7 @@ zend_class_entry *zatabase_di_injectable_ce;
 zend_class_entry *zatabase_exception_ce;
 zend_class_entry *zatabase_execute_querytype_ce;
 zend_class_entry *zatabase_execute_condition_ce;
+zend_class_entry *zatabase_0__closure_ce;
 zend_class_entry *zatabase_db_ce;
 zend_class_entry *zatabase_db_exception_ce;
 zend_class_entry *zatabase_di_ce;
@@ -54,7 +55,9 @@ zend_class_entry *zatabase_execute_results_ce;
 zend_class_entry *zatabase_execute_select_ce;
 zend_class_entry *zatabase_execute_update_ce;
 zend_class_entry *zatabase_helper_arraytoobject_ce;
+zend_class_entry *zatabase_helper_exception_ce;
 zend_class_entry *zatabase_helper_filehandler_ce;
+zend_class_entry *zatabase_schema_alter_ce;
 zend_class_entry *zatabase_schema_ce;
 zend_class_entry *zatabase_schema_exception_ce;
 zend_class_entry *zatabase_storage_adapter_file_ce;
@@ -111,14 +114,17 @@ static PHP_MINIT_FUNCTION(zatabase)
 	ZEPHIR_INIT(ZataBase_Execute_Select);
 	ZEPHIR_INIT(ZataBase_Execute_Update);
 	ZEPHIR_INIT(ZataBase_Helper_ArrayToObject);
+	ZEPHIR_INIT(ZataBase_Helper_Exception);
 	ZEPHIR_INIT(ZataBase_Helper_FileHandler);
 	ZEPHIR_INIT(ZataBase_Schema);
+	ZEPHIR_INIT(ZataBase_Schema_Alter);
 	ZEPHIR_INIT(ZataBase_Schema_Exception);
 	ZEPHIR_INIT(ZataBase_Storage_Adapter_File);
 	ZEPHIR_INIT(ZataBase_Storage_Exception);
 	ZEPHIR_INIT(ZataBase_Table);
 	ZEPHIR_INIT(ZataBase_Table_Column);
 	ZEPHIR_INIT(ZataBase_Table_Exception);
+	ZEPHIR_INIT(zatabase_0__closure);
 
 #if PHP_VERSION_ID < 50500
 	setlocale(LC_ALL, old_lc_all);

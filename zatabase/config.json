@@ -3,12 +3,7 @@
     "path": "ide\/%version%\/%namespace%\/",
     "stubs-run-after-generate": true,
     "hints": {
-      "ZataBase\\Di\\Injectable": [
-        "\\ZataBase\\Storage\\Adapter\\File $storage",
-        "\\ZataBase\\Execute $execute",
-        "\\ZataBase\\Schema $schema",
-        "\\ZataBase\\Traverser $traverser"
-      ]
+      "ZataBase\\Di\\Injectable": []
     }
   },
   "api": {

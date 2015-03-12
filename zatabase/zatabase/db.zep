@@ -41,41 +41,71 @@ class Db extends Injectable {
     }
 
     /**
-    * Alias of Execute\Insert
+    * Alias of Schema::createTable
+    *
+    * @param Table table
+    */
+    public function createTable(const <\ZataBase\Table> table) -> void
+    {
+        this->{"schema"}->createTable(table);
+    }
+
+    /**
+    * Alias of Schema::deleteTable
     *
     * @param string tableName
     */
-    public function insert(const string! tableName) -> <Execute\Insert>
+    public function deleteTable(const string! tableName) -> void
+    {
+        this->{"schema"}->deleteTable(tableName);
+    }
+
+    /**
+    * Alias of Schema::alterTable
+    *
+    * @param string tableName
+    */
+    public function alterTable(const string! tableName) -> <\ZataBase\Schema\Alter>
+    {
+        return this->{"schema"}->alterTable(tableName);
+    }
+
+    /**
+    * Alias of Execute::insert
+    *
+    * @param string tableName
+    */
+    public function insert(const string! tableName) -> <\ZataBase\Execute\Insert>
     {
         return this->{"execute"}->insert(tableName);
     }
 
     /**
-    * Alias of Execute\Select
+    * Alias of Execute::select
     *
     * @param array parameters
     */
-    public function select(const string! tableName) -> <Execute\Select>
+    public function select(const string! tableName) -> <\ZataBase\Execute\Select>
     {
         return this->{"execute"}->select(tableName);
     }
 
     /**
-    * Alias of Execute\Delete
+    * Alias of Execute::delete
     *
     * @param array parameters
     */
-    public function delete(const string! tableName) -> <Execute\Select>
+    public function delete(const string! tableName) -> <\ZataBase\Execute\Select>
     {
         return this->{"execute"}->delete(tableName);
     }
 
     /**
-    * Alias of Execute\Update
+    * Alias of Execute::update
     *
     * @param array parameters
     */
-    public function update(const string! tableName) -> <Execute\Update>
+    public function update(const string! tableName) -> <\ZataBase\Execute\Update>
     {
         return this->{"execute"}->update(tableName);
     }

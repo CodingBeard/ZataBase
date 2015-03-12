@@ -23,18 +23,19 @@ try {
 
     /* Create a table */
     $db->schema->createTable(new Table('Users', [
+        new Column('id', Column::INT_TYPE, [Column::INCREMENT_FLAG]),
         new Column('firstName', Column::STRING_TYPE),
         new Column('lastName', Column::STRING_TYPE),
         new Column('DoB', Column::DATE_TYPE),
     ]));
 
     /* Literal insert with values for all columns */
-    $db->insert('Users')->values(['Josh', 'Doe', '1994-07-04']);
+    $db->insert('Users')->values([1, 'Josh', 'Doe', '1994-07-04']);
 
     /* Inserting multiple rows */
     $db->insert('Users')->values([
-        ['John', 'doe', '1994-07-05'],
-        ['Jane', 'doe', '1994-07-06'],
+        [2, 'John', 'doe', '1994-07-05'],
+        [3, 'Jane', 'doe', '1994-07-06'],
     ]);
 
     /* Relative insert, with values for specific columns */
@@ -104,7 +105,13 @@ try {
         print_r($row);
     }
 
-    /* Delete row(s), conditionally Any of the above selectable conditions can be used here */
+    /* Update row(s) */
+    $db->update('Users')->setColumns(['lastName'])->values(['Don'])->done();
+
+    /* Update row(s), conditionally. Any of the above selectable conditions can be used here */
+    $db->update('Users')->setColumns(['lastName'])->values(['Don'])->where('firstName')->equals('Jim')->done();
+
+    /* Delete row(s), conditionally. Any of the above selectable conditions can be used here */
     $db->delete('Users')->where('firstName')->equals('Jim')->done();
 
     /* Delete row(s) */
