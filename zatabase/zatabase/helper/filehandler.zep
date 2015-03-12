@@ -35,10 +35,10 @@ class FileHandler extends \SplFileObject {
     }
 
     /**
-    * Delete a line from the file
+    * Delete line(s) from the file
     * @param int offset line number
     */
-    public function delete(var offset)
+    public function delete(const var offset)
     {
         var rewrite;
         array offsets;
@@ -53,11 +53,50 @@ class FileHandler extends \SplFileObject {
         let rewrite = new self(this->getRealPath() . ".write", "w");
         this->rewind();
         while this->valid() {
+            this->current();
             if !in_array(this->ftell(), offsets) {
                 rewrite->fwrite(this->current());
             }
-            this->current();
             this->next();
+        }
+        rename(this->getRealPath() . ".write", this->getRealPath());
+    }
+
+    /**
+    * Replace line(s) in the file
+    * @param int offset line number
+    * @param string content
+    */
+    public function replace(const var offset, const var content)
+    {
+        var rewrite, line;
+        array offsets, contents;
+
+        if typeof offset != "array" {
+            let offsets = [offset];
+        }
+        else {
+            let offsets = offset;
+        }
+
+        if typeof content != "array" {
+            let contents = [content];
+        }
+        else {
+            let contents = content;
+        }
+
+        let rewrite = new self(this->getRealPath() . ".write", "w");
+        this->rewind();
+        while this->valid() {
+            this->current();
+            if !in_array(this->ftell(), offsets) {
+                rewrite->fwrite(this->current());
+            }
+            this->next();
+        }
+        for line in contents {
+            rewrite->fwrite(line . PHP_EOL);
         }
         rename(this->getRealPath() . ".write", this->getRealPath());
     }

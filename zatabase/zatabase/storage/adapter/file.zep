@@ -205,7 +205,7 @@ class File {
     * @param string path
     * @return string
     */
-    public function readFile(string! path) -> string
+    public function getFile(string! path) -> string
     {
         if !this->isFile(path) {
             throw new Exception("Attempting to read a non-existent file: '" . path . "'.");

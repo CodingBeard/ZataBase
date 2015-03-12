@@ -27,7 +27,6 @@ class Db extends Injectable {
     {
         var di, storage;
         let storage = new File(config->databaseDir);
-        let config->definitionFile = config->tablesDir . "Schema";
 
         if !storage->isDir(config->tablesDir) {
             storage->addDir(config->tablesDir);
@@ -37,7 +36,7 @@ class Db extends Injectable {
         di->set("config", config, true);
         di->set("storage", storage, true);
         di->set("execute", new Execute(), true);
-        di->set("schema", new Schema(config->definitionFile), true);
+        di->set("schema", new Schema(config->tablesDir), true);
         this->setDI(di);
     }
 

@@ -58,10 +58,26 @@ class Table extends Injectable {
     };
 
     /**
-    * Table's increment counter
+    * True/false
     * @var int
     */
-    public increment {
+    public increment = false {
+        set, get
+    };
+
+    /**
+    * Column with an auto incrementing value
+    * @var int
+    */
+    public incrementKey {
+        set, get
+    };
+
+    /**
+    * Current increment
+    * @var int
+    */
+    public incrementValue {
         set, get
     };
 
@@ -80,9 +96,11 @@ class Table extends Injectable {
     * @param int increment
     * @param array relationships
     */
-    public function __construct(const string! name, const array! columns = [], int increment = 0, const array! relationships = [], const var offset = false)
+    public function __construct(const string! name, const array! columns = [], const array! relationships = [], const var offset = false)
     {
-        var columnArray, column, columnCount = 0;
+        var columnArray, column;
+        int columnCount;
+        let columnCount = 0;
 
         for columnArray in columns {
             if get_class(columnArray) == "stdClass" {
@@ -92,15 +110,23 @@ class Table extends Injectable {
                 columnArray->setKey(columnCount);
                 let column = columnArray;
             }
+
+            if column->hasFlag(Column::INCREMENT_FLAG) {
+                if this->increment {
+                    throw new Exception("A table may only have one auto-incrementing value.");
+                }
+                let this->increment = true;
+                let this->incrementKey = columnCount;
+                let this->incrementValue = 1;
+            }
+
             let this->columns[column->name] = column;
             let this->columnMap[] = column->name;
             let columnCount++;
         }
 
         let this->name = name;
-        let this->increment = increment;
         let this->relationships = relationships;
-        let this->offset = offset;
         this->refresh();
     }
 
@@ -168,12 +194,24 @@ class Table extends Injectable {
     * Insert a row
     * @param int rowId
     */
-    public function insertRow(const array! row) -> void
+    public function insertRow(array! row) -> void
     {
         if count(row) != count(this->columnMap) {
             throw new Exception("Row should contain the same number of values as columns in the table: " . implode(", ", this->columnMap));
         }
+
+        if this->increment {
+            if is_null(row[this->incrementKey]) {
+                let row[this->incrementKey] = this->incrementValue;
+                let this->incrementValue++;
+            }
+            else {
+                let this->incrementValue = row[this->incrementKey];
+            }
+        }
+
         this->file->append(json_encode(row));
+        this->{"schema"}->setIncrement(this->name, this->incrementKey, this->incrementValue);
     }
 
     /**
@@ -187,9 +225,21 @@ class Table extends Injectable {
             if count(row) != count(this->columnMap) {
                 throw new Exception("Row should contain the same number of values as columns in the table: " . implode(", ", this->columnMap));
             }
+
+            if this->increment {
+                if is_null(row[this->incrementKey]) {
+                    let row[this->incrementKey] = this->incrementValue;
+                    let this->incrementValue++;
+                }
+                else {
+                    let this->incrementValue = row[this->incrementKey];
+                }
+            }
             let appendedRows .= json_encode(row) . PHP_EOL;
         }
+
         this->file->append(substr(appendedRows, 0, -1));
+        this->{"schema"}->setIncrement(this->name, this->incrementKey, this->incrementValue);
     }
 
     /**
@@ -222,7 +272,10 @@ class Table extends Injectable {
     */
     public function __sleep()
     {
-        return ["name", "columns", "columnMap", "increment", "relationships"];
+        if this->increment {
+            this->{"schema"}->setIncrement(this->name, this->incrementKey, this->incrementValue);
+        }
+        return ["name", "columns", "columnMap", "relationships", "increment"];
     }
 
     /**
@@ -230,7 +283,13 @@ class Table extends Injectable {
     */
     public function __wakeup()
     {
+        var increment;
         this->refresh();
+        if this->increment {
+            let increment = this->{"schema"}->getIncrement(this->name);
+            let this->incrementKey = increment[0];
+            let this->incrementValue = increment[1];
+        }
     }
 
     /**

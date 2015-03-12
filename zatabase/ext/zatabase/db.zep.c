@@ -15,7 +15,6 @@
 #include "kernel/memory.h"
 #include "kernel/fcall.h"
 #include "kernel/object.h"
-#include "kernel/concat.h"
 #include "kernel/operators.h"
 #include "ext/spl/spl_exceptions.h"
 #include "kernel/exception.h"
@@ -48,12 +47,11 @@ ZEPHIR_INIT_CLASS(ZataBase_Db) {
 PHP_METHOD(ZataBase_Db, __construct) {
 
 	int ZEPHIR_LAST_CALL_STATUS;
-	zval *config, *di, *storage, *_0, *_1, *_2, *_3 = NULL, *_4, *_5 = NULL, *_6 = NULL, *_7 = NULL, *_8 = NULL, *_9;
+	zval *config, *di, *storage, *_0, *_1 = NULL, *_2, *_3 = NULL, *_4 = NULL, *_5 = NULL, *_6 = NULL, *_7;
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &config);
 
-	ZEPHIR_SEPARATE_PARAM(config);
 
 
 	ZEPHIR_INIT_VAR(storage);
@@ -62,64 +60,59 @@ PHP_METHOD(ZataBase_Db, __construct) {
 	zephir_read_property(&_0, config, SL("databaseDir"), PH_NOISY_CC);
 	ZEPHIR_CALL_METHOD(NULL, storage, "__construct", NULL, _0);
 	zephir_check_call_status();
-	ZEPHIR_OBS_VAR(_1);
-	zephir_read_property(&_1, config, SL("tablesDir"), PH_NOISY_CC);
-	ZEPHIR_INIT_VAR(_2);
-	ZEPHIR_CONCAT_VS(_2, _1, "Schema");
-	zephir_update_property_zval(config, SL("definitionFile"), _2 TSRMLS_CC);
-	ZEPHIR_OBS_VAR(_4);
-	zephir_read_property(&_4, config, SL("tablesDir"), PH_NOISY_CC);
-	ZEPHIR_CALL_METHOD(&_3, storage, "isdir", NULL, _4);
+	ZEPHIR_OBS_VAR(_2);
+	zephir_read_property(&_2, config, SL("tablesDir"), PH_NOISY_CC);
+	ZEPHIR_CALL_METHOD(&_1, storage, "isdir", NULL, _2);
 	zephir_check_call_status();
-	if (!(zephir_is_true(_3))) {
-		ZEPHIR_OBS_VAR(_5);
-		zephir_read_property(&_5, config, SL("tablesDir"), PH_NOISY_CC);
-		ZEPHIR_CALL_METHOD(NULL, storage, "adddir", NULL, _5);
+	if (!(zephir_is_true(_1))) {
+		ZEPHIR_OBS_VAR(_3);
+		zephir_read_property(&_3, config, SL("tablesDir"), PH_NOISY_CC);
+		ZEPHIR_CALL_METHOD(NULL, storage, "adddir", NULL, _3);
 		zephir_check_call_status();
 	}
 	ZEPHIR_INIT_VAR(di);
 	object_init_ex(di, zatabase_di_ce);
 	ZEPHIR_CALL_METHOD(NULL, di, "__construct", NULL);
 	zephir_check_call_status();
-	ZEPHIR_INIT_VAR(_6);
-	ZVAL_STRING(_6, "config", ZEPHIR_TEMP_PARAM_COPY);
-	ZEPHIR_INIT_VAR(_7);
-	ZVAL_BOOL(_7, 1);
-	ZEPHIR_CALL_METHOD(NULL, di, "set", NULL, _6, config, _7);
-	zephir_check_temp_parameter(_6);
+	ZEPHIR_INIT_VAR(_4);
+	ZVAL_STRING(_4, "config", ZEPHIR_TEMP_PARAM_COPY);
+	ZEPHIR_INIT_VAR(_5);
+	ZVAL_BOOL(_5, 1);
+	ZEPHIR_CALL_METHOD(NULL, di, "set", NULL, _4, config, _5);
+	zephir_check_temp_parameter(_4);
 	zephir_check_call_status();
-	ZEPHIR_INIT_NVAR(_6);
-	ZVAL_STRING(_6, "storage", ZEPHIR_TEMP_PARAM_COPY);
-	ZEPHIR_INIT_NVAR(_7);
-	ZVAL_BOOL(_7, 1);
-	ZEPHIR_CALL_METHOD(NULL, di, "set", NULL, _6, storage, _7);
-	zephir_check_temp_parameter(_6);
+	ZEPHIR_INIT_NVAR(_4);
+	ZVAL_STRING(_4, "storage", ZEPHIR_TEMP_PARAM_COPY);
+	ZEPHIR_INIT_NVAR(_5);
+	ZVAL_BOOL(_5, 1);
+	ZEPHIR_CALL_METHOD(NULL, di, "set", NULL, _4, storage, _5);
+	zephir_check_temp_parameter(_4);
 	zephir_check_call_status();
-	ZEPHIR_INIT_NVAR(_6);
-	object_init_ex(_6, zatabase_execute_ce);
-	if (zephir_has_constructor(_6 TSRMLS_CC)) {
-		ZEPHIR_CALL_METHOD(NULL, _6, "__construct", NULL);
+	ZEPHIR_INIT_NVAR(_4);
+	object_init_ex(_4, zatabase_execute_ce);
+	if (zephir_has_constructor(_4 TSRMLS_CC)) {
+		ZEPHIR_CALL_METHOD(NULL, _4, "__construct", NULL);
 		zephir_check_call_status();
 	}
-	ZEPHIR_INIT_NVAR(_7);
-	ZVAL_STRING(_7, "execute", ZEPHIR_TEMP_PARAM_COPY);
-	ZEPHIR_INIT_VAR(_8);
-	ZVAL_BOOL(_8, 1);
-	ZEPHIR_CALL_METHOD(NULL, di, "set", NULL, _7, _6, _8);
-	zephir_check_temp_parameter(_7);
+	ZEPHIR_INIT_NVAR(_5);
+	ZVAL_STRING(_5, "execute", ZEPHIR_TEMP_PARAM_COPY);
+	ZEPHIR_INIT_VAR(_6);
+	ZVAL_BOOL(_6, 1);
+	ZEPHIR_CALL_METHOD(NULL, di, "set", NULL, _5, _4, _6);
+	zephir_check_temp_parameter(_5);
 	zephir_check_call_status();
-	ZEPHIR_INIT_NVAR(_7);
-	object_init_ex(_7, zatabase_schema_ce);
-	ZEPHIR_OBS_NVAR(_5);
-	zephir_read_property(&_5, config, SL("definitionFile"), PH_NOISY_CC);
-	ZEPHIR_CALL_METHOD(NULL, _7, "__construct", NULL, _5);
+	ZEPHIR_INIT_NVAR(_5);
+	object_init_ex(_5, zatabase_schema_ce);
+	ZEPHIR_OBS_NVAR(_3);
+	zephir_read_property(&_3, config, SL("tablesDir"), PH_NOISY_CC);
+	ZEPHIR_CALL_METHOD(NULL, _5, "__construct", NULL, _3);
 	zephir_check_call_status();
-	ZEPHIR_INIT_NVAR(_8);
-	ZVAL_STRING(_8, "schema", ZEPHIR_TEMP_PARAM_COPY);
-	ZEPHIR_INIT_VAR(_9);
-	ZVAL_BOOL(_9, 1);
-	ZEPHIR_CALL_METHOD(NULL, di, "set", NULL, _8, _7, _9);
-	zephir_check_temp_parameter(_8);
+	ZEPHIR_INIT_NVAR(_6);
+	ZVAL_STRING(_6, "schema", ZEPHIR_TEMP_PARAM_COPY);
+	ZEPHIR_INIT_VAR(_7);
+	ZVAL_BOOL(_7, 1);
+	ZEPHIR_CALL_METHOD(NULL, di, "set", NULL, _6, _5, _7);
+	zephir_check_temp_parameter(_6);
 	zephir_check_call_status();
 	ZEPHIR_CALL_METHOD(NULL, this_ptr, "setdi", NULL, di);
 	zephir_check_call_status();
