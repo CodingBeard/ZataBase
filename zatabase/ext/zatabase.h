@@ -30,6 +30,7 @@
 #include "zatabase/execute/querytype.zep.h"
 #include "zatabase/execute/results.zep.h"
 #include "zatabase/execute/select.zep.h"
+#include "zatabase/execute/update.zep.h"
 #include "zatabase/helper/arraytoobject.zep.h"
 #include "zatabase/helper/filehandler.zep.h"
 #include "zatabase/schema.zep.h"

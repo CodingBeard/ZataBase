@@ -19,9 +19,7 @@ class QueryType extends Injectable {
     * Table
     * @var Table
     */
-    protected table {
-        set, get
-    };
+    protected table;
 
     /**
     * @param string tableName

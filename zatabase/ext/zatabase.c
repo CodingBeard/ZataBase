@@ -52,6 +52,7 @@ zend_class_entry *zatabase_execute_exception_ce;
 zend_class_entry *zatabase_execute_insert_ce;
 zend_class_entry *zatabase_execute_results_ce;
 zend_class_entry *zatabase_execute_select_ce;
+zend_class_entry *zatabase_execute_update_ce;
 zend_class_entry *zatabase_helper_arraytoobject_ce;
 zend_class_entry *zatabase_helper_filehandler_ce;
 zend_class_entry *zatabase_schema_ce;
@@ -108,6 +109,7 @@ static PHP_MINIT_FUNCTION(zatabase)
 	ZEPHIR_INIT(ZataBase_Execute_Insert);
 	ZEPHIR_INIT(ZataBase_Execute_Results);
 	ZEPHIR_INIT(ZataBase_Execute_Select);
+	ZEPHIR_INIT(ZataBase_Execute_Update);
 	ZEPHIR_INIT(ZataBase_Helper_ArrayToObject);
 	ZEPHIR_INIT(ZataBase_Helper_FileHandler);
 	ZEPHIR_INIT(ZataBase_Schema);

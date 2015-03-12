@@ -41,8 +41,7 @@ class Insert extends QueryType
     *
     * Values should be multi-dimensional if multiple rows are being inserted
     * If inserting values for every column use a numeric array
-    * If only inserting into some columns use an associative array with the
-    * column names as keys
+    * If only inserting into some columns, they must be set using this->columns(array) first
     *
     * @param array values
     */

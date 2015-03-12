@@ -24,25 +24,19 @@ class Condition extends QueryType {
     * Current column
     * @var string
     */
-    protected currentColumn {
-        set, get
-    };
+    protected currentColumn;
 
     /**
     * If the current condition is a Not
     * @var string
     */
-    protected isNot = false {
-        set, get
-    };
+    protected isNot = false;
 
     /**
     * Conditions
     * @var array
     */
-    protected conditions {
-        set, get
-    };
+    protected conditions;
 
     public function reset()
     {

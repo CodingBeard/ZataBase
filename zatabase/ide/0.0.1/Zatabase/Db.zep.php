@@ -38,4 +38,13 @@ class Db extends \ZataBase\Di\Injectable
      */
 	public function delete($tableName) {}
 
+    /**
+     * Alias of Execute\Update
+     *
+     * @param string $tableName 
+     * @param array $parameters 
+     * @return Execute\Update 
+     */
+	public function update($tableName) {}
+
 }

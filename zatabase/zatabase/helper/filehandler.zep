@@ -60,6 +60,7 @@ class FileHandler extends \SplFileObject {
             this->next();
         }
         rename(this->getRealPath() . ".write", this->getRealPath());
+        parent::__construct(this->getRealPath(), "c+");
     }
 
     /**
@@ -69,7 +70,7 @@ class FileHandler extends \SplFileObject {
     */
     public function replace(const var offset, const var content)
     {
-        var rewrite, line;
+        var rewrite, offsetKey;
         array offsets, contents;
 
         if typeof offset != "array" {
@@ -89,16 +90,18 @@ class FileHandler extends \SplFileObject {
         let rewrite = new self(this->getRealPath() . ".write", "w");
         this->rewind();
         while this->valid() {
-            this->current();
-            if !in_array(this->ftell(), offsets) {
+            let offsetKey = array_search(this->ftell(), offsets);
+            if offsetKey === false {
                 rewrite->fwrite(this->current());
             }
+            else {
+                rewrite->fwrite(contents[offsetKey] . PHP_EOL);
+            }
+            this->current();
             this->next();
         }
-        for line in contents {
-            rewrite->fwrite(line . PHP_EOL);
-        }
         rename(this->getRealPath() . ".write", this->getRealPath());
+        parent::__construct(this->getRealPath(), "c+");
     }
 
 }

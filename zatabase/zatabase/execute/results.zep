@@ -64,6 +64,21 @@ class Results implements \SeekableIterator, \ArrayAccess {
         return json_decode(this->table->file->current());
     }
 
+    /**
+    * Get an offset from its row number
+    * @var int row
+    */
+    public function getOffset(const int! row)
+    {
+        var offset;
+        if fetch offset, this->rows[row] {
+            return offset;
+        }
+        return false;
+    }
+
+
+    /* Methods required for SeekableIterator and arrayAccess */
 
     public function seek(const int position) {
       if !isset(this->rows[position]) {
@@ -72,8 +87,6 @@ class Results implements \SeekableIterator, \ArrayAccess {
 
       let this->position = position;
     }
-
-    /* Methods required for Iterator interface */
 
     public function rewind() {
         let this->position = 0;

@@ -70,4 +70,14 @@ class Db extends Injectable {
         return this->{"execute"}->delete(tableName);
     }
 
+    /**
+    * Alias of Execute\Update
+    *
+    * @param array parameters
+    */
+    public function update(const string! tableName) -> <Execute\Update>
+    {
+        return this->{"execute"}->update(tableName);
+    }
+
 }

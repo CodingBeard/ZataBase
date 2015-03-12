@@ -234,3 +234,41 @@ PHP_METHOD(ZataBase_Db, delete) {
 
 }
 
+/**
+ * Alias of Execute\Update
+ *
+ * @param array parameters
+ */
+PHP_METHOD(ZataBase_Db, update) {
+
+	int ZEPHIR_LAST_CALL_STATUS;
+	zval *tableName_param = NULL, *_1;
+	zval *tableName = NULL, *_0 = NULL;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &tableName_param);
+
+	if (unlikely(Z_TYPE_P(tableName_param) != IS_STRING && Z_TYPE_P(tableName_param) != IS_NULL)) {
+		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'tableName' must be a string") TSRMLS_CC);
+		RETURN_MM_NULL();
+	}
+
+	if (likely(Z_TYPE_P(tableName_param) == IS_STRING)) {
+		zephir_get_strval(tableName, tableName_param);
+	} else {
+		ZEPHIR_INIT_VAR(tableName);
+		ZVAL_EMPTY_STRING(tableName);
+	}
+
+
+	ZEPHIR_INIT_VAR(_0);
+	ZEPHIR_INIT_NVAR(_0);
+	ZVAL_STRING(_0, "execute", 1);
+	ZEPHIR_OBS_VAR(_1);
+	zephir_read_property_zval(&_1, this_ptr, _0, PH_NOISY_CC);
+	ZEPHIR_RETURN_CALL_METHOD(_1, "update", NULL, tableName);
+	zephir_check_call_status();
+	RETURN_MM();
+
+}
+

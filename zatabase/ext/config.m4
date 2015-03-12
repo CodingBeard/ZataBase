@@ -35,6 +35,7 @@ if test "$PHP_ZATABASE" = "yes"; then
 	zatabase/execute/querytype.zep.c
 	zatabase/execute/results.zep.c
 	zatabase/execute/select.zep.c
+	zatabase/execute/update.zep.c
 	zatabase/helper/arraytoobject.zep.c
 	zatabase/helper/filehandler.zep.c
 	zatabase/schema.zep.c

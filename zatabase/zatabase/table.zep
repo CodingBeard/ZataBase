@@ -151,10 +151,17 @@ class Table extends Injectable {
         return array_search(columnName, this->columnMap);
     }
 
+    /**
+    * Select rows from this table that match conditions,
+    * If no conditions are given, all rows are selected
+    * @param array conditions
+    */
     public function selectRows(const var conditions = [])
     {
-        var row, condition, results;
+        var line, row, condition, results;
         bool match = true;
+
+        this->file->rewind();
 
         let results = new Results(this);
 
@@ -163,7 +170,8 @@ class Table extends Injectable {
 
                 let match = true;
 
-                let row = json_decode(this->file->current());
+                let line = this->file->current();
+                let row = json_decode(line);
 
                 if typeof row == "array" {
                     for condition in conditions {
@@ -173,7 +181,7 @@ class Table extends Injectable {
                     }
 
                     if match {
-                        let results->rows[] = this->file->ftell();
+                        let results->rows[] = this->file->ftell() - strlen(line);
                     }
                 }
 
@@ -186,6 +194,7 @@ class Table extends Injectable {
                 this->file->current();
                 this->file->next();
             }
+            array_pop(results->rows);
         }
         return results;
     }

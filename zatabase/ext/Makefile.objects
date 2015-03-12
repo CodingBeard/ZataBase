@@ -90,6 +90,8 @@ zatabase/execute/results.lo: /home/tim/Documents/github/ZataBase/zatabase/ext/za
 	$(LIBTOOL) --mode=compile $(CC)  -I. -I/home/tim/Documents/github/ZataBase/zatabase/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /home/tim/Documents/github/ZataBase/zatabase/ext/zatabase/execute/results.zep.c -o zatabase/execute/results.lo 
 zatabase/execute/select.lo: /home/tim/Documents/github/ZataBase/zatabase/ext/zatabase/execute/select.zep.c
 	$(LIBTOOL) --mode=compile $(CC)  -I. -I/home/tim/Documents/github/ZataBase/zatabase/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /home/tim/Documents/github/ZataBase/zatabase/ext/zatabase/execute/select.zep.c -o zatabase/execute/select.lo 
+zatabase/execute/update.lo: /home/tim/Documents/github/ZataBase/zatabase/ext/zatabase/execute/update.zep.c
+	$(LIBTOOL) --mode=compile $(CC)  -I. -I/home/tim/Documents/github/ZataBase/zatabase/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /home/tim/Documents/github/ZataBase/zatabase/ext/zatabase/execute/update.zep.c -o zatabase/execute/update.lo 
 zatabase/helper/arraytoobject.lo: /home/tim/Documents/github/ZataBase/zatabase/ext/zatabase/helper/arraytoobject.zep.c
 	$(LIBTOOL) --mode=compile $(CC)  -I. -I/home/tim/Documents/github/ZataBase/zatabase/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /home/tim/Documents/github/ZataBase/zatabase/ext/zatabase/helper/arraytoobject.zep.c -o zatabase/helper/arraytoobject.lo 
 zatabase/helper/filehandler.lo: /home/tim/Documents/github/ZataBase/zatabase/ext/zatabase/helper/filehandler.zep.c

@@ -9,7 +9,7 @@ if (PHP_ZATABASE != "no") {
 	ADD_SOURCES(configure_module_dirname + "/zatabase/db", "exception.zep.c", "zatabase");
 	ADD_SOURCES(configure_module_dirname + "/zatabase/di", "exception.zep.c injectable.zep.c injectionawareinterface.zep.c service.zep.c serviceinterface.zep.c", "zatabase");
 	ADD_SOURCES(configure_module_dirname + "/zatabase/di/service", "builder.zep.c", "zatabase");
-	ADD_SOURCES(configure_module_dirname + "/zatabase/execute", "condition.zep.c delete.zep.c exception.zep.c insert.zep.c querytype.zep.c results.zep.c select.zep.c", "zatabase");
+	ADD_SOURCES(configure_module_dirname + "/zatabase/execute", "condition.zep.c delete.zep.c exception.zep.c insert.zep.c querytype.zep.c results.zep.c select.zep.c update.zep.c", "zatabase");
 	ADD_SOURCES(configure_module_dirname + "/zatabase/execute/condition", "between.zep.c equals.zep.c exception.zep.c lessthan.zep.c like.zep.c morethan.zep.c within.zep.c", "zatabase");
 	ADD_SOURCES(configure_module_dirname + "/zatabase/helper", "arraytoobject.zep.c filehandler.zep.c", "zatabase");
 	ADD_SOURCES(configure_module_dirname + "/zatabase/schema", "exception.zep.c", "zatabase");
