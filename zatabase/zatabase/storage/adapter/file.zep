@@ -27,7 +27,7 @@ class File {
     * Constructor
     * @var string directory
     */
-    public function __construct(const string directory) -> void
+    public function __construct(const string! directory) -> void
     {
 
         /* Make sure there's a trailing slash on the end of the directory */
@@ -70,7 +70,7 @@ class File {
         /* Compare the amount of relative parent .. to the depth of the path to check if we leave the scope */
         if unlikely substr_count(path, "..") > 0 {
             if substr_count(path, "..") >= substr_count(trim(path, DIRECTORY_SEPARATOR), DIRECTORY_SEPARATOR) {
-                throw new Exception("Attempting to access files outside of the defined scope");
+                throw new Exception("Attempting to access files outside of the defined scope.");
             }
         }
 

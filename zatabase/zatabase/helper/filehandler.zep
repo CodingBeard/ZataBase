@@ -25,11 +25,11 @@ class FileHandler extends \SplFileObject {
     /**
     * Return the number of lines in the file
     */
-    public function count()
+    public function count() -> int
     {
         var count;
         this->seek(PHP_INT_MAX);
-        let count = this->key() - 1;
+        let count = this->key();
         this->rewind();
         return count;
     }
