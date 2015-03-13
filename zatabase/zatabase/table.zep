@@ -124,9 +124,24 @@ class Table extends Injectable {
         if typeof column == "array" {
             let columnObject = new Column(column["name"], column["type"], column["flags"], columnCount);
         }
+        elseif typeof column == "object" {
+            if column instanceof "Column" {
+                column->setKey(columnCount);
+                let columnObject = column;
+            }
+            elseif column instanceof "stdClass" {
+                let columnObject = new Column(column->name, column->type, column->flags, columnCount);
+            }
+            else {
+                throw new Exception("Column must be an: Array, stdClass, or instance of Column.");
+            }
+        }
         else {
-            column->setKey(columnCount);
-            let columnObject = column;
+            throw new Exception("Column must be an: Array, stdClass, or instance of Column.");
+        }
+
+        if isset(this->columns[columnObject->name]) {
+            throw new Exception("A table may not have two columns with the same name.");
         }
 
         if columnObject->hasFlag(Column::INCREMENT_FLAG) {
@@ -164,6 +179,61 @@ class Table extends Injectable {
     }
 
     /**
+    * Insert a row
+    * @param int rowId
+    */
+    public function insertRow(array! row) -> void
+    {
+        if count(row) != count(this->columnMap) {
+            throw new Exception("Row should contain the same number of values as columns in the table: " . implode(", ", this->columnMap));
+        }
+
+        if this->increment {
+            if is_null(row[this->incrementKey]) {
+                let row[this->incrementKey] = this->incrementValue;
+                let this->incrementValue++;
+            }
+            else {
+                let this->incrementValue = row[this->incrementKey];
+            }
+            this->{"schema"}->setIncrement(this->name, this->incrementValue);
+        }
+
+        this->file->append(json_encode(row));
+    }
+
+    /**
+    * Insert rows
+    * @param int rowId
+    */
+    public function insertRows(const array! rows) -> void
+    {
+        var row, appendedRows = "";
+        for row in rows {
+            if count(row) != count(this->columnMap) {
+                throw new Exception("Row should contain the same number of values as columns in the table: " . implode(", ", this->columnMap));
+            }
+
+            if this->increment {
+                if is_null(row[this->incrementKey]) {
+                    let row[this->incrementKey] = this->incrementValue;
+                    let this->incrementValue++;
+                }
+                else {
+                    let this->incrementValue = row[this->incrementKey];
+                }
+            }
+            let appendedRows .= json_encode(row) . PHP_EOL;
+        }
+
+        if this->increment {
+            this->{"schema"}->setIncrement(this->name, this->incrementValue);
+        }
+
+        this->file->append(substr(appendedRows, 0, -1));
+    }
+
+    /**
     * Select rows from this table that match conditions,
     * If no conditions are given, all rows are selected
     * @param array conditions
@@ -193,7 +263,7 @@ class Table extends Injectable {
                     }
 
                     if match {
-                        let results->rows[] = this->file->ftell() - strlen(line);
+                        results->addRowOffset(this->file->ftell() - strlen(line));
                     }
                 }
 
@@ -202,65 +272,13 @@ class Table extends Injectable {
         }
         else {
             while this->file->valid() {
-                let results->rows[] = this->file->ftell();
+                results->addRowOffset(this->file->ftell());
                 this->file->current();
                 this->file->next();
             }
             array_pop(results->rows);
         }
         return results;
-    }
-
-    /**
-    * Insert a row
-    * @param int rowId
-    */
-    public function insertRow(array! row) -> void
-    {
-        if count(row) != count(this->columnMap) {
-            throw new Exception("Row should contain the same number of values as columns in the table: " . implode(", ", this->columnMap));
-        }
-
-        if this->increment {
-            if is_null(row[this->incrementKey]) {
-                let row[this->incrementKey] = this->incrementValue;
-                let this->incrementValue++;
-            }
-            else {
-                let this->incrementValue = row[this->incrementKey];
-            }
-        }
-
-        this->file->append(json_encode(row));
-        this->{"schema"}->setIncrement(this->name, this->incrementKey, this->incrementValue);
-    }
-
-    /**
-    * Insert rows
-    * @param int rowId
-    */
-    public function insertRows(const array! rows) -> void
-    {
-        var row, appendedRows = "";
-        for row in rows {
-            if count(row) != count(this->columnMap) {
-                throw new Exception("Row should contain the same number of values as columns in the table: " . implode(", ", this->columnMap));
-            }
-
-            if this->increment {
-                if is_null(row[this->incrementKey]) {
-                    let row[this->incrementKey] = this->incrementValue;
-                    let this->incrementValue++;
-                }
-                else {
-                    let this->incrementValue = row[this->incrementKey];
-                }
-            }
-            let appendedRows .= json_encode(row) . PHP_EOL;
-        }
-
-        this->file->append(substr(appendedRows, 0, -1));
-        this->{"schema"}->setIncrement(this->name, this->incrementKey, this->incrementValue);
     }
 
     /**

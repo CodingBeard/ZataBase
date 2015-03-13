@@ -43,7 +43,23 @@ class Like {
     {
         let this->matches = isNot ? false : true;
         let this->column = column;
-        let this->pattern = "#^" . preg_replace(["#(?<!\\\\)%#is", "#(?<!\\\\)_#is"], ["(.*)", "(.)"], value) . "$#is";
+
+        if stripos(value, "\\%") !== false {
+            let this->pattern = "#^" . str_replace("\\%", "%", value) . "$#is";
+        }
+        elseif stripos(value, "\\_") !== false {
+            let this->pattern = "#^" . str_replace("\\_", "_", value) . "$#is";
+        }
+        elseif stripos(value, "%") !== false {
+            let this->pattern = "#^" . preg_replace("#(?<!\\\\)%#is", "(.*)", value) . "$#is";
+        }
+        elseif stripos(value, "_") !== false {
+            let this->pattern = "#^" . preg_replace("#(?<!\\\\)_#is", "(.)", value) . "$#is";
+        }
+        else {
+            let this->pattern = "#^" . value . "$#is";
+        }
+
     }
 
     public function matches(const array! row) -> bool

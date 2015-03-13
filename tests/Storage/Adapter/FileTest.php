@@ -22,7 +22,18 @@ class FileTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->file = new File(__DIR__ . '/database');
+        $this->file = new File(__DIR__ . '/../../database');
+    }
+
+    /**
+     * @covers            \ZataBase\Storage\Adapter\File::__construct
+     * @uses              \ZataBase\Storage\Adapter\File
+     * @expectedException InvalidArgumentException
+     * @expectedExceptionMessage Parameter 'directory' must be a string
+     */
+    public function testBadArgumentsOnConstruct()
+    {
+        new File([]);
     }
 
     /**
@@ -31,7 +42,7 @@ class FileTest extends PHPUnit_Framework_TestCase
      */
     public function testConstruct()
     {
-        $file = new File(__DIR__ . '/database');
+        $file = new File(__DIR__ . '/../../database');
         $this->assertInstanceOf('\ZataBase\Storage\Adapter\File', $file);
     }
 
@@ -52,7 +63,7 @@ class FileTest extends PHPUnit_Framework_TestCase
      */
     public function testScope()
     {
-        $this->assertEquals(__DIR__ . '/database/', $this->file->getScope());
+        $this->assertEquals(__DIR__ . '/../../database/', $this->file->getScope());
     }
 
     /**
@@ -63,7 +74,7 @@ class FileTest extends PHPUnit_Framework_TestCase
      */
     public function testOutOfScope()
     {
-        $this->file->path('../../');
+        $this->file->path('../../../');
     }
 
     /**
@@ -72,9 +83,9 @@ class FileTest extends PHPUnit_Framework_TestCase
      */
     public function testScopeDir()
     {
-        $this->assertEquals(__DIR__ . '/database/tables', $this->file->path('tables'));
+        $this->assertEquals(__DIR__ . '/../../database/tables', $this->file->path('tables'));
 
-        $this->assertEquals(__DIR__ . '/database/tables', $this->file->path(__DIR__ . '/database/tables'));
+        $this->assertEquals(__DIR__ . '/../../database/tables', $this->file->path(__DIR__ . '/../../database/tables'));
     }
 
     /**
@@ -83,7 +94,7 @@ class FileTest extends PHPUnit_Framework_TestCase
      */
     public function testIsWritable()
     {
-        $this->assertEquals(is_writable(__DIR__ . '/database/tables'), $this->file->isWritable('tables'));
+        $this->assertEquals(is_writable(__DIR__ . '/../../database/tables'), $this->file->isWritable('tables'));
     }
 
     /**
@@ -92,7 +103,7 @@ class FileTest extends PHPUnit_Framework_TestCase
      */
     public function testIsDir()
     {
-        $this->assertEquals(is_dir(__DIR__ . '/database/tables'), $this->file->isDir('tables'));
+        $this->assertEquals(is_dir(__DIR__ . '/../../database/tables'), $this->file->isDir('tables'));
     }
 
     /**
@@ -102,10 +113,10 @@ class FileTest extends PHPUnit_Framework_TestCase
     public function testAddDir()
     {
         $this->file->addDir('addDir');
-        $this->assertTrue(is_dir(__DIR__ . '/database/addDir'));
+        $this->assertTrue(is_dir(__DIR__ . '/../../database/addDir'));
 
         $this->file->addDir('recursive/new/dirs');
-        $this->assertTrue(is_dir(__DIR__ . '/database/recursive/new/dirs'));
+        $this->assertTrue(is_dir(__DIR__ . '/../../database/recursive/new/dirs'));
     }
 
     /**
@@ -115,10 +126,10 @@ class FileTest extends PHPUnit_Framework_TestCase
     public function testRemoveDir()
     {
         $this->file->removeDir('addDir');
-        $this->assertFalse(is_dir(__DIR__ . '/database/addDir'));
+        $this->assertFalse(is_dir(__DIR__ . '/../../database/addDir'));
 
         $this->file->removeDir('recursive/');
-        $this->assertFalse(is_dir(__DIR__ . '/database/recursive'));
+        $this->assertFalse(is_dir(__DIR__ . '/../../database/recursive'));
     }
 
     /**
@@ -127,8 +138,8 @@ class FileTest extends PHPUnit_Framework_TestCase
      */
     public function testIsFile()
     {
-        touch(__DIR__ . '/database/file');
-        $this->assertEquals(is_file(__DIR__ . '/database/file'), $this->file->isFile('file'));
+        touch(__DIR__ . '/../../database/file');
+        $this->assertEquals(is_file(__DIR__ . '/../../database/file'), $this->file->isFile('file'));
     }
 
     /**
@@ -138,10 +149,10 @@ class FileTest extends PHPUnit_Framework_TestCase
     public function testTouch()
     {
         $this->file->touch('touch');
-        $this->assertTrue(is_file(__DIR__ . '/database/touch'));
+        $this->assertTrue(is_file(__DIR__ . '/../../database/touch'));
 
         $this->file->touch('recursive/new/dirs/touch');
-        $this->assertTrue(is_file(__DIR__ . '/database/recursive/new/dirs/touch'));
+        $this->assertTrue(is_file(__DIR__ . '/../../database/recursive/new/dirs/touch'));
     }
 
     /**
@@ -151,10 +162,10 @@ class FileTest extends PHPUnit_Framework_TestCase
     public function testSetFile()
     {
         $this->file->setFile('setFile', 'Content');
-        $this->assertEquals(file_get_contents(__DIR__ . '/database/setFile'), 'Content' . PHP_EOL);
+        $this->assertEquals(file_get_contents(__DIR__ . '/../../database/setFile'), 'Content' . PHP_EOL);
 
         $this->file->setFile('recursive/new/dirs/setFile', 'Content');
-        $this->assertEquals(file_get_contents(__DIR__ . '/database/recursive/new/dirs/setFile'), 'Content' . PHP_EOL);
+        $this->assertEquals(file_get_contents(__DIR__ . '/../../database/recursive/new/dirs/setFile'), 'Content' . PHP_EOL);
     }
 
     /**
@@ -177,7 +188,7 @@ class FileTest extends PHPUnit_Framework_TestCase
     public function testGetHandle()
     {
         $handle = $this->file->getHandle('getHandle');
-        $this->assertTrue(is_file(__DIR__ . '/database/getHandle'));
+        $this->assertTrue(is_file(__DIR__ . '/../../database/getHandle'));
 
         $this->assertInstanceOf('\ZataBase\Helper\FileHandler', $handle);
     }
@@ -188,8 +199,8 @@ class FileTest extends PHPUnit_Framework_TestCase
      */
     public function testRemoveFile()
     {
-        file_put_contents(__DIR__ . '/database/removeFile', ' ');
+        file_put_contents(__DIR__ . '/../../database/removeFile', ' ');
         $this->file->removeFile('removeFile');
-        $this->assertFalse(is_file(__DIR__ . '/database/removeFile'));
+        $this->assertFalse(is_file(__DIR__ . '/../../database/removeFile'));
     }
 }

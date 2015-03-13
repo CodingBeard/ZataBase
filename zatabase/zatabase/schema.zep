@@ -154,9 +154,9 @@ class Schema extends Injectable {
     * @param string tableName
     * @param int increment
     */
-    public function setIncrement(const string! tableName, const int incrementKey, const int incrementValue)
+    public function setIncrement(const string! tableName, const int incrementValue)
     {
-        let this->increments[tableName] = [incrementKey, incrementValue];
+        let this->increments[tableName] = incrementValue;
     }
 
     /**
@@ -172,7 +172,7 @@ class Schema extends Injectable {
             while this->handlers["increments"]->valid() {
                 let row = json_decode(this->handlers["increments"]->current());
                 if typeof row == "array" {
-                    let this->increments[row[0]] = [row[1], row[2]];
+                    let this->increments[row[0]] = row[1];
                 }
                 this->handlers["increments"]->next();
             }
@@ -190,7 +190,7 @@ class Schema extends Injectable {
         if typeof this->increments == "array" {
             this->handlers["increments"]->ftruncate(0);
             for tableName, increment in this->increments {
-                this->handlers["increments"]->append(json_encode([tableName, increment[0], increment[1]]));
+                this->handlers["increments"]->append(json_encode([tableName, increment]));
             }
         }
     }

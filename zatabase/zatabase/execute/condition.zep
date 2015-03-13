@@ -38,6 +38,9 @@ class Condition extends QueryType {
     */
     protected conditions;
 
+    /**
+    * Reset the current condition identifiers
+    */
     public function reset()
     {
         let this->currentColumn = false;

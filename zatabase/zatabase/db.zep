@@ -23,20 +23,20 @@ class Db extends Injectable {
     /**
     * Constructor
     */
-    public function __construct(const var! config)
+    public function __construct(const <\ZataBase\Helper\ArrayToObject> config)
     {
         var di, storage;
-        let storage = new File(config->databaseDir);
+        let storage = new File(config->{"databaseDir"});
 
-        if !storage->isDir(config->tablesDir) {
-            storage->addDir(config->tablesDir);
+        if !storage->isDir(config->{"tablesDir"}) {
+            storage->addDir(config->{"tablesDir"});
         }
 
         let di = new Di();
         di->set("config", config, true);
         di->set("storage", storage, true);
+        di->set("schema", new Schema(config->{"tablesDir"}), true);
         di->set("execute", new Execute(), true);
-        di->set("schema", new Schema(config->tablesDir), true);
         this->setDI(di);
     }
 

@@ -28,7 +28,9 @@ class Results implements \SeekableIterator, \ArrayAccess {
     * Byte seek locations of each row
     * @var array
     */
-    protected rows;
+    protected rows {
+        get
+    };
 
     /**
     * Constructor
@@ -38,6 +40,15 @@ class Results implements \SeekableIterator, \ArrayAccess {
     {
         let this->table = table;
         let this->position = 0;
+    }
+
+    /**
+    * Add a row
+    * @var int offset
+    */
+    public function addRowOffset(offset)
+    {
+        let this->rows[] = offset;
     }
 
     /**
@@ -59,13 +70,13 @@ class Results implements \SeekableIterator, \ArrayAccess {
     }
 
     /**
-    * Get an offset from its row number
+    * Get an offset from its row key
     * @var int row
     */
-    public function getOffset(const int! row)
+    public function getOffset(const int! rowKey)
     {
         var offset;
-        if fetch offset, this->rows[row] {
+        if fetch offset, this->rows[rowKey] {
             return offset;
         }
         return false;

@@ -26,12 +26,12 @@ class FileHandlerTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->fileHandler = new FileHandler(__DIR__ . '/fileHandler', "c+");
+        $this->fileHandler = new FileHandler(__DIR__ . '/../fileHandler', "c+");
     }
 
     protected function tearDown()
     {
-        unlink(__DIR__ . '/fileHandler');
+        unlink(__DIR__ . '/../fileHandler');
     }
 
     /**
@@ -40,7 +40,7 @@ class FileHandlerTest extends PHPUnit_Framework_TestCase
      */
     public function testConstruct()
     {
-        $file = new FileHandler(__DIR__ . '/fileHandler', "c+");
+        $file = new FileHandler(__DIR__ . '/../fileHandler', "c+");
         $this->assertInstanceOf('\ZataBase\Helper\FileHandler', $file);
     }
 
@@ -51,7 +51,7 @@ class FileHandlerTest extends PHPUnit_Framework_TestCase
     public function testAppend()
     {
         $this->fileHandler->append('Appended Content');
-        $this->assertEquals('Appended Content' . PHP_EOL, file_get_contents(__DIR__ . '/fileHandler'));
+        $this->assertEquals('Appended Content' . PHP_EOL, file_get_contents(__DIR__ . '/../fileHandler'));
     }
 
     /**
@@ -80,7 +80,23 @@ class FileHandlerTest extends PHPUnit_Framework_TestCase
         $this->fileHandler->append('3');
         $this->fileHandler->delete(strlen('1' . PHP_EOL));
 
-        $this->assertEquals('1' . PHP_EOL . '3' . PHP_EOL, file_get_contents(__DIR__ . '/fileHandler'));
+        $this->assertEquals('1' . PHP_EOL . '3' . PHP_EOL, file_get_contents(__DIR__ . '/../fileHandler'));
+    }
+
+    /**
+     * @covers            \ZataBase\Helper\FileHandler::delete
+     * @uses              \ZataBase\Helper\FileHandler
+     * @depends testAppend
+     */
+    public function testDeleteMultiple()
+    {
+        $this->fileHandler->ftruncate(0);
+        $this->fileHandler->append('1');
+        $this->fileHandler->append('2');
+        $this->fileHandler->append('3');
+        $this->fileHandler->delete([0, strlen('1' . PHP_EOL)]);
+
+        $this->assertEquals('3' . PHP_EOL, file_get_contents(__DIR__ . '/../fileHandler'));
     }
 
     /**
@@ -96,7 +112,7 @@ class FileHandlerTest extends PHPUnit_Framework_TestCase
         $this->fileHandler->append('3');
         $this->fileHandler->replace(strlen('1' . PHP_EOL), '4');
 
-        $this->assertEquals('1' . PHP_EOL . '4' . PHP_EOL . '3' . PHP_EOL, file_get_contents(__DIR__ . '/fileHandler'));
+        $this->assertEquals('1' . PHP_EOL . '4' . PHP_EOL . '3' . PHP_EOL, file_get_contents(__DIR__ . '/../fileHandler'));
     }
 
     /**
@@ -117,6 +133,6 @@ class FileHandlerTest extends PHPUnit_Framework_TestCase
             return '';
         }, [3]);
 
-        $this->assertEquals('4' . PHP_EOL . '6' . PHP_EOL, file_get_contents(__DIR__ . '/fileHandler'));
+        $this->assertEquals('4' . PHP_EOL . '6' . PHP_EOL, file_get_contents(__DIR__ . '/../fileHandler'));
     }
 }

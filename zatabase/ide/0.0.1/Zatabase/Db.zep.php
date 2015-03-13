@@ -10,7 +10,7 @@ class Db extends \ZataBase\Di\Injectable
      *
      * @param mixed $config 
      */
-	public function __construct($config) {}
+	public function __construct(\ZataBase\Helper\ArrayToObject $config) {}
 
     /**
      * Alias of Schema::createTable
