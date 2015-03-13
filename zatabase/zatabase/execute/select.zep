@@ -17,7 +17,6 @@ class Select extends Condition
 
     /**
     * Finished creating the query, check table for rows matching conditions and return the results
-    * TODO: implement a resultset object
     */
     public function done() -> <\ZataBase\Execute\Results>|bool
     {

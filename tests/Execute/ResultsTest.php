@@ -87,6 +87,24 @@ class ResultsTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers            \ZataBase\Execute\Results::toArray
+     * @uses              \ZataBase\Execute\Results
+     */
+    public function testToArray()
+    {
+        $this->db->testTable->file->ftruncate(0);
+        $this->db->testTable->file->append(json_encode(['one', 'two']));
+        $this->db->testTable->file->append(json_encode(['three', 'four']));
+
+        $this->db->testResults->addRowOffset(0);
+        $this->db->testResults->addRowOffset(strlen(json_encode(['one', 'two']) . PHP_EOL));
+
+
+
+        $this->assertEquals([['one', 'two'], ['three', 'four']], $this->db->testResults->toArray());
+    }
+
+    /**
      * @covers            \ZataBase\Execute\Results::count
      * @uses              \ZataBase\Execute\Results
      */

@@ -14,6 +14,7 @@ use ZataBase\Db;
 use ZataBase\Helper\ArrayToObject;
 use ZataBase\Table;
 use ZataBase\Table\Column;
+use ZataBase\Tests\UnitUtils;
 
 class InsertTest extends PHPUnit_Framework_TestCase
 {
@@ -30,6 +31,7 @@ class InsertTest extends PHPUnit_Framework_TestCase
         ]));
         $this->db->schema->deleteTable('Insert');
         $this->db->schema->createTable(new Table('Insert', [
+            new Column('id', Column::INT_TYPE, [Column::INCREMENT_FLAG]),
             new Column('one', Column::INT_TYPE),
             new Column('two', Column::INT_TYPE),
             new Column('three', Column::INT_TYPE),
@@ -44,7 +46,7 @@ class InsertTest extends PHPUnit_Framework_TestCase
     {
         $insert = $this->db->insert('Insert')->columns(['one', 'three']);
 
-        $this->assertEquals([0, 2], $insert->getColumns());
+        $this->assertEquals([1, 3], $insert->getColumns());
     }
 
     /**
@@ -55,11 +57,63 @@ class InsertTest extends PHPUnit_Framework_TestCase
     {
         $insert = $this->db->insert('Insert')->columns(['one', 'three']);
 
-        $reflection = new ReflectionClass('\ZataBase\Execute\Insert');
-        $fillNulls = $reflection->getMethod('fillNulls');
-        $fillNulls->setAccessible(true);
+        $this->assertEquals([null, 1, null, 3], UnitUtils::callMethod($insert, 'fillNulls', [[1, 3]]));
+    }
 
-        $this->assertEquals([1, null, 3], $fillNulls->invokeArgs($insert, [[1, 3]]));
+    /**
+     * @covers            \ZataBase\Execute\Insert::values
+     * @uses              \ZataBase\Execute\Insert
+     */
+    public function testValuesLiteral()
+    {
+        $this->db->insert('Insert')->values([null, 1, 2, 3]);
+
+        $this->assertEquals([[1, 1, 2, 3]], $this->db->schema->getTable('Insert')->selectRows()->toArray());
+    }
+
+    /**
+     * @covers            \ZataBase\Execute\Insert::values
+     * @uses              \ZataBase\Execute\Insert
+     */
+    public function testValuesColumns()
+    {
+        $this->db->insert('Insert')->columns(['one', 'three'])->values([1, 3]);
+
+        $this->assertEquals([[1, 1, null, 3]], $this->db->schema->getTable('Insert')->selectRows()->toArray());
+    }
+
+    /**
+     * @covers            \ZataBase\Execute\Insert::values
+     * @uses              \ZataBase\Execute\Insert
+     */
+    public function testValuesLiteralMultiple()
+    {
+        $this->db->insert('Insert')->values([
+            [null, 1, 2, 3],
+            [null, 4, 5, 6],
+        ]);
+
+        $this->assertEquals([
+            [1, 1, 2, 3],
+            [2, 4, 5, 6],
+        ], $this->db->schema->getTable('Insert')->selectRows()->toArray());
+    }
+
+    /**
+     * @covers            \ZataBase\Execute\Insert::values
+     * @uses              \ZataBase\Execute\Insert
+     */
+    public function testValuesColumnsMultiple()
+    {
+        $this->db->insert('Insert')->columns(['one', 'three'])->values([
+            [1, 3],
+            [4, 6]
+        ]);
+
+        $this->assertEquals([
+            [1, 1, null, 3],
+            [2, 4, null, 6]
+        ], $this->db->schema->getTable('Insert')->selectRows()->toArray());
     }
 
 }

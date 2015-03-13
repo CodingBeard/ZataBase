@@ -82,6 +82,21 @@ class Results implements \SeekableIterator, \ArrayAccess {
         return false;
     }
 
+    /**
+    * Convert result set to an array with all values loaded, don't use for heavy memory selects
+    */
+    public function toArray() -> array
+    {
+        var offset;
+        array arrayResults = [];
+
+        for offset in this->rows {
+            this->table->file->fseek(offset);
+            let arrayResults[] = json_decode(this->table->file->current());
+        }
+        return arrayResults;
+    }
+
 
     /* Methods required for SeekableIterator and arrayAccess */
 

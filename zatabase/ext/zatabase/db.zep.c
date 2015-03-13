@@ -103,29 +103,29 @@ PHP_METHOD(ZataBase_Db, __construct) {
 	zephir_check_temp_parameter(_7);
 	zephir_check_call_status();
 	ZEPHIR_INIT_NVAR(_7);
-	object_init_ex(_7, zatabase_execute_ce);
-	if (zephir_has_constructor(_7 TSRMLS_CC)) {
-		ZEPHIR_CALL_METHOD(NULL, _7, "__construct", NULL);
-		zephir_check_call_status();
-	}
+	object_init_ex(_7, zatabase_schema_ce);
+	ZEPHIR_INIT_NVAR(_5);
+	ZEPHIR_INIT_NVAR(_5);
+	ZVAL_STRING(_5, "tablesDir", 1);
+	ZEPHIR_OBS_NVAR(_6);
+	zephir_read_property_zval(&_6, config, _5, PH_NOISY_CC);
+	ZEPHIR_CALL_METHOD(NULL, _7, "__construct", NULL, _6);
+	zephir_check_call_status();
 	ZEPHIR_INIT_NVAR(_8);
-	ZVAL_STRING(_8, "execute", ZEPHIR_TEMP_PARAM_COPY);
+	ZVAL_STRING(_8, "schema", ZEPHIR_TEMP_PARAM_COPY);
 	ZEPHIR_INIT_VAR(_9);
 	ZVAL_BOOL(_9, 1);
 	ZEPHIR_CALL_METHOD(NULL, di, "set", NULL, _8, _7, _9);
 	zephir_check_temp_parameter(_8);
 	zephir_check_call_status();
 	ZEPHIR_INIT_NVAR(_8);
-	object_init_ex(_8, zatabase_schema_ce);
-	ZEPHIR_INIT_NVAR(_5);
-	ZEPHIR_INIT_NVAR(_5);
-	ZVAL_STRING(_5, "tablesDir", 1);
-	ZEPHIR_OBS_NVAR(_6);
-	zephir_read_property_zval(&_6, config, _5, PH_NOISY_CC);
-	ZEPHIR_CALL_METHOD(NULL, _8, "__construct", NULL, _6);
-	zephir_check_call_status();
+	object_init_ex(_8, zatabase_execute_ce);
+	if (zephir_has_constructor(_8 TSRMLS_CC)) {
+		ZEPHIR_CALL_METHOD(NULL, _8, "__construct", NULL);
+		zephir_check_call_status();
+	}
 	ZEPHIR_INIT_NVAR(_9);
-	ZVAL_STRING(_9, "schema", ZEPHIR_TEMP_PARAM_COPY);
+	ZVAL_STRING(_9, "execute", ZEPHIR_TEMP_PARAM_COPY);
 	ZEPHIR_INIT_VAR(_10);
 	ZVAL_BOOL(_10, 1);
 	ZEPHIR_CALL_METHOD(NULL, di, "set", NULL, _9, _8, _10);
