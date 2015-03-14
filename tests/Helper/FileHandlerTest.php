@@ -57,7 +57,6 @@ class FileHandlerTest extends PHPUnit_Framework_TestCase
     /**
      * @covers            \ZataBase\Helper\FileHandler::count
      * @uses              \ZataBase\Helper\FileHandler
-     * @depends testAppend
      */
     public function testCount()
     {
@@ -70,7 +69,6 @@ class FileHandlerTest extends PHPUnit_Framework_TestCase
     /**
      * @covers            \ZataBase\Helper\FileHandler::delete
      * @uses              \ZataBase\Helper\FileHandler
-     * @depends testAppend
      */
     public function testDelete()
     {
@@ -86,7 +84,6 @@ class FileHandlerTest extends PHPUnit_Framework_TestCase
     /**
      * @covers            \ZataBase\Helper\FileHandler::delete
      * @uses              \ZataBase\Helper\FileHandler
-     * @depends testAppend
      */
     public function testDeleteMultiple()
     {
@@ -102,7 +99,6 @@ class FileHandlerTest extends PHPUnit_Framework_TestCase
     /**
      * @covers            \ZataBase\Helper\FileHandler::replace
      * @uses              \ZataBase\Helper\FileHandler
-     * @depends testAppend
      */
     public function testReplace()
     {
@@ -118,7 +114,6 @@ class FileHandlerTest extends PHPUnit_Framework_TestCase
     /**
      * @covers            \ZataBase\Helper\FileHandler::callback
      * @uses              \ZataBase\Helper\FileHandler
-     * @depends testAppend
      */
     public function testCallback()
     {
@@ -134,5 +129,22 @@ class FileHandlerTest extends PHPUnit_Framework_TestCase
         }, [3]);
 
         $this->assertEquals('4' . PHP_EOL . '6' . PHP_EOL, file_get_contents(__DIR__ . '/../fileHandler'));
+    }
+
+    /**
+     * @covers            \ZataBase\Helper\FileHandler::callback
+     * @uses              \ZataBase\Helper\FileHandler
+     */
+    public function testCallbackOffsets()
+    {
+        $this->fileHandler->ftruncate(0);
+        $this->fileHandler->append('1');
+        $this->fileHandler->append('2');
+        $this->fileHandler->append('3');
+        $this->fileHandler->callback(function ($line, $increment) {
+                return $line + $increment . PHP_EOL;
+        }, [3], [0, (strlen('1' . PHP_EOL) + strlen('2' . PHP_EOL))]);
+
+        $this->assertEquals('4' . PHP_EOL . '2' . PHP_EOL . '6' . PHP_EOL, file_get_contents(__DIR__ . '/../fileHandler'));
     }
 }

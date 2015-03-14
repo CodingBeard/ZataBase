@@ -87,6 +87,7 @@ class Schema extends Injectable {
             if typeof row == "array" {
                 if row[0] == name {
                     let table = new Table(row[0], row[1], row[2]);
+                    table->setDI(this->getDI());
                     table->setOffset(this->handlers["schema"]->ftell() - strlen(line));
                     return table;
                 }
@@ -132,10 +133,12 @@ class Schema extends Injectable {
     */
     public function alterTable(const string! name)
     {
-        var table;
+        var table, alter;
         let table = this->getTable(name);
         if table {
-            return new Alter(table);
+            let alter = new Alter(table);
+            alter->setDI(this->getDI());
+            return alter;
         }
     }
 

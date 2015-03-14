@@ -116,6 +116,8 @@ zatabase/table/exception.lo: /home/tim/Documents/github/ZataBase/zatabase/ext/za
 	$(LIBTOOL) --mode=compile $(CC)  -I. -I/home/tim/Documents/github/ZataBase/zatabase/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /home/tim/Documents/github/ZataBase/zatabase/ext/zatabase/table/exception.zep.c -o zatabase/table/exception.lo 
 zatabase/0__closure.lo: /home/tim/Documents/github/ZataBase/zatabase/ext/zatabase/0__closure.zep.c
 	$(LIBTOOL) --mode=compile $(CC)  -I. -I/home/tim/Documents/github/ZataBase/zatabase/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /home/tim/Documents/github/ZataBase/zatabase/ext/zatabase/0__closure.zep.c -o zatabase/0__closure.lo 
+zatabase/1__closure.lo: /home/tim/Documents/github/ZataBase/zatabase/ext/zatabase/1__closure.zep.c
+	$(LIBTOOL) --mode=compile $(CC)  -I. -I/home/tim/Documents/github/ZataBase/zatabase/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /home/tim/Documents/github/ZataBase/zatabase/ext/zatabase/1__closure.zep.c -o zatabase/1__closure.lo 
 $(phplibdir)/zatabase.la: ./zatabase.la
 	$(LIBTOOL) --mode=install cp ./zatabase.la $(phplibdir)
 

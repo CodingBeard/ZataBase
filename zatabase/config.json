@@ -31,7 +31,7 @@
     "non-valid-objectupdate": true,
     "non-valid-fetch": true,
     "invalid-array-index": true,
-    "non-array-append": true,
+    "non-array-append": false,
     "invalid-return-type": true,
     "unreachable-code": true,
     "nonexistent-constant": true,

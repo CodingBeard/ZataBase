@@ -10,9 +10,7 @@
 
 namespace ZataBase\Table;
 
-use ZataBase\Di\Injectable;
-
-class Column extends Injectable {
+class Column {
 
     /**
     * Column's name

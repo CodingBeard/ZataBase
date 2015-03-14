@@ -116,14 +116,11 @@ class FileHandler extends \SplFileObject {
         this->rewind();
         if typeof offsets == "array" {
             while this->valid() {
-                let line = this->current();
-                if strlen(line) {
-                    if in_array(this->ftell(), offsets) {
-                        rewrite->fwrite(call_user_func_array(callback, array_merge([line], arguments)));
-                    }
-                    else {
-                        rewrite->fwrite(line);
-                    }
+                if in_array(this->ftell(), offsets) {
+                    rewrite->fwrite(call_user_func_array(callback, array_merge([this->current()], arguments)));
+                }
+                else {
+                    rewrite->fwrite(this->current());
                 }
                 this->next();
             }
@@ -132,7 +129,7 @@ class FileHandler extends \SplFileObject {
             while this->valid() {
                 let line = this->current();
                 if strlen(line) {
-                    rewrite->fwrite(call_user_func_array(callback, array_merge([line], arguments)));
+                    rewrite->fwrite(call_user_func_array(callback, array_merge([this->current()], arguments)));
                 }
                 this->next();
             }

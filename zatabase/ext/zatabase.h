@@ -43,5 +43,6 @@
 #include "zatabase/table/column.zep.h"
 #include "zatabase/table/exception.zep.h"
 #include "zatabase/0__closure.zep.h"
+#include "zatabase/1__closure.zep.h"
 
 #endif

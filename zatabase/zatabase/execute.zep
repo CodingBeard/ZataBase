@@ -25,13 +25,15 @@ class Execute extends Injectable {
     */
     public function insert(const string! tableName) -> <Execute\Insert>
     {
-        var table;
+        var table, query;
 
         let table = this->{"schema"}->getTable(tableName);
         if !table {
             throw new Exception("Cannot insert into table: '" . tableName . "'. It does not exist.");
         }
-        return new Insert(table);
+        let query = new Insert(table);
+        query->setDI(this->getDI());
+        return query;
     }
 
     /**
@@ -41,13 +43,15 @@ class Execute extends Injectable {
     */
     public function select(const string! tableName) -> <Execute\Select>
     {
-        var table;
+        var table, query;
 
         let table = this->{"schema"}->getTable(tableName);
         if !table {
             throw new Exception("Cannot select from table: '" . tableName . "'. It does not exist.");
         }
-        return new Select(table);
+        let query = new Select(table);
+        query->setDI(this->getDI());
+        return query;
     }
 
     /**
@@ -57,13 +61,15 @@ class Execute extends Injectable {
     */
     public function delete(const string! tableName) -> <Execute\Select>
     {
-        var table;
+        var table, query;
 
         let table = this->{"schema"}->getTable(tableName);
         if !table {
             throw new Exception("Cannot delete from table: '" . tableName . "'. It does not exist.");
         }
-        return new Delete(table);
+        let query = new Delete(table);
+        query->setDI(this->getDI());
+        return query;
     }
 
     /**
@@ -73,13 +79,15 @@ class Execute extends Injectable {
     */
     public function update(const string! tableName) -> <Execute\Select>
     {
-        var table;
+        var table, query;
 
         let table = this->{"schema"}->getTable(tableName);
         if !table {
             throw new Exception("Cannot update table: '" . tableName . "'. It does not exist.");
         }
-        return new Update(table);
+        let query = new Update(table);
+        query->setDI(this->getDI());
+        return query;
     }
 
 }

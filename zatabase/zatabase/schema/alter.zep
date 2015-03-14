@@ -37,14 +37,14 @@ class Alter extends Injectable {
     public function addColumn(<\ZataBase\Table\Column> column, const var after = false) -> <\ZataBase\Schema\Alter>
     {
         var columns, afterKey;
-        if after {
-            let afterKey = this->table->columnKey(after);
+        if typeof after == "string" {
+            let afterKey = this->table->columnKey(after) + 1;
             if afterKey === false {
                 throw new Exception("You cannot add a column after a non-existent column.");
             }
 
             let columns = this->table->getColumns();
-            let columns = this->spliceColumns(columns, column, afterKey);
+            let columns = array_merge(array_slice(columns, 0, afterKey, true), [column], array_slice(columns, afterKey, NULL, true));
             this->table->setColumns(columns);
         }
         else {
@@ -66,16 +66,6 @@ class Alter extends Injectable {
         );
 
         return this;
-    }
-
-    /**
-    * Add a column at a specific offset
-    * @param \ZataBase\Table\Column column
-    * @param string after
-    */
-    protected function spliceColumns(array! columns, <\ZataBase\Table\Column> column, const int! offset) -> array
-    {
-        return array_slice(columns, 0, offset, true) + column + array_slice(columns, offset, NULL, true);
     }
 
 }

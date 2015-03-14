@@ -30,6 +30,15 @@ class SchemaTest extends PHPUnit_Framework_TestCase
         ]));
     }
 
+    protected function tearDown()
+    {
+        unlink(__DIR__ . "/database/tables/_schema");
+        unlink(__DIR__ . "/database/tables/_increments");
+        if (is_file(__DIR__ . "/database/tables/Test")) {
+            unlink(__DIR__ . "/database/tables/Test");
+        }
+    }
+
     /**
      * @covers            \ZataBase\Schema::__construct
      * @uses              \ZataBase\Schema
@@ -77,6 +86,7 @@ class SchemaTest extends PHPUnit_Framework_TestCase
     {
         $this->db->schema->getHandlers()['schema']->ftruncate(0);
         $table = new Table('Test', []);
+        $table->setDI($this->db->getDI());
         $this->db->schema->createTable($table);
 
         $this->assertEquals($table, $this->db->schema->getTable('Test'));
@@ -116,7 +126,7 @@ class SchemaTest extends PHPUnit_Framework_TestCase
     public function testSaveTable()
     {
         $this->db->schema->getHandlers()['schema']->ftruncate(0);
-        $table = new Table('Test', []);
+        $table = new Table('Test', [new Table\Column('int', Table\Column::INT_TYPE)]);
         $this->db->schema->createTable($table);
         $table = $this->db->schema->getTable('Test');
         $table->addColumn(new Table\Column('New', Table\Column::INT_TYPE));

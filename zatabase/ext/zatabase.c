@@ -34,6 +34,7 @@ zend_class_entry *zatabase_exception_ce;
 zend_class_entry *zatabase_execute_querytype_ce;
 zend_class_entry *zatabase_execute_condition_ce;
 zend_class_entry *zatabase_0__closure_ce;
+zend_class_entry *zatabase_1__closure_ce;
 zend_class_entry *zatabase_db_ce;
 zend_class_entry *zatabase_db_exception_ce;
 zend_class_entry *zatabase_di_ce;
@@ -125,6 +126,7 @@ static PHP_MINIT_FUNCTION(zatabase)
 	ZEPHIR_INIT(ZataBase_Table_Column);
 	ZEPHIR_INIT(ZataBase_Table_Exception);
 	ZEPHIR_INIT(zatabase_0__closure);
+	ZEPHIR_INIT(zatabase_1__closure);
 
 #if PHP_VERSION_ID < 50500
 	setlocale(LC_ALL, old_lc_all);

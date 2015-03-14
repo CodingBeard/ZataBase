@@ -34,8 +34,7 @@ class Select extends Condition
     */
     public function max(const string! columnName) -> string|int
     {
-        var column, columnKey, rows, row, highest = 0, highestValue = "0000-00-00";
-
+        var column, columnKey, rows, row, highest = 0, highestValue;
         let column = this->table->hasColumn(columnName);
         if typeof column != "object" {
             throw new Exception("Cannot select max from column: '" . columnName . "' It does not exist.");
@@ -44,19 +43,21 @@ class Select extends Condition
         let columnKey = column->getKey();
         let rows = this->table->selectRows();
 
-        if column->type == Column::DATE_TYPE {
-            for row in iterator(rows) {
-                if strtotime(row[columnKey]) > highest {
-                    let highest = strtotime(row[columnKey]);
-                    let highestValue = row[columnKey];
+        if rows->count() {
+            if column->type == Column::DATE_TYPE {
+                for row in iterator(rows) {
+                    if strtotime(row[columnKey]) > highest {
+                        let highest = strtotime(row[columnKey]);
+                        let highestValue = row[columnKey];
+                    }
                 }
             }
-        }
-        else {
-            for row in iterator(rows) {
-                if intval(row[columnKey]) > highest {
-                    let highest = intval(row[columnKey]);
-                    let highestValue = row[columnKey];
+            else {
+                for row in iterator(rows) {
+                    if intval(row[columnKey]) > highest {
+                        let highest = intval(row[columnKey]);
+                        let highestValue = row[columnKey];
+                    }
                 }
             }
         }
@@ -69,7 +70,7 @@ class Select extends Condition
     */
     public function min(const string! columnName) -> string|int
     {
-        var column, columnKey, rows, key, row, lowest = 0, lowestValue = "9999-99-99";
+        var column, columnKey, rows, key, row, lowest = 0, lowestValue;
 
         let column = this->table->hasColumn(columnName);
         if typeof column != "object" {
@@ -79,19 +80,21 @@ class Select extends Condition
         let columnKey = column->getKey();
         let rows = this->table->selectRows();
 
-        if column->type == Column::DATE_TYPE {
+        if rows->count() {
+            if column->type == Column::DATE_TYPE {
             for key, row in iterator(rows) {
-                if strtotime(row[columnKey]) < lowest || key == 0 {
-                    let lowest = strtotime(row[columnKey]);
-                    let lowestValue = row[columnKey];
+                    if strtotime(row[columnKey]) < lowest || key == 0 {
+                        let lowest = strtotime(row[columnKey]);
+                        let lowestValue = row[columnKey];
+                    }
                 }
             }
-        }
-        else {
-            for key, row in iterator(rows) {
-                if intval(row[columnKey]) < lowest || key == 0 {
-                    let lowest = intval(row[columnKey]);
-                    let lowestValue = row[columnKey];
+            else {
+                for key, row in iterator(rows) {
+                    if intval(row[columnKey]) < lowest || key == 0 {
+                        let lowest = intval(row[columnKey]);
+                        let lowestValue = row[columnKey];
+                    }
                 }
             }
         }

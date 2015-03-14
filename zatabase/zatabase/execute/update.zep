@@ -19,17 +19,13 @@ class Update extends Condition
     * Columns to update
     * @var string
     */
-    protected columns {
-        get
-    };
+    protected columns;
 
     /**
     * Values to update with
     * @var string
     */
-    protected values {
-        set, get
-    };
+    protected values;
 
     /**
     * Which columns to update
@@ -47,34 +43,14 @@ class Update extends Condition
         }
         let this->columns = [];
         for column in arraycolumns {
+
+            if !this->table->hasColumn(column) {
+                throw new Exception("You cannot select a column to update that does not exist.");
+            }
+
             let this->columns[] = this->table->columnKey(column);
         }
         return this;
-    }
-
-    /**
-    * Finished creating the query, check table for rows matching conditions and update the results
-    * TODO: Implement callback instead of rewriting the file for every updated row
-    */
-    public function done() -> bool
-    {
-        var results, rowCount, result, offset, columnCount, columnKey;
-        let results = this->table->selectRows(this->conditions);
-
-        if results->count() {
-
-            for rowCount, result in iterator(results) {
-
-                let offset = results->getOffset(rowCount);
-
-                for columnCount, columnKey in this->columns {
-                    let result[columnKey] = this->values[columnCount];
-                }
-
-                this->table->file->replace(offset, json_encode(result));
-            }
-        }
-        return false;
     }
 
     /**
@@ -102,5 +78,33 @@ class Update extends Condition
 
         let this->values = arrayvalues;
         return this;
+    }
+
+    /**
+    * Finished creating the query, check table for rows matching conditions and update the results
+    */
+    public function done() -> bool
+    {
+        var results;
+        let results = this->table->selectRows(this->conditions);
+
+        if results->count() {
+            this->table->file->callback(function (var line, var columns, var values) {
+
+                var columnCount, columnKey, row;
+
+                let row = [];
+                let row = json_decode(line);
+
+                for columnCount, columnKey in columns {
+                    let row[columnKey] = values[columnCount];
+                }
+                return json_encode(row) . PHP_EOL;
+
+            }, [this->columns, this->values], results->rows);
+
+        }
+
+        return false;
     }
 }
