@@ -429,6 +429,6 @@ class TableTest extends PHPUnit_Framework_TestCase
      */
     public function testToString()
     {
-        $this->assertEquals(json_encode([$this->db->testTable->name, $this->db->testTable->columns, $this->db->testTable->relationships]), $this->db->testTable);
+        $this->assertEquals(json_encode([$this->db->testTable->name, $this->db->testTable->columns, $this->db->testTable->relations]), $this->db->testTable);
     }
 }

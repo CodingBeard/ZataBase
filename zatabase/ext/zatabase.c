@@ -33,8 +33,10 @@ zend_class_entry *zatabase_di_injectable_ce;
 zend_class_entry *zatabase_exception_ce;
 zend_class_entry *zatabase_execute_querytype_ce;
 zend_class_entry *zatabase_execute_condition_ce;
+zend_class_entry *zatabase_table_relation_ce;
 zend_class_entry *zatabase_0__closure_ce;
 zend_class_entry *zatabase_1__closure_ce;
+zend_class_entry *zatabase_2__closure_ce;
 zend_class_entry *zatabase_db_ce;
 zend_class_entry *zatabase_db_exception_ce;
 zend_class_entry *zatabase_di_ce;
@@ -66,6 +68,7 @@ zend_class_entry *zatabase_storage_exception_ce;
 zend_class_entry *zatabase_table_ce;
 zend_class_entry *zatabase_table_column_ce;
 zend_class_entry *zatabase_table_exception_ce;
+zend_class_entry *zatabase_table_relations_belongsto_ce;
 
 ZEND_DECLARE_MODULE_GLOBALS(zatabase)
 
@@ -94,6 +97,7 @@ static PHP_MINIT_FUNCTION(zatabase)
 	ZEPHIR_INIT(ZataBase_Exception);
 	ZEPHIR_INIT(ZataBase_Execute_QueryType);
 	ZEPHIR_INIT(ZataBase_Execute_Condition);
+	ZEPHIR_INIT(ZataBase_Table_Relation);
 	ZEPHIR_INIT(ZataBase_Db);
 	ZEPHIR_INIT(ZataBase_Db_Exception);
 	ZEPHIR_INIT(ZataBase_Di);
@@ -125,8 +129,10 @@ static PHP_MINIT_FUNCTION(zatabase)
 	ZEPHIR_INIT(ZataBase_Table);
 	ZEPHIR_INIT(ZataBase_Table_Column);
 	ZEPHIR_INIT(ZataBase_Table_Exception);
+	ZEPHIR_INIT(ZataBase_Table_Relations_BelongsTo);
 	ZEPHIR_INIT(zatabase_0__closure);
 	ZEPHIR_INIT(zatabase_1__closure);
+	ZEPHIR_INIT(zatabase_2__closure);
 
 #if PHP_VERSION_ID < 50500
 	setlocale(LC_ALL, old_lc_all);

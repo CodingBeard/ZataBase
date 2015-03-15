@@ -22,6 +22,8 @@
             <file>Execute/Condition/WithinTest.php</file>
             <file>Execute/ResultsTest.php</file>
             <file>TableTest.php</file>
+            <file>Table/RelationTest.php</file>
+            <file>Table/Relations/BelongsToTest.php</file>
             <file>SchemaTest.php</file>
             <file>Schema/AlterTest.php</file>
             <file>ExecuteTest.php</file>

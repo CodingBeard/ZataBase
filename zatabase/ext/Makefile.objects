@@ -114,10 +114,16 @@ zatabase/table/column.lo: /home/tim/Documents/github/ZataBase/zatabase/ext/zatab
 	$(LIBTOOL) --mode=compile $(CC)  -I. -I/home/tim/Documents/github/ZataBase/zatabase/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /home/tim/Documents/github/ZataBase/zatabase/ext/zatabase/table/column.zep.c -o zatabase/table/column.lo 
 zatabase/table/exception.lo: /home/tim/Documents/github/ZataBase/zatabase/ext/zatabase/table/exception.zep.c
 	$(LIBTOOL) --mode=compile $(CC)  -I. -I/home/tim/Documents/github/ZataBase/zatabase/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /home/tim/Documents/github/ZataBase/zatabase/ext/zatabase/table/exception.zep.c -o zatabase/table/exception.lo 
+zatabase/table/relation.lo: /home/tim/Documents/github/ZataBase/zatabase/ext/zatabase/table/relation.zep.c
+	$(LIBTOOL) --mode=compile $(CC)  -I. -I/home/tim/Documents/github/ZataBase/zatabase/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /home/tim/Documents/github/ZataBase/zatabase/ext/zatabase/table/relation.zep.c -o zatabase/table/relation.lo 
+zatabase/table/relations/belongsto.lo: /home/tim/Documents/github/ZataBase/zatabase/ext/zatabase/table/relations/belongsto.zep.c
+	$(LIBTOOL) --mode=compile $(CC)  -I. -I/home/tim/Documents/github/ZataBase/zatabase/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /home/tim/Documents/github/ZataBase/zatabase/ext/zatabase/table/relations/belongsto.zep.c -o zatabase/table/relations/belongsto.lo 
 zatabase/0__closure.lo: /home/tim/Documents/github/ZataBase/zatabase/ext/zatabase/0__closure.zep.c
 	$(LIBTOOL) --mode=compile $(CC)  -I. -I/home/tim/Documents/github/ZataBase/zatabase/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /home/tim/Documents/github/ZataBase/zatabase/ext/zatabase/0__closure.zep.c -o zatabase/0__closure.lo 
 zatabase/1__closure.lo: /home/tim/Documents/github/ZataBase/zatabase/ext/zatabase/1__closure.zep.c
 	$(LIBTOOL) --mode=compile $(CC)  -I. -I/home/tim/Documents/github/ZataBase/zatabase/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /home/tim/Documents/github/ZataBase/zatabase/ext/zatabase/1__closure.zep.c -o zatabase/1__closure.lo 
+zatabase/2__closure.lo: /home/tim/Documents/github/ZataBase/zatabase/ext/zatabase/2__closure.zep.c
+	$(LIBTOOL) --mode=compile $(CC)  -I. -I/home/tim/Documents/github/ZataBase/zatabase/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /home/tim/Documents/github/ZataBase/zatabase/ext/zatabase/2__closure.zep.c -o zatabase/2__closure.lo 
 $(phplibdir)/zatabase.la: ./zatabase.la
 	$(LIBTOOL) --mode=install cp ./zatabase.la $(phplibdir)
 

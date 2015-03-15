@@ -85,7 +85,7 @@ class Table extends Injectable {
     * Table's relationships
     * @var array
     */
-    public relationships {
+    public relations {
         set, get
     };
 
@@ -96,9 +96,9 @@ class Table extends Injectable {
     * @param int increment
     * @param array relationships
     */
-    public function __construct(const string! name, const array! columns = [], const array! relationships = [], const var offset = false)
+    public function __construct(const string! name, const array! columns = [], const array! relations = [], const var offset = false)
     {
-        var column;
+        var column, relation;
 
         let this->columns = [];
 
@@ -107,7 +107,17 @@ class Table extends Injectable {
         }
 
         let this->name = name;
-        let this->relationships = relationships;
+
+        let this->relations = [];
+
+        if typeof relations == "array" {
+            if count(relations) {
+                for relation in relations {
+                    this->addRelation(relation);
+                }
+            }
+        }
+
         this->refresh();
     }
 
@@ -155,6 +165,46 @@ class Table extends Injectable {
 
         let this->columns[columnObject->name] = columnObject;
         let this->columnMap[] = columnObject->name;
+    }
+
+    /**
+    * Add a relationship to the table
+    * @param \ZataBase\Table\RelationInterface relation
+    */
+    public function addRelation(var relation)
+    {
+        var parent, type, relationArray;
+
+        if typeof relation == "array" {
+            let relationArray = relation;
+            let type = relation["type"];
+            let relation = new {type}(
+                relationArray["parentTable"],
+                relationArray["parentColumn"],
+                relationArray["childColumn"],
+                relationArray["childTable"]
+            );
+        }
+
+        let parent = this->{"schema"}->getTable(relation->getParentTable());
+
+        if !parent {
+            throw new Exception("You cannot add a relation if the parent table is non-existent.");
+        }
+
+        if !parent->hasColumn(relation->getParentColumn()) {
+            throw new Exception("You cannot add a relation if the parent table's column is non-existent.");
+        }
+
+        if !this->hasColumn(relation->getChildColumn()) {
+            throw new Exception("You cannot add a relation to this table with a non-existent child column.");
+        }
+
+        if strlen(relation->getChildTable()) == 0 {
+            relation->setChildTable(this->name);
+        }
+
+        let this->relations[] = relation;
     }
 
     /**
@@ -303,7 +353,7 @@ class Table extends Injectable {
     */
     public function __toString()
     {
-        return json_encode([this->name, this->columns, this->relationships]);
+        return json_encode([this->name, this->columns, this->relations]);
     }
 
     /**

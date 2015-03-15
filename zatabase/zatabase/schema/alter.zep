@@ -68,4 +68,67 @@ class Alter extends Injectable {
         return this;
     }
 
+    /**
+    * Delete a column from a table
+    * @param string columnName
+    */
+    public function removeColumn(const string! columnName)
+    {
+        var column, columns, columnKey;
+
+        let column = this->table->hasColumn(columnName);
+
+        if !column {
+            throw new Exception("You cannot remove a non-existent column from a table.");
+        }
+
+        let columns = this->table->getColumns();
+
+        let columnKey = this->table->columnKey(columnName);
+
+        unset(columns[columnName]);
+
+        this->table->setColumns([]);
+
+        for column in columns {
+            this->table->addColumn(column);
+        }
+        this->{"schema"}->saveTable(this->table);
+
+        this->table->file->callback(
+            function (var line, var offset) {
+
+                let line = json_decode(line);
+
+                unset(line[offset]);
+
+                let line = array_values(line);
+
+                return json_encode(line) . PHP_EOL;
+            },
+            [columnKey]
+        );
+    }
+
+    /**
+    * Change a column in a table to the new supplied column
+    * @param string columnName
+    * @param \ZataBase\Table\Column column
+    */
+    public function changeColumn(const string! columnName, <\ZataBase\Table\Column> column)
+    {
+        var columns;
+
+        let columns = this->table->getColumns();
+
+        let columns[columnName] = column;
+
+        this->table->setColumns([]);
+
+        for column in columns {
+            this->table->addColumn(column);
+        }
+        this->{"schema"}->saveTable(this->table);
+    }
+
 }
