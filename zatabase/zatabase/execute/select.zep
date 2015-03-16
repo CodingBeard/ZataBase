@@ -37,6 +37,7 @@ class Select extends Condition
             let this->joins[] = this->table;
         }
 
+
         let this->joins[] = table;
 
         return this;
