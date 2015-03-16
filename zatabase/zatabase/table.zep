@@ -249,7 +249,7 @@ class Table extends Injectable {
             this->{"schema"}->setIncrement(this->name, this->incrementValue);
         }
 
-        this->file->append(json_encode(row));
+        this->file->appendcsv(row);
     }
 
     /**
@@ -258,7 +258,8 @@ class Table extends Injectable {
     */
     public function insertRows(const array! rows) -> void
     {
-        var row, appendedRows = "";
+        var row, updatedRows;
+        let updatedRows = [];
         for row in rows {
             if count(row) != count(this->columnMap) {
                 throw new Exception("Row should contain the same number of values as columns in the table: " . implode(", ", this->columnMap));
@@ -273,14 +274,14 @@ class Table extends Injectable {
                     let this->incrementValue = row[this->incrementKey];
                 }
             }
-            let appendedRows .= json_encode(row) . PHP_EOL;
+            let updatedRows[] = row;
         }
 
         if this->increment {
             this->{"schema"}->setIncrement(this->name, this->incrementValue);
         }
 
-        this->file->append(substr(appendedRows, 0, -1));
+        this->file->appendcsvs(updatedRows);
     }
 
     /**
@@ -303,9 +304,9 @@ class Table extends Injectable {
                 let match = true;
 
                 let line = this->file->current();
-                let row = json_decode(line);
+                let row = str_getcsv(line);
 
-                if typeof row == "array" {
+                if typeof row == "array" && strlen(line) {
                     for condition in conditions {
                         if !condition->matches(row) {
                             let match = false;

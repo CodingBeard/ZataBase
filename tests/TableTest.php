@@ -223,7 +223,7 @@ class TableTest extends PHPUnit_Framework_TestCase
         $this->db->testTable->insertRow([1, 2, 3]);
         $this->db->testTable->file->rewind();
 
-        $this->assertEquals(json_encode([1, 2, 3]) . PHP_EOL, $this->db->testTable->file->current());
+        $this->assertEquals([1, 2, 3], $this->db->testTable->file->getcsv(0));
     }
 
     /**
@@ -240,9 +240,9 @@ class TableTest extends PHPUnit_Framework_TestCase
         $this->db->testTable->insertRow([null, 3, 4]);
         $this->db->testTable->file->rewind();
 
-        $this->assertEquals(json_encode([1, 2, 3]) . PHP_EOL, $this->db->testTable->file->current());
+        $this->assertEquals([1, 2, 3], $this->db->testTable->file->getcsv(0));
         $this->db->testTable->file->next();
-        $this->assertEquals(json_encode([2, 3, 4]) . PHP_EOL, $this->db->testTable->file->current());
+        $this->assertEquals([2, 3, 4], $this->db->testTable->file->getcsv(strlen('1,2,3' . PHP_EOL)));
     }
 
     /**
@@ -279,9 +279,9 @@ class TableTest extends PHPUnit_Framework_TestCase
         ]);
         $this->db->testTable->file->rewind();
 
-        $this->assertEquals(json_encode([1, 2, 3]) . PHP_EOL, $this->db->testTable->file->current());
+        $this->assertEquals([1, 2, 3], $this->db->testTable->file->fgetcsv());
         $this->db->testTable->file->next();
-        $this->assertEquals(json_encode([4, 5, 6]) . PHP_EOL, $this->db->testTable->file->current());
+        $this->assertEquals([4, 5, 6], $this->db->testTable->file->fgetcsv());
     }
 
     /**
@@ -300,9 +300,9 @@ class TableTest extends PHPUnit_Framework_TestCase
         ]);
         $this->db->testTable->file->rewind();
 
-        $this->assertEquals(json_encode([3, 2, 3]) . PHP_EOL, $this->db->testTable->file->current());
+        $this->assertEquals([3, 2, 3], $this->db->testTable->file->fgetcsv());
         $this->db->testTable->file->next();
-        $this->assertEquals(json_encode([4, 3, 4]) . PHP_EOL, $this->db->testTable->file->current());
+        $this->assertEquals([4, 3, 4], $this->db->testTable->file->fgetcsv());
     }
 
     /**
@@ -382,7 +382,7 @@ class TableTest extends PHPUnit_Framework_TestCase
         ];
         $this->db->testTable->insertRows($rows);
 
-        $this->db->testTable->deleteRows(strlen(json_encode([1, 2, 3]) . PHP_EOL));
+        $this->db->testTable->deleteRows(strlen('1,2,3' . PHP_EOL));
 
         $results = $this->db->testTable->selectRows();
 

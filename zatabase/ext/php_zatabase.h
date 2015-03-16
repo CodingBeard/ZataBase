@@ -11,7 +11,7 @@
 #include "kernel/globals.h"
 
 #define PHP_ZATABASE_NAME        "zatabase"
-#define PHP_ZATABASE_VERSION     "0.0.1"
+#define PHP_ZATABASE_VERSION     "0.0.2"
 #define PHP_ZATABASE_EXTNAME     "zatabase"
 #define PHP_ZATABASE_AUTHOR      "Tim Marshall"
 #define PHP_ZATABASE_ZEPVERSION  "0.6.0a"

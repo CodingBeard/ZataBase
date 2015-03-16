@@ -72,11 +72,12 @@ class AlterTest extends PHPUnit_Framework_TestCase
             'NewColumn' => new Column('NewColumn', Column::INT_TYPE, [], 3)
         ], $this->db->schema->getTable('Alter')->getColumns());
 
+
         $this->assertEquals([
-            [1, '2015-01-01', 'foo', null],
-            [2, '2015-01-02', 'bar', null],
-            [3, '2015-01-03', 'fuz', null],
-            [4, '2015-01-04', 'baz', null],
+            [1, '2015-01-01', 'foo', ''],
+            [2, '2015-01-02', 'bar', ''],
+            [3, '2015-01-03', 'fuz', ''],
+            [4, '2015-01-04', 'baz', ''],
         ], $this->db->select('Alter')->done()->toArray());
     }
 
@@ -96,10 +97,10 @@ class AlterTest extends PHPUnit_Framework_TestCase
         ], $this->db->schema->getTable('Alter')->getColumns());
 
         $this->assertEquals([
-            [1, '2015-01-01', null, 'foo'],
-            [2, '2015-01-02', null, 'bar'],
-            [3, '2015-01-03', null, 'fuz'],
-            [4, '2015-01-04', null, 'baz'],
+            [1, '2015-01-01', '', 'foo'],
+            [2, '2015-01-02', '', 'bar'],
+            [3, '2015-01-03', '', 'fuz'],
+            [4, '2015-01-04', '', 'baz'],
         ], $this->db->select('Alter')->done()->toArray());
     }
 

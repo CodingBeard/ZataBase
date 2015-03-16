@@ -58,7 +58,7 @@
   "name": "zatabase",
   "description": "A database system written in Zephir",
   "author": "Tim Marshall",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "verbose": false,
   "requires": {
     "extensions": []

@@ -155,7 +155,7 @@ class SchemaTest extends PHPUnit_Framework_TestCase
     {
         $this->db->schema->getHandlers()['increments']->ftruncate(0);
         $this->db->schema->setIncrements(false);
-        $this->db->schema->getHandlers()['increments']->append(json_encode(['Test', 5]));
+        $this->db->schema->getHandlers()['increments']->appendcsv(['Test', 5]);
 
         $this->assertEquals(5, $this->db->schema->getIncrement('Test'));
         $this->assertEquals(5, $this->db->schema->getIncrement('Test'));

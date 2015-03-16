@@ -45,12 +45,12 @@ class FileHandlerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers            \ZataBase\Helper\FileHandler::append
+     * @covers            \ZataBase\Helper\FileHandler::appendRaw
      * @uses              \ZataBase\Helper\FileHandler
      */
-    public function testAppend()
+    public function testAppendRaw()
     {
-        $this->fileHandler->append('Appended Content');
+        $this->fileHandler->appendRaw('Appended Content');
         $this->assertEquals('Appended Content' . PHP_EOL, file_get_contents(__DIR__ . '/../fileHandler'));
     }
 
@@ -60,9 +60,9 @@ class FileHandlerTest extends PHPUnit_Framework_TestCase
      */
     public function testCount()
     {
-        $this->fileHandler->append('1');
-        $this->fileHandler->append('2');
-        $this->fileHandler->append('3');
+        $this->fileHandler->appendRaw('1');
+        $this->fileHandler->appendRaw('2');
+        $this->fileHandler->appendRaw('3');
         $this->assertEquals(3, $this->fileHandler->count());
     }
 
@@ -73,9 +73,9 @@ class FileHandlerTest extends PHPUnit_Framework_TestCase
     public function testDelete()
     {
         $this->fileHandler->ftruncate(0);
-        $this->fileHandler->append('1');
-        $this->fileHandler->append('2');
-        $this->fileHandler->append('3');
+        $this->fileHandler->appendRaw('1');
+        $this->fileHandler->appendRaw('2');
+        $this->fileHandler->appendRaw('3');
         $this->fileHandler->delete(strlen('1' . PHP_EOL));
 
         $this->assertEquals('1' . PHP_EOL . '3' . PHP_EOL, file_get_contents(__DIR__ . '/../fileHandler'));
@@ -88,9 +88,9 @@ class FileHandlerTest extends PHPUnit_Framework_TestCase
     public function testDeleteMultiple()
     {
         $this->fileHandler->ftruncate(0);
-        $this->fileHandler->append('1');
-        $this->fileHandler->append('2');
-        $this->fileHandler->append('3');
+        $this->fileHandler->appendRaw('1');
+        $this->fileHandler->appendRaw('2');
+        $this->fileHandler->appendRaw('3');
         $this->fileHandler->delete([0, strlen('1' . PHP_EOL)]);
 
         $this->assertEquals('3' . PHP_EOL, file_get_contents(__DIR__ . '/../fileHandler'));
@@ -103,9 +103,9 @@ class FileHandlerTest extends PHPUnit_Framework_TestCase
     public function testReplace()
     {
         $this->fileHandler->ftruncate(0);
-        $this->fileHandler->append('1');
-        $this->fileHandler->append('2');
-        $this->fileHandler->append('3');
+        $this->fileHandler->appendRaw('1');
+        $this->fileHandler->appendRaw('2');
+        $this->fileHandler->appendRaw('3');
         $this->fileHandler->replace(strlen('1' . PHP_EOL), '4');
 
         $this->assertEquals('1' . PHP_EOL . '4' . PHP_EOL . '3' . PHP_EOL, file_get_contents(__DIR__ . '/../fileHandler'));
@@ -118,9 +118,9 @@ class FileHandlerTest extends PHPUnit_Framework_TestCase
     public function testCallback()
     {
         $this->fileHandler->ftruncate(0);
-        $this->fileHandler->append('1');
-        $this->fileHandler->append('2');
-        $this->fileHandler->append('3');
+        $this->fileHandler->appendRaw('1');
+        $this->fileHandler->appendRaw('2');
+        $this->fileHandler->appendRaw('3');
         $this->fileHandler->callback(function ($line, $increment) {
             if ($line != '2' . PHP_EOL) {
                 return $line + $increment . PHP_EOL;
@@ -138,13 +138,65 @@ class FileHandlerTest extends PHPUnit_Framework_TestCase
     public function testCallbackOffsets()
     {
         $this->fileHandler->ftruncate(0);
-        $this->fileHandler->append('1');
-        $this->fileHandler->append('2');
-        $this->fileHandler->append('3');
+        $this->fileHandler->appendRaw('1');
+        $this->fileHandler->appendRaw('2');
+        $this->fileHandler->appendRaw('3');
         $this->fileHandler->callback(function ($line, $increment) {
-                return $line + $increment . PHP_EOL;
+            return $line + $increment . PHP_EOL;
         }, [3], [0, (strlen('1' . PHP_EOL) + strlen('2' . PHP_EOL))]);
 
         $this->assertEquals('4' . PHP_EOL . '2' . PHP_EOL . '6' . PHP_EOL, file_get_contents(__DIR__ . '/../fileHandler'));
+    }
+
+    /**
+     * @covers            \ZataBase\Helper\FileHandler::appendcsv
+     * @uses              \ZataBase\Helper\FileHandler
+     */
+    public function testGetCsv()
+    {
+        file_put_contents(__DIR__ . '/../fileHandler', '1,2,3' . PHP_EOL);
+
+        $this->assertEquals([1, 2, 3], $this->fileHandler->getcsv(0));
+    }
+
+    /**
+     * @covers            \ZataBase\Helper\FileHandler::appendcsv
+     * @uses              \ZataBase\Helper\FileHandler
+     */
+    public function testAppendCsv()
+    {
+        $this->fileHandler->ftruncate(0);
+        $this->fileHandler->appendcsv([4, 2, 6]);
+
+        $this->assertEquals([4, 2, 6], $this->fileHandler->getcsv(0));
+    }
+
+    /**
+     * @covers            \ZataBase\Helper\FileHandler::appendcsvs
+     * @uses              \ZataBase\Helper\FileHandler
+     */
+    public function testAppendCsvs()
+    {
+        $this->fileHandler->ftruncate(0);
+        $this->fileHandler->appendcsvs([
+            [4, 2, 6],
+            [1, 2, 3]
+        ]);
+
+        $this->assertEquals([4, 2, 6], $this->fileHandler->getcsv(0));
+        $this->assertEquals([1, 2, 3], $this->fileHandler->getcsv(strlen('4,2,6' . PHP_EOL)));
+    }
+
+    /**
+     * @covers            \ZataBase\Helper\FileHandler::appendcsv
+     * @uses              \ZataBase\Helper\FileHandler
+     */
+    public function testPutCsv()
+    {
+        $this->fileHandler->ftruncate(0);
+        file_put_contents(__DIR__ . '/../fileHandler', '1,2,3' . PHP_EOL);
+        $this->fileHandler->putcsv(strlen('1,2,3' . PHP_EOL), [4, 2, 6]);
+
+        $this->assertEquals([4, 2, 6], $this->fileHandler->getcsv(strlen('1,2,3' . PHP_EOL)));
     }
 }

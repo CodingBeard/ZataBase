@@ -75,11 +75,11 @@ class ResultsTest extends PHPUnit_Framework_TestCase
      */
     public function testGetRow()
     {
-        $this->db->testTable->file->append(json_encode(['one', 'two']));
-        $this->db->testTable->file->append(json_encode(['three', 'four']));
+        $this->db->testTable->file->appendcsv(['one', 'two']);
+        $this->db->testTable->file->appendcsv(['three', 'four']);
 
         $this->db->testResults->addRowOffset(0);
-        $this->db->testResults->addRowOffset(strlen(json_encode(['one', 'two']) . PHP_EOL));
+        $this->db->testResults->addRowOffset(strlen('one,two' . PHP_EOL));
 
         $this->assertEquals(['one', 'two'], $this->db->testResults->getRow(0));
 
@@ -93,11 +93,11 @@ class ResultsTest extends PHPUnit_Framework_TestCase
     public function testToArray()
     {
         $this->db->testTable->file->ftruncate(0);
-        $this->db->testTable->file->append(json_encode(['one', 'two']));
-        $this->db->testTable->file->append(json_encode(['three', 'four']));
+        $this->db->testTable->file->appendcsv(['one', 'two']);
+        $this->db->testTable->file->appendcsv(['three', 'four']);
 
         $this->db->testResults->addRowOffset(0);
-        $this->db->testResults->addRowOffset(strlen(json_encode(['one', 'two']) . PHP_EOL));
+        $this->db->testResults->addRowOffset(strlen('one,two' . PHP_EOL));
 
 
 
@@ -122,11 +122,11 @@ class ResultsTest extends PHPUnit_Framework_TestCase
      */
     public function testIterability()
     {
-        $this->db->testTable->file->append(json_encode(['one', 'two']));
-        $this->db->testTable->file->append(json_encode(['three', 'four']));
+        $length = $this->db->testTable->file->appendcsv(['one', 'two']);
+        $this->db->testTable->file->appendcsv(['three', 'four']);
 
         $this->db->testResults->addRowOffset(0);
-        $this->db->testResults->addRowOffset(strlen(json_encode(['one', 'two']) . PHP_EOL));
+        $this->db->testResults->addRowOffset($length);
 
         foreach ($this->db->testResults as $key => $row) {
             $this->assertEquals($row, $this->db->testResults->getRow($key));
@@ -139,11 +139,11 @@ class ResultsTest extends PHPUnit_Framework_TestCase
      */
     public function testArrayAccess()
     {
-        $this->db->testTable->file->append(json_encode(['one', 'two']));
-        $this->db->testTable->file->append(json_encode(['three', 'four']));
+        $length = $this->db->testTable->file->appendcsv(['one', 'two']);
+        $this->db->testTable->file->appendcsv(['three', 'four']);
 
         $this->db->testResults->addRowOffset(0);
-        $this->db->testResults->addRowOffset(strlen(json_encode(['one', 'two']) . PHP_EOL));
+        $this->db->testResults->addRowOffset($length);
 
         $this->assertEquals($this->db->testResults[0], $this->db->testResults->getRow(0));
         $this->assertEquals($this->db->testResults[1], $this->db->testResults->getRow(1));

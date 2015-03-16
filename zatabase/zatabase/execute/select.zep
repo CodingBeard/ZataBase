@@ -16,25 +16,6 @@ class Select extends Condition
 {
 
     /**
-    * Select a table to join with
-    * @param string tableName
-    */
-    public function join(const string! tableName)
-    {
-        var table, query;
-
-        let table = this->{"schema"}->getTable(tableName);
-        if !table {
-            throw new Exception("Cannot join table: '" . tableName . "'. It does not exist.");
-        }
-
-
-
-        return this;
-    }
-
-
-    /**
     * Finished creating the query, check table for rows matching conditions and return the results
     */
     public function done() -> <\ZataBase\Execute\Results>|bool

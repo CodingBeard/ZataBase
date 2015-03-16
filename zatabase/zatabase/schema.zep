@@ -43,14 +43,14 @@ class Schema extends Injectable {
         let this->handlers["increments"] = this->{"storage"}->getHandle(tablesDir . "_increments");
 
         if !this->getTable("_schema") {
-            this->handlers["schema"]->append(new Table("_schema", [
+            this->handlers["schema"]->appendRaw(new Table("_schema", [
                 new Column("name", Column::STRING_TYPE),
                 new Column("columns", Column::JSON_TYPE),
                 new Column("relationships", Column::JSON_TYPE)
             ]));
         }
         if !this->getTable("_increments") {
-            this->handlers["schema"]->append(new Table("_increments", [
+            this->handlers["schema"]->appendRaw(new Table("_increments", [
                 new Column("name", Column::STRING_TYPE),
                 new Column("increment", Column::INT_TYPE)
             ]));
@@ -104,7 +104,7 @@ class Schema extends Injectable {
     public function createTable(<Table> table)
     {
         if !this->getTable(table->name) {
-            this->handlers["schema"]->append(table);
+            this->handlers["schema"]->appendRaw(table);
             this->refresh();
         }
         else {
@@ -173,7 +173,7 @@ class Schema extends Injectable {
         if typeof this->increments != "array" {
             this->handlers["increments"]->rewind();
             while this->handlers["increments"]->valid() {
-                let row = json_decode(this->handlers["increments"]->current());
+                let row = this->handlers["increments"]->getcsv();
                 if typeof row == "array" {
                     let this->increments[row[0]] = row[1];
                 }
@@ -193,7 +193,7 @@ class Schema extends Injectable {
         if typeof this->increments == "array" {
             this->handlers["increments"]->ftruncate(0);
             for tableName, increment in this->increments {
-                this->handlers["increments"]->append(json_encode([tableName, increment]));
+                this->handlers["increments"]->appendcsv([tableName, increment]);
             }
         }
     }

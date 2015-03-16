@@ -65,8 +65,7 @@ class Results implements \SeekableIterator, \ArrayAccess {
     */
     public function getRow(var offset = false) -> bool|array
     {
-        this->table->file->fseek(this->rows[offset]);
-        return json_decode(this->table->file->current());
+        return this->table->file->getcsv(this->rows[offset]);
     }
 
     /**
@@ -92,7 +91,7 @@ class Results implements \SeekableIterator, \ArrayAccess {
 
         for offset in this->rows {
             this->table->file->fseek(offset);
-            let arrayResults[] = json_decode(this->table->file->current());
+            let arrayResults[] = this->table->file->fgetcsv();
         }
         return arrayResults;
     }

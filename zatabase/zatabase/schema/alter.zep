@@ -56,11 +56,11 @@ class Alter extends Injectable {
         this->table->file->callback(
             function (var line, var offset) {
 
-                let line = json_decode(line);
+                let line = str_getcsv(line);
 
                 array_splice(line, offset, 0, [null]);
 
-                return json_encode(line) . PHP_EOL;
+                return \ZataBase\Helper\Csv::arrayToCsv(line) . PHP_EOL;
             },
             [afterKey]
         );
@@ -98,13 +98,13 @@ class Alter extends Injectable {
         this->table->file->callback(
             function (var line, var offset) {
 
-                let line = json_decode(line);
+                let line = str_getcsv(line);
 
                 unset(line[offset]);
 
                 let line = array_values(line);
 
-                return json_encode(line) . PHP_EOL;
+                return \ZataBase\Helper\Csv::arrayToCsv(line) . PHP_EOL;
             },
             [columnKey]
         );
