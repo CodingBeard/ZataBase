@@ -44,6 +44,7 @@ zend_class_entry *zatabase_di_exception_ce;
 zend_class_entry *zatabase_di_service_builder_ce;
 zend_class_entry *zatabase_di_service_ce;
 zend_class_entry *zatabase_execute_ce;
+zend_class_entry *zatabase_execute_complexresults_ce;
 zend_class_entry *zatabase_execute_condition_between_ce;
 zend_class_entry *zatabase_execute_condition_equals_ce;
 zend_class_entry *zatabase_execute_condition_exception_ce;
@@ -70,6 +71,7 @@ zend_class_entry *zatabase_table_ce;
 zend_class_entry *zatabase_table_column_ce;
 zend_class_entry *zatabase_table_exception_ce;
 zend_class_entry *zatabase_table_relations_belongsto_ce;
+zend_class_entry *zatabase_table_relations_hasone_ce;
 
 ZEND_DECLARE_MODULE_GLOBALS(zatabase)
 
@@ -106,6 +108,7 @@ static PHP_MINIT_FUNCTION(zatabase)
 	ZEPHIR_INIT(ZataBase_Di_Service);
 	ZEPHIR_INIT(ZataBase_Di_Service_Builder);
 	ZEPHIR_INIT(ZataBase_Execute);
+	ZEPHIR_INIT(ZataBase_Execute_ComplexResults);
 	ZEPHIR_INIT(ZataBase_Execute_Condition_Between);
 	ZEPHIR_INIT(ZataBase_Execute_Condition_Equals);
 	ZEPHIR_INIT(ZataBase_Execute_Condition_Exception);
@@ -132,6 +135,7 @@ static PHP_MINIT_FUNCTION(zatabase)
 	ZEPHIR_INIT(ZataBase_Table_Column);
 	ZEPHIR_INIT(ZataBase_Table_Exception);
 	ZEPHIR_INIT(ZataBase_Table_Relations_BelongsTo);
+	ZEPHIR_INIT(ZataBase_Table_Relations_HasOne);
 	ZEPHIR_INIT(zatabase_0__closure);
 	ZEPHIR_INIT(zatabase_1__closure);
 	ZEPHIR_INIT(zatabase_2__closure);

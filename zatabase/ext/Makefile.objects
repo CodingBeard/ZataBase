@@ -62,6 +62,8 @@ zatabase/exception.lo: /media/Data/Documents/github/ZataBase/zatabase/ext/zataba
 	$(LIBTOOL) --mode=compile $(CC)  -I. -I/media/Data/Documents/github/ZataBase/zatabase/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /media/Data/Documents/github/ZataBase/zatabase/ext/zatabase/exception.zep.c -o zatabase/exception.lo 
 zatabase/execute.lo: /media/Data/Documents/github/ZataBase/zatabase/ext/zatabase/execute.zep.c
 	$(LIBTOOL) --mode=compile $(CC)  -I. -I/media/Data/Documents/github/ZataBase/zatabase/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /media/Data/Documents/github/ZataBase/zatabase/ext/zatabase/execute.zep.c -o zatabase/execute.lo 
+zatabase/execute/complexresults.lo: /media/Data/Documents/github/ZataBase/zatabase/ext/zatabase/execute/complexresults.zep.c
+	$(LIBTOOL) --mode=compile $(CC)  -I. -I/media/Data/Documents/github/ZataBase/zatabase/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /media/Data/Documents/github/ZataBase/zatabase/ext/zatabase/execute/complexresults.zep.c -o zatabase/execute/complexresults.lo 
 zatabase/execute/condition.lo: /media/Data/Documents/github/ZataBase/zatabase/ext/zatabase/execute/condition.zep.c
 	$(LIBTOOL) --mode=compile $(CC)  -I. -I/media/Data/Documents/github/ZataBase/zatabase/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /media/Data/Documents/github/ZataBase/zatabase/ext/zatabase/execute/condition.zep.c -o zatabase/execute/condition.lo 
 zatabase/execute/condition/between.lo: /media/Data/Documents/github/ZataBase/zatabase/ext/zatabase/execute/condition/between.zep.c
@@ -120,6 +122,8 @@ zatabase/table/relation.lo: /media/Data/Documents/github/ZataBase/zatabase/ext/z
 	$(LIBTOOL) --mode=compile $(CC)  -I. -I/media/Data/Documents/github/ZataBase/zatabase/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /media/Data/Documents/github/ZataBase/zatabase/ext/zatabase/table/relation.zep.c -o zatabase/table/relation.lo 
 zatabase/table/relations/belongsto.lo: /media/Data/Documents/github/ZataBase/zatabase/ext/zatabase/table/relations/belongsto.zep.c
 	$(LIBTOOL) --mode=compile $(CC)  -I. -I/media/Data/Documents/github/ZataBase/zatabase/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /media/Data/Documents/github/ZataBase/zatabase/ext/zatabase/table/relations/belongsto.zep.c -o zatabase/table/relations/belongsto.lo 
+zatabase/table/relations/hasone.lo: /media/Data/Documents/github/ZataBase/zatabase/ext/zatabase/table/relations/hasone.zep.c
+	$(LIBTOOL) --mode=compile $(CC)  -I. -I/media/Data/Documents/github/ZataBase/zatabase/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /media/Data/Documents/github/ZataBase/zatabase/ext/zatabase/table/relations/hasone.zep.c -o zatabase/table/relations/hasone.lo 
 zatabase/0__closure.lo: /media/Data/Documents/github/ZataBase/zatabase/ext/zatabase/0__closure.zep.c
 	$(LIBTOOL) --mode=compile $(CC)  -I. -I/media/Data/Documents/github/ZataBase/zatabase/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /media/Data/Documents/github/ZataBase/zatabase/ext/zatabase/0__closure.zep.c -o zatabase/0__closure.lo 
 zatabase/1__closure.lo: /media/Data/Documents/github/ZataBase/zatabase/ext/zatabase/1__closure.zep.c

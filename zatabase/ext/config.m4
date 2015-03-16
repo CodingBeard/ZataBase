@@ -21,6 +21,7 @@ if test "$PHP_ZATABASE" = "yes"; then
 	zatabase/diinterface.zep.c
 	zatabase/exception.zep.c
 	zatabase/execute.zep.c
+	zatabase/execute/complexresults.zep.c
 	zatabase/execute/condition.zep.c
 	zatabase/execute/condition/between.zep.c
 	zatabase/execute/condition/equals.zep.c
@@ -50,6 +51,7 @@ if test "$PHP_ZATABASE" = "yes"; then
 	zatabase/table/exception.zep.c
 	zatabase/table/relation.zep.c
 	zatabase/table/relations/belongsto.zep.c
+	zatabase/table/relations/hasone.zep.c
 	zatabase/0__closure.zep.c
 	zatabase/1__closure.zep.c
 	zatabase/2__closure.zep.c "

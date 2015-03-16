@@ -1,5 +1,5 @@
 /*
- * ZataBase\Execute\Results
+ * complexresults
  *
  * @category 
  * @package 
@@ -10,13 +10,13 @@
 
 namespace ZataBase\Execute;
 
-class Results implements \SeekableIterator, \ArrayAccess {
+class ComplexResults implements \SeekableIterator, \ArrayAccess {
 
     /**
-    * Table's file path
-    * @var string
+    * Array of tables in the results
+    * @var array
     */
-    protected table;
+    protected tables;
 
     /**
     * Internal row position
@@ -36,19 +36,19 @@ class Results implements \SeekableIterator, \ArrayAccess {
     * Constructor
     * @param string table
     */
-    public function __construct(const <\ZataBase\Table> table)
+    public function __construct(const array! tables)
     {
-        let this->table = table;
+        let this->tables = tables;
         let this->position = 0;
     }
 
     /**
     * Add a row
-    * @var int offset
+    * @var array offsets
     */
-    public function addRowOffset(offset)
+    public function addRowOffset(offsets)
     {
-        let this->rows[] = offset;
+        let this->rows[] = offsets;
     }
 
     /**
@@ -65,7 +65,13 @@ class Results implements \SeekableIterator, \ArrayAccess {
     */
     public function getRow(var offset = false) -> bool|array
     {
-        return this->table->file->getcsv(this->rows[offset]);
+        var joinedRow = [], key, table;
+
+        for key, table in this->tables {
+            let joinedRow = array_merge(joinedRow, table->file->getcsv(this->rows[offset][key]));
+        }
+
+        return joinedRow;
     }
 
     /**
@@ -86,13 +92,11 @@ class Results implements \SeekableIterator, \ArrayAccess {
     */
     public function toArray() -> array
     {
-        var offset;
+        var key, offset;
         array arrayResults = [];
-
         if typeof this->rows == "array" {
-            for offset in this->rows {
-                this->table->file->fseek(offset);
-                let arrayResults[] = this->table->file->fgetcsv();
+            for key, offset in this->rows {
+                let arrayResults[] = this->getRow(key);
             }
             return arrayResults;
         }

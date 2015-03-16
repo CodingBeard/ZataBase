@@ -16,15 +16,60 @@ class Select extends Condition
 {
 
     /**
+    * @var bool|array
+    */
+    protected joins = false;
+
+    /**
+    * Set a table to join
+    *
+    * @param string tableName
+    */
+    public function join(const string! tableName) -> <\ZataBase\Execute\Select>
+    {
+        var table;
+        let table = this->{"schema"}->getTable(tableName);
+        if !table {
+            throw new Exception("Cannot join table: '" . tableName . "'. It does not exist.");
+        }
+
+        if !this->joins {
+            let this->joins[] = this->table;
+        }
+
+        let this->joins[] = table;
+
+        return this;
+    }
+
+    /**
     * Finished creating the query, check table for rows matching conditions and return the results
     */
     public function done() -> <\ZataBase\Execute\Results>|bool
     {
-        var results;
-        let results = this->table->selectRows(this->conditions);
-        if results->count() {
-            return results;
+        var results, table;
+
+        if this->joins {
+            if this->conditions {
+
+            }
+            else {
+                let results = new ComplexResults(this->joins);
+
+                for table in results->tables {
+                    
+                }
+
+                return results;
+            }
         }
+        else {
+            let results = this->table->selectRows(this->conditions);
+            if results->count() {
+                return results;
+            }
+        }
+
         return false;
     }
 

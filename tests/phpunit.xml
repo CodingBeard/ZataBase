@@ -9,7 +9,7 @@
          syntaxCheck="false">
     <testsuites>
         <testsuite name="stable">
-            <file>Storage/Adapter/FileTest.php</file>
+            <!--<file>Storage/Adapter/FileTest.php</file>
             <file>Helper/FileHandlerTest.php</file>
             <file>Helper/ArrayToObjectTest.php</file>
             <file>Helper/CsvTest.php</file>
@@ -31,6 +31,8 @@
             <file>Execute/QueryTypeTest.php</file>
             <file>Execute/ConditionTest.php</file>
             <file>Execute/InsertTest.php</file>
+            <file>Execute/SelectTest.php</file>-->
+            <file>Execute/ComplexResultTest.php</file>
         </testsuite>
     </testsuites>
 </phpunit>

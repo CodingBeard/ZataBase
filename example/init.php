@@ -112,10 +112,10 @@ try {
     $db->update('Users')->setColumns(['lastName'])->values(['Don'])->where('firstName')->equals('Jim')->done();
 
     /* Delete row(s), conditionally. Any of the above selectable conditions can be used here */
-    $db->delete('Users')->where('firstName')->equals('Jim')->done();
+    //$db->delete('Users')->where('firstName')->equals('Jim')->done();
 
     /* Delete row(s) */
-    $db->delete('Users')->done();
+    //$db->delete('Users')->done();
 
 } catch (\Exception $e) {
     echo $e->getMessage() . PHP_EOL;
