@@ -15,6 +15,7 @@ use ZataBase\Execute\Condition\Equals;
 use ZataBase\Helper\ArrayToObject;
 use ZataBase\Table;
 use ZataBase\Table\Column;
+use ZataBase\Tests\UnitUtils;
 
 class TableTest extends PHPUnit_Framework_TestCase
 {
@@ -35,11 +36,16 @@ class TableTest extends PHPUnit_Framework_TestCase
         $this->db->testTable = new Table('Test', []);
     }
 
+    protected function tearDown()
+    {
+        UnitUtils::deleteDir(__DIR__ . "/database");
+    }
+
     /**
      * @covers            \ZataBase\Table::__construct
      * @uses              \ZataBase\Table
      * @expectedException Exception
-     * @expectedExceptionMessage Column must be an: Array, stdClass, or instance of Column.
+     * @expectedExceptionMessage Column must be an instance of ZataBase\Table\Column.
      */
     public function testConstructBadColumns()
     {
@@ -73,61 +79,8 @@ class TableTest extends PHPUnit_Framework_TestCase
     /**
      * @covers            \ZataBase\Table::addColumn
      * @uses              \ZataBase\Table
-     * @expectedException Exception
-     * @expectedExceptionMessage Column must be an: Array, stdClass, or instance of Column.
      */
-    public function testAddColumnBadArgument1()
-    {
-        $this->db->testTable->addColumn('a');
-    }
-
-    /**
-     * @covers            \ZataBase\Table::addColumn
-     * @uses              \ZataBase\Table
-     * @expectedException Exception
-     * @expectedExceptionMessage Column must be an: Array, stdClass, or instance of Column.
-     */
-    public function testAddColumnBadArgument2()
-    {
-        $this->db->testTable->addColumn(new Exception(""));
-    }
-
-    /**
-     * @covers            \ZataBase\Table::addColumn
-     * @uses              \ZataBase\Table
-     */
-    public function testAddColumnArray()
-    {
-        $this->db->testTable->addColumn([
-            'name' => 'testAddColumnArray',
-            'type' => Column::INT_TYPE,
-            'flags' => []
-        ]);
-
-        $this->assertInstanceOf('\ZataBase\Table\Column', $this->db->testTable->hasColumn('testAddColumnArray'));
-    }
-
-    /**
-     * @covers            \ZataBase\Table::addColumn
-     * @uses              \ZataBase\Table
-     */
-    public function testAddColumnStdClass()
-    {
-        $object = new stdClass();
-        $object->name = 'testAddColumnStdClass';
-        $object->type = Column::INT_TYPE;
-        $object->flags = [];
-
-        $this->db->testTable->addColumn($object);
-
-        $this->assertInstanceOf('\ZataBase\Table\Column', $this->db->testTable->hasColumn('testAddColumnStdClass'));
-    }
-
-    /**
-     * @covers            \ZataBase\Table::addColumn
-     * @uses              \ZataBase\Table
-     */
-    public function testAddColumnObject()
+    public function testAddColumn()
     {
         $this->db->testTable->addColumn(new Column('testAddColumnObject', Column::INT_TYPE));
 
@@ -300,9 +253,9 @@ class TableTest extends PHPUnit_Framework_TestCase
         ]);
         $this->db->testTable->file->rewind();
 
-        $this->assertEquals([3, 2, 3], $this->db->testTable->file->fgetcsv());
+        $this->assertEquals([1, 2, 3], $this->db->testTable->file->fgetcsv());
         $this->db->testTable->file->next();
-        $this->assertEquals([4, 3, 4], $this->db->testTable->file->fgetcsv());
+        $this->assertEquals([2, 3, 4], $this->db->testTable->file->fgetcsv());
     }
 
     /**
@@ -421,14 +374,5 @@ class TableTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf('\Traversable', $results);
 
         $this->assertEquals(0, $results->count());
-    }
-
-    /**
-     * @covers            \ZataBase\Table::__toString
-     * @uses              \ZataBase\Table
-     */
-    public function testToString()
-    {
-        $this->assertEquals(json_encode([$this->db->testTable->name, $this->db->testTable->columns, $this->db->testTable->relations]), $this->db->testTable);
     }
 }

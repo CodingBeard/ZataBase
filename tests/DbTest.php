@@ -12,6 +12,7 @@
 
 use ZataBase\Db;
 use ZataBase\Helper\ArrayToObject;
+use ZataBase\Tests\UnitUtils;
 
 class DbTest extends PHPUnit_Framework_TestCase
 {
@@ -23,9 +24,13 @@ class DbTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->db = new Db(new ArrayToObject([
-            "databaseDir" => __DIR__ . "/database",
-            "tablesDir" => "tables/"
+            "databaseDir" => __DIR__ . "/database"
         ]));
+    }
+
+    protected function tearDown()
+    {
+        UnitUtils::deleteDir(__DIR__ . "/database");
     }
 
     /**
@@ -46,7 +51,6 @@ class DbTest extends PHPUnit_Framework_TestCase
     public function testStorageInitOnConstruct()
     {
         $this->assertTrue(is_dir(__DIR__ . '/database'));
-        $this->assertTrue(is_dir(__DIR__ . '/database/tables'));
     }
 
     /**

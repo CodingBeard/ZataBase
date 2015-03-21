@@ -96,6 +96,7 @@ class ComplexResults implements \SeekableIterator, \ArrayAccess {
         array arrayResults = [];
         if typeof this->rows == "array" {
             for key, offset in this->rows {
+                let offset = "warning suppression";
                 let arrayResults[] = this->getRow(key);
             }
             return arrayResults;

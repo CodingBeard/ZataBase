@@ -26,16 +26,20 @@ class InsertTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->db = new Db(new ArrayToObject([
-            "databaseDir" => __DIR__ . "/../database",
-            "tablesDir" => "tables/"
+            "databaseDir" => __DIR__ . "/../database"
         ]));
-        $this->db->schema->deleteTable('Insert');
+
         $this->db->schema->createTable(new Table('Insert', [
             new Column('id', Column::INT_TYPE, [Column::INCREMENT_FLAG]),
             new Column('one', Column::INT_TYPE),
             new Column('two', Column::INT_TYPE),
             new Column('three', Column::INT_TYPE),
         ]));
+    }
+
+    protected function tearDown()
+    {
+        UnitUtils::deleteDir(__DIR__ . "/../database");
     }
 
     /**

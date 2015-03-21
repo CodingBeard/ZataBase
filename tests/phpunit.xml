@@ -5,11 +5,11 @@
          backupStaticAttributes="false"
          colors="true"
          processIsolation="false"
-         stopOnFailure="false"
+         stopOnFailure="true"
          syntaxCheck="false">
     <testsuites>
         <testsuite name="stable">
-            <!--<file>Storage/Adapter/FileTest.php</file>
+            <file>Storage/Adapter/FileTest.php</file>
             <file>Helper/FileHandlerTest.php</file>
             <file>Helper/ArrayToObjectTest.php</file>
             <file>Helper/CsvTest.php</file>
@@ -23,15 +23,16 @@
             <file>Execute/Condition/WithinTest.php</file>
             <file>Execute/ResultsTest.php</file>
             <file>TableTest.php</file>
+            <file>SchemaTest.php</file>
             <file>Table/RelationTest.php</file>
             <file>Table/Relations/BelongsToTest.php</file>
-            <file>SchemaTest.php</file>
             <file>Schema/AlterTest.php</file>
             <file>ExecuteTest.php</file>
             <file>Execute/QueryTypeTest.php</file>
             <file>Execute/ConditionTest.php</file>
             <file>Execute/InsertTest.php</file>
-            <file>Execute/SelectTest.php</file>-->
+            <file>Execute/SelectTest.php</file>
+            <file>Execute/UpdateTest.php</file>
             <file>Execute/ComplexResultTest.php</file>
         </testsuite>
     </testsuites>

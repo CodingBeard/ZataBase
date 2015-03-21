@@ -18,24 +18,19 @@ use ZataBase\Storage\Adapter\File;
 * ZataBase\db
 * $db = new ZataBase\db([__DIR__ . '/database']);
 */
-class Db extends Injectable {
-
+class Db extends Injectable
+{
     /**
     * Constructor
     */
     public function __construct(const <\ZataBase\Helper\ArrayToObject> config)
     {
-        var di, storage;
-        let storage = new File(config->{"databaseDir"});
-
-        if !storage->isDir(config->{"tablesDir"}) {
-            storage->addDir(config->{"tablesDir"});
-        }
+        var di;
 
         let di = new Di();
         di->set("config", config, true);
-        di->set("storage", storage, true);
-        di->set("schema", new Schema(config->{"tablesDir"}), true);
+        di->set("storage", new File(config->{"databaseDir"}), true);
+        di->set("schema", new Schema(), true);
         di->set("execute", new Execute(), true);
         this->setDI(di);
     }

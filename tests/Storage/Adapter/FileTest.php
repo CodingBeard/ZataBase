@@ -11,6 +11,7 @@
  */
 
 use ZataBase\Storage\Adapter\File;
+use ZataBase\Tests\UnitUtils;
 
 class FileTest extends PHPUnit_Framework_TestCase
 {
@@ -23,6 +24,11 @@ class FileTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->file = new File(__DIR__ . '/../../database');
+    }
+
+    protected function tearDown()
+    {
+        UnitUtils::deleteDir(__DIR__ . "/../../database");
     }
 
     /**
@@ -117,6 +123,19 @@ class FileTest extends PHPUnit_Framework_TestCase
 
         $this->file->addDir('recursive/new/dirs');
         $this->assertTrue(is_dir(__DIR__ . '/../../database/recursive/new/dirs'));
+    }
+
+    /**
+     * @covers            \ZataBase\Storage\Adapter\File::scanDir
+     * @uses              \ZataBase\Storage\Adapter\File
+     */
+    public function testScanDir()
+    {
+        $this->file->addDir('scanDir/a');
+        $this->file->addDir('scanDir/b');
+        $this->file->addDir('scanDir/c');
+
+        $this->assertEquals(['a', 'b', 'c'], $this->file->scanDir('scanDir'));
     }
 
     /**

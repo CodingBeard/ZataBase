@@ -94,12 +94,12 @@ class Update extends Condition
                 var columnCount, columnKey, row;
 
                 let row = [];
-                let row = json_decode(line);
+                let row = str_getcsv(line);
 
                 for columnCount, columnKey in columns {
                     let row[columnKey] = values[columnCount];
                 }
-                return json_encode(row) . PHP_EOL;
+                return \ZataBase\Helper\Csv::arrayToCsv(row) . PHP_EOL;
 
             }, [this->columns, this->values], results->rows);
 

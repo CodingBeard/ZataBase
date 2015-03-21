@@ -12,10 +12,12 @@ namespace ZataBase;
 
 use Zatabase\Execute\Results;
 use ZataBase\Di\Injectable;
+use ZataBase\Di\InjectionAwareInterface;
 use ZataBase\Helper\FileHandler;
 use ZataBase\Table\Column;
 
-class Table extends Injectable {
+class Table extends Injectable
+{
 
     /**
     * Table's id in the schema
@@ -58,26 +60,10 @@ class Table extends Injectable {
     };
 
     /**
-    * True/false
+    * false or array of [increment column key, increment value]
     * @var int
     */
     public increment = false {
-        set, get
-    };
-
-    /**
-    * Column with an auto incrementing value
-    * @var int
-    */
-    public incrementKey {
-        set, get
-    };
-
-    /**
-    * Current increment
-    * @var int
-    */
-    public incrementValue {
         set, get
     };
 
@@ -96,23 +82,44 @@ class Table extends Injectable {
     * @param int increment
     * @param array relationships
     */
-    public function __construct(const string! name, const array! columns = [], const array! relations = [], const var offset = false)
+    public function __construct(const string! name, const array! columns = [], const array! relations = [], const var increment = false)
     {
         var column, relation;
 
-        let this->columns = [];
-
-        for column in columns {
-            this->addColumn(column);
+        if name == "Hats" {
+            //print_r(this->{"storage"}->scanDir());
         }
 
         let this->name = name;
+        let this->increment = increment;
+
+        let this->columns = [];
+
+        if typeof columns == "array" {
+            if count(columns) {
+                for column in columns {
+                    if typeof column != "object" {
+                        throw new Exception("Column must be an instance of ZataBase\\Table\\Column.");
+                    }
+                    if !(column instanceof \ZataBase\Table\Column) {
+                        throw new Exception("Column must be an instance of ZataBase\\Table\\Column.");
+                    }
+                    this->addColumn(column);
+                }
+            }
+        }
 
         let this->relations = [];
 
         if typeof relations == "array" {
             if count(relations) {
                 for relation in relations {
+                    if typeof relation != "object" {
+                        throw new Exception("relation must be an instance of ZataBase\\Table\\Relation.");
+                    }
+                    if !(relation instanceof \ZataBase\Table\Relation) {
+                        throw new Exception("relation must be an instance of ZataBase\\Table\\Relation.");
+                    }
                     this->addRelation(relation);
                 }
             }
@@ -125,66 +132,37 @@ class Table extends Injectable {
     * Check if this table has a certain column
     * @param string columnName
     */
-    public function addColumn(const var column) -> void
+    public function addColumn(<\ZataBase\Table\Column> column) -> void
     {
-        var columnObject, columnCount;
+        var columnCount;
 
         let columnCount = count(this->columns);
 
-        if typeof column == "array" {
-            let columnObject = new Column(column["name"], column["type"], column["flags"], columnCount);
-        }
-        elseif typeof column == "object" {
-            if column instanceof "Column" {
-                column->setKey(columnCount);
-                let columnObject = column;
-            }
-            elseif column instanceof "stdClass" {
-                let columnObject = new Column(column->name, column->type, column->flags, columnCount);
-            }
-            else {
-                throw new Exception("Column must be an: Array, stdClass, or instance of Column.");
-            }
-        }
-        else {
-            throw new Exception("Column must be an: Array, stdClass, or instance of Column.");
-        }
+        column->setKey(columnCount);
 
-        if isset(this->columns[columnObject->name]) {
+        if isset(this->columns[column->name]) {
             throw new Exception("A table may not have two columns with the same name.");
         }
 
-        if columnObject->hasFlag(Column::INCREMENT_FLAG) {
-            if this->increment {
+        if column->hasFlag(Column::INCREMENT_FLAG) {
+            if typeof this->increment == "array" {
                 throw new Exception("A table may only have one auto-incrementing value.");
             }
-            let this->increment = true;
-            let this->incrementKey = columnCount;
-            let this->incrementValue = this->{"schema"}->getIncrement(this->name);
+            let this->increment = ["key": columnCount, "value": 1];
         }
 
-        let this->columns[columnObject->name] = columnObject;
-        let this->columnMap[] = columnObject->name;
+        let this->columns[column->name] = column;
+        let this->columnMap[] = column->name;
     }
 
     /**
     * Add a relationship to the table
-    * @param \ZataBase\Table\RelationInterface relation
+    * @param \ZataBase\Table\Relation relation
     */
-    public function addRelation(var relation)
+    public function addRelation(<\ZataBase\Table\Relation> relation)
     {
-        var parent, type, relationArray;
-
-        if typeof relation == "array" {
-            let relationArray = relation;
-            let type = relation["type"];
-            let relation = new {type}(
-                relationArray["parentTable"],
-                relationArray["parentColumn"],
-                relationArray["childColumn"],
-                relationArray["childTable"]
-            );
-        }
+        /* TODO: optional checking
+        var parent;
 
         let parent = this->{"schema"}->getTable(relation->getParentTable());
 
@@ -195,6 +173,7 @@ class Table extends Injectable {
         if !parent->hasColumn(relation->getParentColumn()) {
             throw new Exception("You cannot add a relation if the parent table's column is non-existent.");
         }
+        */
 
         if !this->hasColumn(relation->getChildColumn()) {
             throw new Exception("You cannot add a relation to this table with a non-existent child column.");
@@ -239,14 +218,13 @@ class Table extends Injectable {
         }
 
         if this->increment {
-            if is_null(row[this->incrementKey]) {
-                let row[this->incrementKey] = this->incrementValue;
-                let this->incrementValue++;
+            if is_null(row[this->increment["key"]]) {
+                let row[this->increment["key"]] = this->increment["value"];
+                let this->increment["value"] = this->increment["value"] + 1;
             }
             else {
-                let this->incrementValue = row[this->incrementKey];
+                let this->increment["value"] = row[this->increment["key"]];
             }
-            this->{"schema"}->setIncrement(this->name, this->incrementValue);
         }
 
         this->file->appendcsv(row);
@@ -266,19 +244,15 @@ class Table extends Injectable {
             }
 
             if this->increment {
-                if is_null(row[this->incrementKey]) {
-                    let row[this->incrementKey] = this->incrementValue;
-                    let this->incrementValue++;
+                if is_null(row[this->increment["key"]]) {
+                    let row[this->increment["key"]] = this->increment["value"];
+                    let this->increment["value"] = this->increment["value"] + 1;
                 }
                 else {
-                    let this->incrementValue = row[this->incrementKey];
+                    let this->increment["value"] = row[this->increment["key"]];
                 }
             }
             let updatedRows[] = row;
-        }
-
-        if this->increment {
-            this->{"schema"}->setIncrement(this->name, this->incrementValue);
         }
 
         this->file->appendcsvs(updatedRows);
@@ -350,18 +324,11 @@ class Table extends Injectable {
     }
 
     /**
-    * Serialize self
-    */
-    public function __toString()
-    {
-        return json_encode([this->name, this->columns, this->relations]);
-    }
-
-    /**
-    * Refresh the file handler
+    * Refresh/create the file handler
     */
     public function refresh()
     {
-        let this->file = new FileHandler(this->{"storage"}->path(this->{"config"}->tablesDir . this->name), "c+");
+        this->{"storage"}->addDir(this->name);
+        let this->file = new FileHandler(this->{"storage"}->path(this->name . "/data"), "c+");
     }
 }

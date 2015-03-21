@@ -24,8 +24,9 @@ class QueryType extends Injectable {
     /**
     * @param string tableName
     */
-    public function __construct(<\Zatabase\Table> table)
+    public function __construct(<\ZataBase\DiInterface> di, <\Zatabase\Table> table)
     {
+        this->setDI(di);
         let this->table = table;
     }
 

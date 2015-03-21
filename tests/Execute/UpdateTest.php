@@ -14,6 +14,7 @@ use ZataBase\Db;
 use ZataBase\Helper\ArrayToObject;
 use ZataBase\Table;
 use ZataBase\Table\Column;
+use ZataBase\Tests\UnitUtils;
 
 class UpdateTest extends PHPUnit_Framework_TestCase
 {
@@ -28,7 +29,7 @@ class UpdateTest extends PHPUnit_Framework_TestCase
             "databaseDir" => __DIR__ . "/../database",
             "tablesDir" => "tables/"
         ]));
-        $this->db->schema->deleteTable('Update');
+
         $this->db->schema->createTable(new Table('Update', [
             new Column('id', Column::INT_TYPE, [Column::INCREMENT_FLAG]),
             new Column('int', Column::INT_TYPE),
@@ -42,6 +43,11 @@ class UpdateTest extends PHPUnit_Framework_TestCase
             [3, '2015-01-03', 'fuz'],
             [4, '2015-01-04', 'baz'],
         ]);
+    }
+
+    protected function tearDown()
+    {
+        UnitUtils::deleteDir(__DIR__ . "/../database");
     }
 
     /**

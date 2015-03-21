@@ -14,6 +14,7 @@ use ZataBase\Db;
 use ZataBase\Execute\Results;
 use ZataBase\Helper\ArrayToObject;
 use ZataBase\Table;
+use ZataBase\Tests\UnitUtils;
 
 class ResultsTest extends PHPUnit_Framework_TestCase
 {
@@ -25,11 +26,15 @@ class ResultsTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->db = new Db(new ArrayToObject([
-            "databaseDir" => __DIR__ . "/../database",
-            "tablesDir" => "tables/"
+            "databaseDir" => __DIR__ . "/../database"
         ]));
         $this->db->testTable = new Table('Test', []);
         $this->db->testResults = new Results($this->db->testTable);
+    }
+
+    protected function tearDown()
+    {
+        UnitUtils::deleteDir(__DIR__ . "/../database");
     }
 
     /**

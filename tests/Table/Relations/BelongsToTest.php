@@ -15,6 +15,7 @@ use ZataBase\Helper\ArrayToObject;
 use ZataBase\Table;
 use ZataBase\Table\Column;
 use ZataBase\Table\Relations\BelongsTo;
+use ZataBase\Tests\UnitUtils;
 
 class BelongsToTest extends PHPUnit_Framework_TestCase
 {
@@ -53,6 +54,11 @@ class BelongsToTest extends PHPUnit_Framework_TestCase
             [
                 new BelongsTo('Users', 'id', 'user_id')
             ]));
+    }
+
+    protected function tearDown()
+    {
+        UnitUtils::deleteDir(__DIR__ . "/../../database");
     }
 
     /**

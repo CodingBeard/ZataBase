@@ -13,6 +13,7 @@
 use ZataBase\Db;
 use ZataBase\Helper\ArrayToObject;
 use ZataBase\Table;
+use ZataBase\Tests\UnitUtils;
 
 class ExecuteTest extends PHPUnit_Framework_TestCase
 {
@@ -32,6 +33,11 @@ class ExecuteTest extends PHPUnit_Framework_TestCase
         $this->db->schema->createTable(new Table('Execute', [
              new Table\Column('one', Table\Column::INT_TYPE)
         ]));
+    }
+
+    protected function tearDown()
+    {
+        UnitUtils::deleteDir(__DIR__ . "/database");
     }
 
     /**

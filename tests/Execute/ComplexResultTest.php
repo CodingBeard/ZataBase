@@ -15,6 +15,7 @@ use ZataBase\Execute\ComplexResults;
 use ZataBase\Helper\ArrayToObject;
 use ZataBase\Table;
 use ZataBase\Table\Column;
+use ZataBase\Tests\UnitUtils;
 
 class ComplexResultTest extends PHPUnit_Framework_TestCase
 {
@@ -26,35 +27,25 @@ class ComplexResultTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->db = new Db(new ArrayToObject([
-            "databaseDir" => __DIR__ . "/../database",
-            "tablesDir" => "tables/"
+            "databaseDir" => __DIR__ . "/../database"
         ]));
 
-        $this->db->deleteTable('Users');
+        $this->db->createTable(new Table('Users', [
+            new Column('id', Column::INT_TYPE, [Column::INCREMENT_FLAG]),
+            new Column('firstName', Column::STRING_TYPE),
+            new Column('lastName', Column::STRING_TYPE),
+            new Column('DoB', Column::DATE_TYPE),
+        ], [
+            new Table\Relations\HasOne('Hats', 'user_id', 'id')
+        ]));
 
-        $this->db->createTable(new Table('Users',
-            [
-                new Column('id', Column::INT_TYPE, [Column::INCREMENT_FLAG]),
-                new Column('firstName', Column::STRING_TYPE),
-                new Column('lastName', Column::STRING_TYPE),
-                new Column('DoB', Column::DATE_TYPE),
-            ],
-            [
-                new Table\Relations\HasOne('Hats', 'user_id', 'id')
-            ]
-        ));
-
-        $this->db->deleteTable('Hats');
-
-        $this->db->createTable(new Table('Hats',
-            [
-                new Column('id', Column::INT_TYPE, [Column::INCREMENT_FLAG]),
-                new Column('user_id', Column::INT_TYPE),
-                new Column('name', Column::STRING_TYPE),
-            ],
-            [
-                new Table\Relations\BelongsTo('Users', 'id', 'user_id')
-            ]));
+        $this->db->createTable(new Table('Hats', [
+            new Column('id', Column::INT_TYPE, [Column::INCREMENT_FLAG]),
+            new Column('user_id', Column::INT_TYPE),
+            new Column('name', Column::STRING_TYPE),
+        ], [
+            new Table\Relations\BelongsTo('Users', 'id', 'user_id')
+        ]));
 
 
         $this->db->insert('Users')->columns(['firstName', 'lastName', 'DoB'])
@@ -75,6 +66,11 @@ class ComplexResultTest extends PHPUnit_Framework_TestCase
             $this->db->schema->getTable('Users'),
             $this->db->schema->getTable('Hats')
         ]);
+    }
+
+    protected function tearDown()
+    {
+        UnitUtils::deleteDir(__DIR__ . "/../database");
     }
 
     /**
@@ -200,14 +196,5 @@ class ComplexResultTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($this->db->testResults[0], $this->db->testResults->getRow(0));
         $this->assertEquals($this->db->testResults[1], $this->db->testResults->getRow(1));
 
-    }
-
-    /**
-     * @covers            \ZataBase\Execute\ComplexResults::count
-     * @uses              \ZataBase\Execute\ComplexResults
-     */
-    public function testSelectJoin()
-    {
-        print_r($this->db->select('Users')->join('Hats')->done()->toArray());
     }
 }

@@ -18,18 +18,18 @@ use ZataBase\Table\Column;
 class Schema extends Injectable {
 
     /**
-    * File handlers
-    * @var mixed
+    * Tables
+    * @var array
     */
-    protected handlers {
+    protected tables {
         set, get
     };
 
     /**
-    * Increments
+    * increment
     * @var mixed
     */
-    protected increments {
+    protected increment {
         set, get
     };
 
@@ -37,62 +37,59 @@ class Schema extends Injectable {
     * Construct
     * @param string
     */
-    public function __construct(const string! tablesDir)
+    public function __construct()
     {
-        let this->handlers["schema"] = this->{"storage"}->getHandle(tablesDir . "_schema");
-        let this->handlers["increments"] = this->{"storage"}->getHandle(tablesDir . "_increments");
+        this->refresh();
 
-        if !this->getTable("_schema") {
-            this->handlers["schema"]->appendRaw(new Table("_schema", [
-                new Column("name", Column::STRING_TYPE),
-                new Column("columns", Column::JSON_TYPE),
-                new Column("relationships", Column::JSON_TYPE)
-            ]));
-        }
-        if !this->getTable("_increments") {
-            this->handlers["schema"]->appendRaw(new Table("_increments", [
-                new Column("name", Column::STRING_TYPE),
-                new Column("increment", Column::INT_TYPE)
-            ]));
-        }
-
-        register_shutdown_function([this, "shutdown"]);
+        register_shutdown_function([this, "save"]);
     }
 
     /**
-    * Refresh the definition file handler
-    * @param string
+    * Refresh the table definitions
     */
     public function refresh()
     {
-        let this->handlers["schema"] = this->{"storage"}->getHandle(this->{"config"}->tablesDir . "_schema");
-        let this->handlers["increments"] = this->{"storage"}->getHandle(this->{"config"}->tablesDir . "_increments");
+        var file;
+
+        let this->tables = [];
+
+        for file in this->{"storage"}->scanDir() {
+            this->getTable(file);
+        }
     }
 
     /**
-    * Instance a table from the tables' file
+    * Check for a table
     * @param string name
     */
     public function getTable(const string! name) -> <Table>|bool
     {
-        var line, row, table;
-        let row = [];
-        this->handlers["schema"]->rewind();
+        var columns, relations, increment;
+        if this->{"storage"}->isFile(name . "/.zatabasetable") {
 
-        while this->handlers["schema"]->valid() {
-
-            let line = this->handlers["schema"]->current();
-            let row = json_decode(line, true);
-
-            if typeof row == "array" {
-                if row[0] == name {
-                    let table = new Table(row[0], row[1], row[2]);
-                    table->setDI(this->getDI());
-                    table->setOffset(this->handlers["schema"]->ftell() - strlen(line));
-                    return table;
-                }
+            if this->{"storage"}->isFile(name . "/columns") {
+                let columns = unserialize(this->{"storage"}->getFile(name . "/columns"));
             }
-            this->handlers["schema"]->next();
+            else {
+                let columns = [];
+            }
+
+            if this->{"storage"}->isFile(name . "/relations") {
+                let relations = unserialize(this->{"storage"}->getFile(name . "/relations"));
+            }
+            else {
+                let relations = [];
+            }
+
+            if this->{"storage"}->isFile(name . "/increment") {
+                let increment = abs(this->{"storage"}->getFile(name . "/increment"));
+            }
+            else {
+                let increment = false;
+            }
+
+            let this->tables[name] = new Table(name, columns, relations, increment);
+            return this->tables[name];
         }
         return false;
     }
@@ -104,7 +101,12 @@ class Schema extends Injectable {
     public function createTable(<Table> table)
     {
         if !this->getTable(table->name) {
-            this->handlers["schema"]->appendRaw(table);
+            this->{"storage"}->addDir(table->name);
+            this->{"storage"}->setFile(table->name . "/columns", serialize(table->columns));
+            this->{"storage"}->setFile(table->name . "/relations", serialize(table->relations));
+            this->{"storage"}->setFile(table->name . "/increment", serialize(table->increment));
+            this->{"storage"}->touch(table->name . "/.zatabasetable");
+            this->save();
             this->refresh();
         }
         else {
@@ -121,8 +123,8 @@ class Schema extends Injectable {
         var table;
         let table = this->getTable(name);
         if table {
-            this->handlers["schema"]->delete(table->offset);
-            table->deleteAllRows();
+            this->{"storage"}->removeDir(table->name);
+            this->save();
             this->refresh();
         }
     }
@@ -148,52 +150,21 @@ class Schema extends Injectable {
     */
     public function saveTable(<Table> table)
     {
-        this->handlers["schema"]->replace(table->offset, table);
+        let this->tables[table->name] = table;
+        this->save();
         this->refresh();
     }
 
-    /**
-    * Set a table increment value
-    * @param string tableName
-    * @param int increment
-    */
-    public function setIncrement(const string! tableName, const int incrementValue)
+    public function save()
     {
-        let this->increments[tableName] = incrementValue;
-    }
-
-    /**
-    * Get a table increment value
-    * @param string tableName
-    */
-    public function getIncrement(const string! tableName)
-    {
-        var row, increment;
-        let row = [];
-        if typeof this->increments != "array" {
-            this->handlers["increments"]->rewind();
-            while this->handlers["increments"]->valid() {
-                let row = this->handlers["increments"]->getcsv();
-                if typeof row == "array" {
-                    let this->increments[row[0]] = row[1];
+        var table;
+        if typeof this->tables == "array" {
+            for table in this->tables {
+                if this->{"storage"}->isDir(table->name) {
+                    this->{"storage"}->setFile(table->name . "/columns", serialize(table->columns));
+                    this->{"storage"}->setFile(table->name . "/relations", serialize(table->relations));
+                    this->{"storage"}->setFile(table->name . "/increment", serialize(table->increment));
                 }
-                this->handlers["increments"]->next();
-            }
-        }
-
-        if fetch increment, this->increments[tableName] {
-            return increment;
-        }
-        return 1;
-    }
-
-    public function shutdown()
-    {
-        var tableName, increment;
-        if typeof this->increments == "array" {
-            this->handlers["increments"]->ftruncate(0);
-            for tableName, increment in this->increments {
-                this->handlers["increments"]->appendcsv([tableName, increment]);
             }
         }
     }

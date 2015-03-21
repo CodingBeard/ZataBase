@@ -15,6 +15,7 @@ use ZataBase\Execute\Condition;
 use ZataBase\Helper\ArrayToObject;
 use ZataBase\Table;
 use ZataBase\Table\Column;
+use ZataBase\Tests\UnitUtils;
 
 class ConditionTest extends PHPUnit_Framework_TestCase
 {
@@ -26,16 +27,20 @@ class ConditionTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->db = new Db(new ArrayToObject([
-            "databaseDir" => __DIR__ . "/../database",
-            "tablesDir" => "tables/"
+            "databaseDir" => __DIR__ . "/../database"
         ]));
-        $this->db->schema->deleteTable('Condition');
+
         $this->db->schema->createTable(new Table('Condition', [
             new Column('one', Column::INT_TYPE),
             new Column('two', Column::INT_TYPE),
             new Column('three', Column::INT_TYPE),
         ]));
-        $this->db->condition = new Condition($this->db->schema->getTable('Condition'));
+        $this->db->condition = new Condition($this->db->getDI(), $this->db->schema->getTable('Condition'));
+    }
+
+    protected function tearDown()
+    {
+        UnitUtils::deleteDir(__DIR__ . "/../database");
     }
 
     /**

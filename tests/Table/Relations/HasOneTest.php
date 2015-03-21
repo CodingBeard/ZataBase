@@ -55,6 +55,11 @@ class HasOneTest extends PHPUnit_Framework_TestCase
             ]));
     }
 
+    protected function tearDown()
+    {
+        UnitUtils::deleteDir(__DIR__ . "/../../database");
+    }
+
     /**
      * @covers            \ZataBase\Table\Relations\HasOne::__construct
      * @uses              \ZataBase\Table\Relations\HasOne

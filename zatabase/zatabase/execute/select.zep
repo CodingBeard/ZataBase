@@ -58,7 +58,7 @@ class Select extends Condition
                 let results = new ComplexResults(this->joins);
 
                 for table in results->tables {
-                    
+                    let table->name =  "warning suppression";
                 }
 
                 return results;

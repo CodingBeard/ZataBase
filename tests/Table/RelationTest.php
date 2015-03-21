@@ -15,6 +15,7 @@ use ZataBase\Helper\ArrayToObject;
 use ZataBase\Table;
 use ZataBase\Table\Column;
 use ZataBase\Table\Relations\BelongsTo;
+use ZataBase\Tests\UnitUtils;
 
 class RelationTest extends PHPUnit_Framework_TestCase
 {
@@ -29,11 +30,8 @@ class RelationTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->db = new Db(new ArrayToObject([
-            "databaseDir" => __DIR__ . "/../../database",
-            "tablesDir" => "tables/"
+            "databaseDir" => __DIR__ . "/../database"
         ]));
-
-        $this->db->deleteTable('Users');
 
         $this->db->createTable(new Table('Users', [
             new Column('id', Column::INT_TYPE, [Column::INCREMENT_FLAG]),
@@ -42,25 +40,26 @@ class RelationTest extends PHPUnit_Framework_TestCase
             new Column('DoB', Column::DATE_TYPE),
         ]));
 
-        $this->db->deleteTable('Hats');
-
-        $this->db->createTable(new Table('Hats',
-            [
-                new Column('id', Column::INT_TYPE, [Column::INCREMENT_FLAG]),
-                new Column('user_id', Column::INT_TYPE),
-                new Column('name', Column::STRING_TYPE),
-            ],
-            [
-                new BelongsTo('Users', 'id', 'user_id')
-            ]));
+        $this->db->createTable(new Table('Hats', [
+            new Column('id', Column::INT_TYPE, [Column::INCREMENT_FLAG]),
+            new Column('user_id', Column::INT_TYPE),
+            new Column('name', Column::STRING_TYPE),
+        ], [
+            new BelongsTo('Users', 'id', 'user_id')
+        ]));
     }
 
-    /**
+    protected function tearDown()
+    {
+        UnitUtils::deleteDir(__DIR__ . "/../database");
+    }
+
+    /*
      * @covers            \ZataBase\Table::addRelation
      * @uses              \ZataBase\Table
      * @expectedException Exception
      * @expectedExceptionMessage You cannot add a relation if the parent table is non-existent.
-     */
+     *
     public function testAddRelationNoParent()
     {
         $table = $this->db->schema->getTable('Hats');
@@ -70,12 +69,12 @@ class RelationTest extends PHPUnit_Framework_TestCase
         $table->addRelation(new BelongsTo('Non', 'id', 'user_id'));
     }
 
-    /**
+    /*
      * @covers            \ZataBase\Table::addRelation
      * @uses              \ZataBase\Table
      * @expectedException Exception
      * @expectedExceptionMessage You cannot add a relation if the parent table's column is non-existent.
-     */
+     *
     public function testAddRelationNoParentColumn()
     {
         $table = $this->db->schema->getTable('Hats');
@@ -83,7 +82,7 @@ class RelationTest extends PHPUnit_Framework_TestCase
         $table->setRelations(null);
 
         $table->addRelation(new BelongsTo('Users', 'Non', 'user_id'));
-    }
+    }*/
 
     /**
      * @covers            \ZataBase\Table::addRelation

@@ -14,6 +14,7 @@ use ZataBase\Db;
 use ZataBase\Helper\ArrayToObject;
 use ZataBase\Table;
 use ZataBase\Table\Column;
+use ZataBase\Tests\UnitUtils;
 
 class AlterTest extends PHPUnit_Framework_TestCase
 {
@@ -42,6 +43,11 @@ class AlterTest extends PHPUnit_Framework_TestCase
             [3, '2015-01-03', 'fuz'],
             [4, '2015-01-04', 'baz'],
         ]);
+    }
+
+    protected function tearDown()
+    {
+        UnitUtils::deleteDir(__DIR__ . "/../database");
     }
 
     /**

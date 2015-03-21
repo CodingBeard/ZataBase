@@ -14,6 +14,7 @@ use ZataBase\Db;
 use ZataBase\Helper\ArrayToObject;
 use ZataBase\Table;
 use ZataBase\Table\Column;
+use ZataBase\Tests\UnitUtils;
 
 class SelectTest extends PHPUnit_Framework_TestCase
 {
@@ -25,10 +26,9 @@ class SelectTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->db = new Db(new ArrayToObject([
-            "databaseDir" => __DIR__ . "/../database",
-            "tablesDir" => "tables/"
+            "databaseDir" => __DIR__ . "/../database"
         ]));
-        $this->db->schema->deleteTable('Select');
+
         $this->db->schema->createTable(new Table('Select', [
             new Column('int', Column::INT_TYPE),
             new Column('date', Column::DATE_TYPE),
@@ -41,6 +41,11 @@ class SelectTest extends PHPUnit_Framework_TestCase
             [3, '2015-01-03', 'fuz'],
             [4, '2015-01-04', 'baz'],
         ]);
+    }
+
+    protected function tearDown()
+    {
+        UnitUtils::deleteDir(__DIR__ . "/../database");
     }
 
     /**

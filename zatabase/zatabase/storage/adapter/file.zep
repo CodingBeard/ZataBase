@@ -29,7 +29,6 @@ class File {
     */
     public function __construct(const string! directory) -> void
     {
-
         /* Make sure there's a trailing slash on the end of the directory */
         if (substr(directory, -1) !== DIRECTORY_SEPARATOR) {
             let this->scope = directory . DIRECTORY_SEPARATOR;
@@ -58,6 +57,10 @@ class File {
     public function path(const string! path) -> string
     {
         var absolutePath = "";
+
+        if !is_dir(this->scope) {
+            throw new Exception("The scope no longer exists.");
+        }
 
         /* Stop self from appending scope if it's present */
         if substr(path, 0, strlen(this->scope)) != this->scope {
@@ -122,6 +125,22 @@ class File {
     }
 
     /**
+    * scan a directory for its contents
+    *
+    * @param string path
+    */
+    public function scanDir(const string! path = "") -> bool|array
+    {
+        /* Dir doesn't exist */
+        if !this->isDir(path) {
+            return false;
+        }
+
+        /* Remove the dots returned by unix file system scans */
+        return array_values(array_diff(scandir(this->path(path)), [".", ".."]));
+    }
+
+    /**
     * Delete a directory
     *
     * @param string path
@@ -144,7 +163,7 @@ class File {
                     continue;
                 }
 
-                let file = this->path(path . DIRECTORY_SEPARATOR . file);
+                let file = path . DIRECTORY_SEPARATOR . file;
 
                 if this->isDir(file) {
                     this->removeDir(file);

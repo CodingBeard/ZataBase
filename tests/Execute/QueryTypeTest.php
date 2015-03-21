@@ -14,6 +14,7 @@ use ZataBase\Db;
 use ZataBase\Execute\QueryType;
 use ZataBase\Helper\ArrayToObject;
 use ZataBase\Table;
+use ZataBase\Tests\UnitUtils;
 
 class QueryTypeTest extends PHPUnit_Framework_TestCase
 {
@@ -25,10 +26,14 @@ class QueryTypeTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->db = new Db(new ArrayToObject([
-            "databaseDir" => __DIR__ . "/../database",
-            "tablesDir" => "tables/"
+            "databaseDir" => __DIR__ . "/../database"
         ]));
         $this->db->testTable = new Table('Test', []);
+    }
+
+    protected function tearDown()
+    {
+        UnitUtils::deleteDir(__DIR__ . "/../database");
     }
 
     /**
@@ -37,7 +42,7 @@ class QueryTypeTest extends PHPUnit_Framework_TestCase
      */
     public function testConstruct()
     {
-        $queryType = new QueryType($this->db->testTable);
+        $queryType = new QueryType($this->db->getDI(), $this->db->testTable);
         $this->assertInstanceOf('\ZataBase\Execute\QueryType', $queryType);
     }
 }

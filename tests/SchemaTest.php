@@ -13,6 +13,7 @@
 use ZataBase\Db;
 use ZataBase\Helper\ArrayToObject;
 use ZataBase\Table;
+use ZataBase\Tests\UnitUtils;
 
 class SchemaTest extends PHPUnit_Framework_TestCase
 {
@@ -25,18 +26,13 @@ class SchemaTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->db = new Db(new ArrayToObject([
-            "databaseDir" => __DIR__ . "/database",
-            "tablesDir" => "tables/"
+            "databaseDir" => __DIR__ . "/database"
         ]));
     }
 
     protected function tearDown()
     {
-        unlink(__DIR__ . "/database/tables/_schema");
-        unlink(__DIR__ . "/database/tables/_increments");
-        if (is_file(__DIR__ . "/database/tables/Test")) {
-            unlink(__DIR__ . "/database/tables/Test");
-        }
+        UnitUtils::deleteDir(__DIR__ . "/database");
     }
 
     /**
@@ -46,10 +42,6 @@ class SchemaTest extends PHPUnit_Framework_TestCase
     public function testConstruct()
     {
         $this->assertInstanceOf('\ZataBase\Schema', $this->db->schema);
-        $handlers = $this->db->schema->getHandlers();
-
-        $this->assertInstanceOf('\ZataBase\Helper\FileHandler', $handlers['schema']);
-        $this->assertInstanceOf('\ZataBase\Helper\FileHandler', $handlers['increments']);
     }
 
     /**
@@ -59,10 +51,6 @@ class SchemaTest extends PHPUnit_Framework_TestCase
     public function testRefresh()
     {
         $this->db->schema->refresh();
-        $handlers = $this->db->schema->getHandlers();
-
-        $this->assertInstanceOf('\ZataBase\Helper\FileHandler', $handlers['schema']);
-        $this->assertInstanceOf('\ZataBase\Helper\FileHandler', $handlers['increments']);
     }
 
     /**
@@ -71,11 +59,17 @@ class SchemaTest extends PHPUnit_Framework_TestCase
      */
     public function testCreateTable()
     {
-        $this->db->schema->getHandlers()['schema']->ftruncate(0);
         $table = new Table('Test', []);
         $this->db->schema->createTable($table);
 
-        $this->assertEquals($table->__toString() . PHP_EOL, $this->db->schema->getHandlers()['schema']->current());
+        $this->assertTrue($this->db->storage->isDir('Test'));
+        $this->assertTrue($this->db->storage->isFile('Test/columns'));
+        $this->assertTrue($this->db->storage->isFile('Test/data'));
+        $this->assertTrue($this->db->storage->isFile('Test/increment'));
+        $this->assertTrue($this->db->storage->isFile('Test/relations'));
+        $this->assertTrue($this->db->storage->isFile('Test/.zatabasetable'));
+
+        $this->assertEquals(['Test' => $table], $this->db->schema->getTables());
     }
 
     /**
@@ -84,9 +78,7 @@ class SchemaTest extends PHPUnit_Framework_TestCase
      */
     public function testGetTable()
     {
-        $this->db->schema->getHandlers()['schema']->ftruncate(0);
         $table = new Table('Test', []);
-        $table->setDI($this->db->getDI());
         $this->db->schema->createTable($table);
 
         $this->assertEquals($table, $this->db->schema->getTable('Test'));
@@ -98,7 +90,6 @@ class SchemaTest extends PHPUnit_Framework_TestCase
      */
     public function testDeleteTable()
     {
-        $this->db->schema->getHandlers()['schema']->ftruncate(0);
         $table = new Table('Test', []);
         $this->db->schema->createTable($table);
         $this->db->schema->deleteTable('Test');
@@ -112,7 +103,6 @@ class SchemaTest extends PHPUnit_Framework_TestCase
      */
     public function testAlterTable()
     {
-        $this->db->schema->getHandlers()['schema']->ftruncate(0);
         $this->db->schema->createTable(new Table('Test', []));
         $alter = $this->db->schema->alterTable('Test');
 
@@ -125,7 +115,6 @@ class SchemaTest extends PHPUnit_Framework_TestCase
      */
     public function testSaveTable()
     {
-        $this->db->schema->getHandlers()['schema']->ftruncate(0);
         $table = new Table('Test', [new Table\Column('int', Table\Column::INT_TYPE)]);
         $this->db->schema->createTable($table);
         $table = $this->db->schema->getTable('Test');
@@ -137,45 +126,19 @@ class SchemaTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers            \ZataBase\Schema::setIncrement
+     * @covers            \ZataBase\Schema::save
      * @uses              \ZataBase\Schema
      */
-    public function testSetIncrement()
+    public function testSave()
     {
-        $this->db->schema->setIncrement('Test', 5);
+        $table = new Table('Test', []);
+        $this->db->schema->createTable($table);
+        $this->db->schema->getTables()['Test']->addColumn(new Table\Column('shutdown', Table\Column::INT_TYPE));
 
-        $this->assertEquals(['Test' => 5], $this->db->schema->getIncrements());
-    }
-
-    /**
-     * @covers            \ZataBase\Schema::getIncrement
-     * @uses              \ZataBase\Schema
-     */
-    public function testGetIncrement()
-    {
-        $this->db->schema->getHandlers()['increments']->ftruncate(0);
-        $this->db->schema->setIncrements(false);
-        $this->db->schema->getHandlers()['increments']->appendcsv(['Test', 5]);
-
-        $this->assertEquals(5, $this->db->schema->getIncrement('Test'));
-        $this->assertEquals(5, $this->db->schema->getIncrement('Test'));
-        $this->assertEquals(1, $this->db->schema->getIncrement('Undefined'));
-    }
-
-    /**
-     * @covers            \ZataBase\Schema::shutdown
-     * @uses              \ZataBase\Schema
-     */
-    public function testShutdown()
-    {
-        $this->db->schema->getHandlers()['increments']->ftruncate(0);
-        $this->db->schema->setIncrements(false);
-        $this->db->schema->setIncrement('Test', 5);
-
-        $this->db->schema->shutdown();
+        $this->db->schema->save();
         $this->setUp();
 
-        $this->assertEquals(5, $this->db->schema->getIncrement('Test'));
+        $this->assertEquals(['shutdown' => new Table\Column('shutdown', Table\Column::INT_TYPE)], $this->db->schema->getTable('Test')->getColumns());
     }
 
 }
