@@ -67,12 +67,27 @@ class FileHandlerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers            \ZataBase\Helper\FileHandler::getLinePositions
+     * @uses              \ZataBase\Helper\FileHandler
+     */
+    public function testGetLinePositions()
+    {
+        $this->fileHandler->appendRaw('12');
+        $this->fileHandler->appendRaw('234');
+        $this->fileHandler->appendRaw('3456');
+        $this->assertEquals([
+            0,
+            strlen('12' . PHP_EOL),
+            strlen('12' . PHP_EOL) + strlen('234' . PHP_EOL)
+        ], $this->fileHandler->getLinePositions());
+    }
+
+    /**
      * @covers            \ZataBase\Helper\FileHandler::delete
      * @uses              \ZataBase\Helper\FileHandler
      */
     public function testDelete()
     {
-        $this->fileHandler->ftruncate(0);
         $this->fileHandler->appendRaw('1');
         $this->fileHandler->appendRaw('2');
         $this->fileHandler->appendRaw('3');
@@ -87,7 +102,6 @@ class FileHandlerTest extends PHPUnit_Framework_TestCase
      */
     public function testDeleteMultiple()
     {
-        $this->fileHandler->ftruncate(0);
         $this->fileHandler->appendRaw('1');
         $this->fileHandler->appendRaw('2');
         $this->fileHandler->appendRaw('3');
@@ -102,7 +116,6 @@ class FileHandlerTest extends PHPUnit_Framework_TestCase
      */
     public function testReplace()
     {
-        $this->fileHandler->ftruncate(0);
         $this->fileHandler->appendRaw('1');
         $this->fileHandler->appendRaw('2');
         $this->fileHandler->appendRaw('3');
@@ -117,7 +130,6 @@ class FileHandlerTest extends PHPUnit_Framework_TestCase
      */
     public function testCallback()
     {
-        $this->fileHandler->ftruncate(0);
         $this->fileHandler->appendRaw('1');
         $this->fileHandler->appendRaw('2');
         $this->fileHandler->appendRaw('3');
@@ -137,7 +149,6 @@ class FileHandlerTest extends PHPUnit_Framework_TestCase
      */
     public function testCallbackOffsets()
     {
-        $this->fileHandler->ftruncate(0);
         $this->fileHandler->appendRaw('1');
         $this->fileHandler->appendRaw('2');
         $this->fileHandler->appendRaw('3');
@@ -165,7 +176,6 @@ class FileHandlerTest extends PHPUnit_Framework_TestCase
      */
     public function testAppendCsv()
     {
-        $this->fileHandler->ftruncate(0);
         $this->fileHandler->appendcsv([4, 2, 6]);
 
         $this->assertEquals([4, 2, 6], $this->fileHandler->getcsv(0));
@@ -177,7 +187,6 @@ class FileHandlerTest extends PHPUnit_Framework_TestCase
      */
     public function testAppendCsvs()
     {
-        $this->fileHandler->ftruncate(0);
         $this->fileHandler->appendcsvs([
             [4, 2, 6],
             [1, 2, 3]
@@ -193,7 +202,6 @@ class FileHandlerTest extends PHPUnit_Framework_TestCase
      */
     public function testPutCsv()
     {
-        $this->fileHandler->ftruncate(0);
         file_put_contents(__DIR__ . '/../fileHandler', '1,2,3' . PHP_EOL);
         $this->fileHandler->putcsv(strlen('1,2,3' . PHP_EOL), [4, 2, 6]);
 

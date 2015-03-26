@@ -37,6 +37,9 @@ zend_class_entry *zatabase_table_relation_ce;
 zend_class_entry *zatabase_0__closure_ce;
 zend_class_entry *zatabase_1__closure_ce;
 zend_class_entry *zatabase_2__closure_ce;
+zend_class_entry *zatabase_3__closure_ce;
+zend_class_entry *zatabase_4__closure_ce;
+zend_class_entry *zatabase_5__closure_ce;
 zend_class_entry *zatabase_db_ce;
 zend_class_entry *zatabase_db_exception_ce;
 zend_class_entry *zatabase_di_ce;
@@ -66,6 +69,9 @@ zend_class_entry *zatabase_schema_alter_ce;
 zend_class_entry *zatabase_schema_ce;
 zend_class_entry *zatabase_schema_exception_ce;
 zend_class_entry *zatabase_storage_adapter_file_ce;
+zend_class_entry *zatabase_storage_btree_ce;
+zend_class_entry *zatabase_storage_btree_node_ce;
+zend_class_entry *zatabase_storage_btree_node_element_ce;
 zend_class_entry *zatabase_storage_exception_ce;
 zend_class_entry *zatabase_table_ce;
 zend_class_entry *zatabase_table_column_ce;
@@ -130,6 +136,9 @@ static PHP_MINIT_FUNCTION(zatabase)
 	ZEPHIR_INIT(ZataBase_Schema_Alter);
 	ZEPHIR_INIT(ZataBase_Schema_Exception);
 	ZEPHIR_INIT(ZataBase_Storage_Adapter_File);
+	ZEPHIR_INIT(ZataBase_Storage_BTree);
+	ZEPHIR_INIT(ZataBase_Storage_BTree_Node);
+	ZEPHIR_INIT(ZataBase_Storage_BTree_Node_Element);
 	ZEPHIR_INIT(ZataBase_Storage_Exception);
 	ZEPHIR_INIT(ZataBase_Table);
 	ZEPHIR_INIT(ZataBase_Table_Column);
@@ -139,6 +148,9 @@ static PHP_MINIT_FUNCTION(zatabase)
 	ZEPHIR_INIT(zatabase_0__closure);
 	ZEPHIR_INIT(zatabase_1__closure);
 	ZEPHIR_INIT(zatabase_2__closure);
+	ZEPHIR_INIT(zatabase_3__closure);
+	ZEPHIR_INIT(zatabase_4__closure);
+	ZEPHIR_INIT(zatabase_5__closure);
 
 #if PHP_VERSION_ID < 50500
 	setlocale(LC_ALL, old_lc_all);

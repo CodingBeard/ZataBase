@@ -113,12 +113,4 @@ class Column {
         return false;
     }
 
-    /**
-    * Serialize self
-    */
-    public function __toString()
-    {
-        return json_encode([this->name, this->type, this->flags]);
-    }
-
 }

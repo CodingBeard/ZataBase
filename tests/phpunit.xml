@@ -14,6 +14,10 @@
             <file>Helper/ArrayToObjectTest.php</file>
             <file>Helper/CsvTest.php</file>
             <file>DbTest.php</file>
+            <file>Storage/BTree/Node/ElementTest.php</file>
+            <file>Storage/BTree/NodeTest.php</file>
+            <file>Storage/BTree/LevelTest.php</file>
+            <file>Storage/BTreeTest.php</file>
             <file>Table/ColumnTest.php</file>
             <file>Execute/Condition/BetweenTest.php</file>
             <file>Execute/Condition/EqualsTest.php</file>

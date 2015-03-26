@@ -18,18 +18,9 @@ use ZataBase\Table\Column;
 
 class Table extends Injectable
 {
-
-    /**
-    * Table's id in the schema
-    * @var string
-    */
-    public offset {
-        set, get
-    };
-
     /**
     * Table's file handler
-    * @var \SplFileObject
+    * @var \ZataBase\Helper\FileHandler
     */
     public file {
         set, get
@@ -85,10 +76,6 @@ class Table extends Injectable
     public function __construct(const string! name, const array! columns = [], const array! relations = [], const var increment = false)
     {
         var column, relation;
-
-        if name == "Hats" {
-            //print_r(this->{"storage"}->scanDir());
-        }
 
         let this->name = name;
         let this->increment = increment;

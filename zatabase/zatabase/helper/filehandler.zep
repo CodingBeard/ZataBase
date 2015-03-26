@@ -35,6 +35,26 @@ class FileHandler extends \SplFileObject {
     }
 
     /**
+    * Return the positions of the start of each line of the file
+    */
+    public function getLinePositions() -> array
+    {
+        array positions;
+
+        this->fseek(0, SEEK_SET);
+
+        let positions = [];
+
+        while this->valid() {
+            let positions[] = this->ftell();
+            this->current();
+            this->next();
+        }
+        array_pop(positions);
+        return positions;
+    }
+
+    /**
     * Delete line(s) from the file
     * @param int offset line number
     */
@@ -142,17 +162,17 @@ class FileHandler extends \SplFileObject {
     * Add a csv line to the file
     * @param array values
     */
-    public function putcsv(const int! offset, const array! values)
+    public function putcsv(const int! offset, const array! values) -> int
     {
         this->fseek(offset, SEEK_SET);
-        this->fputcsv(values, ",", "\"");
+        return this->fputcsv(values, ",", "\"");
     }
 
     /**
     * Add a csv line to the file
     * @param array values
     */
-    public function appendcsv(const array! values)
+    public function appendcsv(const array! values) -> int
     {
         this->fseek(0, SEEK_END);
         return this->fputcsv(values, ",", "\"");
@@ -162,14 +182,15 @@ class FileHandler extends \SplFileObject {
     * Add a csv line to the file
     * @param array values
     */
-    public function appendcsvs(const array! values)
+    public function appendcsvs(const array! values) -> int
     {
-        var row;
+        var row, length = 0;
         this->fseek(0, SEEK_END);
 
         for row in values {
-            this->fputcsv(row, ",", "\"");
+            let length = length + this->fputcsv(row, ",", "\"");
         }
+        return length;
     }
 
     /**

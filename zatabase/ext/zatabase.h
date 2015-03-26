@@ -40,6 +40,9 @@
 #include "zatabase/schema/alter.zep.h"
 #include "zatabase/schema/exception.zep.h"
 #include "zatabase/storage/adapter/file.zep.h"
+#include "zatabase/storage/btree.zep.h"
+#include "zatabase/storage/btree/node.zep.h"
+#include "zatabase/storage/btree/node/element.zep.h"
 #include "zatabase/storage/exception.zep.h"
 #include "zatabase/table.zep.h"
 #include "zatabase/table/column.zep.h"
@@ -50,5 +53,8 @@
 #include "zatabase/0__closure.zep.h"
 #include "zatabase/1__closure.zep.h"
 #include "zatabase/2__closure.zep.h"
+#include "zatabase/3__closure.zep.h"
+#include "zatabase/4__closure.zep.h"
+#include "zatabase/5__closure.zep.h"
 
 #endif

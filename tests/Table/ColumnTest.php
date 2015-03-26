@@ -36,15 +36,4 @@ class ColumnTest extends PHPUnit_Framework_TestCase
 
         $this->assertTrue($column->hasFlag(Column::INCREMENT_FLAG));
     }
-
-    /**
-     * @covers            \ZataBase\Table\Column::hasFlag
-     * @uses              \ZataBase\Table\Column
-     */
-    public function testToString()
-    {
-        $column = new Column('Name', Column::INT_TYPE, [Column::INCREMENT_FLAG]);
-
-        $this->assertEquals(json_encode(['Name', Column::INT_TYPE, [Column::INCREMENT_FLAG]]), $column);
-    }
 }

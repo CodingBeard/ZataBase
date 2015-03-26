@@ -45,6 +45,9 @@ if test "$PHP_ZATABASE" = "yes"; then
 	zatabase/schema/alter.zep.c
 	zatabase/schema/exception.zep.c
 	zatabase/storage/adapter/file.zep.c
+	zatabase/storage/btree.zep.c
+	zatabase/storage/btree/node.zep.c
+	zatabase/storage/btree/node/element.zep.c
 	zatabase/storage/exception.zep.c
 	zatabase/table.zep.c
 	zatabase/table/column.zep.c
@@ -54,7 +57,10 @@ if test "$PHP_ZATABASE" = "yes"; then
 	zatabase/table/relations/hasone.zep.c
 	zatabase/0__closure.zep.c
 	zatabase/1__closure.zep.c
-	zatabase/2__closure.zep.c "
+	zatabase/2__closure.zep.c
+	zatabase/3__closure.zep.c
+	zatabase/4__closure.zep.c
+	zatabase/5__closure.zep.c "
 	PHP_NEW_EXTENSION(zatabase, $zatabase_sources, $ext_shared,, )
 	PHP_SUBST(ZATABASE_SHARED_LIBADD)
 

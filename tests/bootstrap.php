@@ -16,7 +16,7 @@ use ZataBase\Exception;
 
 class UnitUtils
 {
-    public static function callMethod($object, $methodName, $arguments)
+    public static function callMethod($object, $methodName, $arguments = [])
     {
         $reflection = new \ReflectionClass(get_class($object));
         $method = $reflection->getMethod($methodName);

@@ -4071,6 +4071,9 @@ $as_echo "#define HAVE_ZATABASE 1" >>confdefs.h
 	zatabase/schema/alter.zep.c
 	zatabase/schema/exception.zep.c
 	zatabase/storage/adapter/file.zep.c
+	zatabase/storage/btree.zep.c
+	zatabase/storage/btree/node.zep.c
+	zatabase/storage/btree/node/element.zep.c
 	zatabase/storage/exception.zep.c
 	zatabase/table.zep.c
 	zatabase/table/column.zep.c
@@ -4080,7 +4083,10 @@ $as_echo "#define HAVE_ZATABASE 1" >>confdefs.h
 	zatabase/table/relations/hasone.zep.c
 	zatabase/0__closure.zep.c
 	zatabase/1__closure.zep.c
-	zatabase/2__closure.zep.c "
+	zatabase/2__closure.zep.c
+	zatabase/3__closure.zep.c
+	zatabase/4__closure.zep.c
+	zatabase/5__closure.zep.c "
 
   ext_builddir=.
   ext_srcdir=$abs_srcdir

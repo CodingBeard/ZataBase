@@ -13,7 +13,7 @@ use ZataBaseBench\encoding;
 
 echo PHP_EOL;
 
-$iterations = 100;
+$iterations = 1000000;
 
 /**/
 $start = time() + microtime();
