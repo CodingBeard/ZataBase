@@ -67,7 +67,7 @@ class Column {
     /**
     * @var int
     */
-    const JSON_TYPE = 5;
+    const DATETIME_TYPE = 5;
 
     /**
     * @var int

@@ -32,11 +32,12 @@ class Node
     }
 
     /**
-    *
+    * Load a node from a file handler
+    * @param \ZataBase\Helper\FileHandler file
     */
     public static function load(<\ZataBase\Helper\FileHandler> file) -> <\ZataBase\Storage\BTree\Node>|bool
     {
-        var nodeInfo, elements;
+        var nodeInfo, csv, elements;
         int count = 0;
 
         let nodeInfo = file->fgetcsv();
@@ -47,9 +48,10 @@ class Node
 
         let elements = [];
 
-        while count < nodeInfo[1] {
+        while count < trim(nodeInfo[1]) {
             file->next();
-            let elements[] = new Element(file->fgetcsv());
+            let csv = file->fgetcsv();
+            let elements[] = new Element(csv[0], csv[1], csv[2], csv[3], csv[4]);
             let count++;
         }
 
@@ -81,12 +83,6 @@ class Node
                 else {
                     return -1;
                 }
-            });
-        }
-        elseif this->elements[0]->getKeyType() == Element::KEY_STRING {
-
-            usort(this->elements, function (var a, var b) {
-                return strcmp(a->getKey(), b->getKey());
             });
         }
         elseif this->elements[0]->getKeyType() == Element::KEY_DATE {
@@ -202,6 +198,22 @@ class Node
     public function getLast() -> <\ZataBase\Storage\BTree\Node\Element>|bool
     {
         return end(this->elements);
+    }
+
+    /**
+    * Convert self to a string for storage
+    */
+    public function toString() -> string
+    {
+        var toString, element;
+
+        let toString = "node," . str_pad(this->count(), 20) . PHP_EOL;
+
+        for element in this->elements {
+            let toString .= element->toString() . PHP_EOL;
+        }
+
+        return substr(toString, 0, -1);
     }
 
 }

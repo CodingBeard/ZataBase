@@ -11,6 +11,7 @@
 namespace ZataBase\Storage\BTree\Node;
 
 use ZataBase\Storage\Exception;
+use ZataBase\Helper\Csv;
 
 class Element
 {
@@ -40,17 +41,17 @@ class Element
 
     /**
     * Byte location of the node with smaller keys than this element
-    * @var int
+    * @var int|string
     */
-    public less {
+    public less = "" {
         get, set
     };
 
     /**
     * Byte location of the node with greater keys than this element
-    * @var int
+    * @var int|string
     */
-    public more {
+    public more = "" {
         get, set
     };
 
@@ -64,54 +65,54 @@ class Element
     /**
     * @var int
     */
+    const KEY_DETECT = 0;
+
+    /**
+    * @var int
+    */
     const KEY_INT = 1;
 
     /**
     * @var int
     */
-    const KEY_STRING = 2;
+    const KEY_DATE = 2;
 
     /**
     * @var int
     */
-    const KEY_DATE = 3;
+    const KEY_DATETIME = 2;
 
     /**
-    * Pass in an array with 4/6 elements in it [key, byteLocation, lessNodeByte?, moreNodeByte?]
     * @param array element
     */
-    public function __construct(array element)
+    public function __construct(const int keyType, const var key, const var byte, const var less = "", const var more = "")
     {
-        if element->count() !== 3 && element->count() !== 4 && element->count() !== 5 {
-            throw new Exception("Element should be an array with 3-5 elements in it [keyType, key, dataByte, lessNodeByte?, moreNodeByte?]");
-        }
-        if element->count() == 3 {
-            let this->key = element[1];
-            let this->byte = (int) element[2];
-        }
-        elseif element->count() == 4 {
-            let this->hasChildren = true;
-            let this->key = element[1];
-            let this->byte = (int) element[2];
-            let this->less = (int) element[3];
-        }
-        elseif element->count() == 5 {
-            let this->hasChildren = true;
-            let this->key = element[1];
-            let this->byte = (int) element[2];
-            let this->less = (int) element[3];
-            let this->more = (int) element[4];
-        }
 
-        if abs(element[0]) {
-            let this->keyType = (int) element[0];
+        if keyType == self::KEY_DETECT {
+            let this->key = key;
+            let this->keyType = this->getType();
         }
         else {
-            let this->keyType = this->getType();
+            let this->keyType = keyType;
         }
 
         if this->keyType == self::KEY_INT {
-            let this->key = (int) this->key;
+            let this->key = (int) trim(key);
+        }
+        else {
+            let this->key = key;
+        }
+
+        let this->byte = (int) trim(byte);
+
+        if strlen(trim(less)) {
+            let this->less = (int) trim(less);
+            let this->hasChildren = true;
+        }
+
+        if strlen(trim(more)) {
+            let this->more = (int) trim(more);
+            let this->hasChildren = true;
         }
     }
 
@@ -121,16 +122,13 @@ class Element
     protected function getType() -> int
     {
         if typeof this->key == "string" {
-
-            if \DateTime::createFromFormat("Y-m-d", this->key) !== false
-            || \DateTime::createFromFormat("Y-m-d H:i:s", this->key) !== false {
-
+            if \DateTime::createFromFormat("Y-m-d", this->key) !== false {
                 return self::KEY_DATE;
             }
-
-            return self::KEY_STRING;
+            elseif \DateTime::createFromFormat("Y-m-d H:i:s", this->key) !== false {
+                return self::KEY_DATE;
+            }
         }
-
         return self::KEY_INT;
     }
 
@@ -144,10 +142,6 @@ class Element
 
             return key - this->key;
         }
-        elseif this->keyType == self::KEY_STRING {
-
-            return strcmp(key, this->key);
-        }
         else {
 
             return strtotime(key) - strtotime(this->key);
@@ -157,16 +151,13 @@ class Element
     /**
     * Return an array of the data stored in this object
     */
-    public function toArray() -> array
+    public function toString() -> array
     {
-        if typeof this->less == "int" {
-
-            if typeof this->more == "int" {
-
-                return [this->keyType, this->key, this->byte, this->less, this->more];
-            }
-            return [this->keyType, this->key, this->byte, this->less];
+        if this->keyType == self::KEY_INT {
+            return Csv::arrayToCsv([this->keyType, str_pad(this->key, 20), str_pad(this->byte, 20), str_pad(this->less, 20), str_pad(this->more, 20)]);
         }
-        return [this->keyType, this->key, this->byte];
+        else {
+            return Csv::arrayToCsv([this->keyType, this->key, str_pad(this->byte, 20), str_pad(this->less, 20), str_pad(this->more, 20)]);
+        }
     }
 }

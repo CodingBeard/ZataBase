@@ -4085,8 +4085,7 @@ $as_echo "#define HAVE_ZATABASE 1" >>confdefs.h
 	zatabase/1__closure.zep.c
 	zatabase/2__closure.zep.c
 	zatabase/3__closure.zep.c
-	zatabase/4__closure.zep.c
-	zatabase/5__closure.zep.c "
+	zatabase/4__closure.zep.c "
 
   ext_builddir=.
   ext_srcdir=$abs_srcdir

@@ -238,7 +238,7 @@ class FileHandler extends \SplFileObject {
     * Get a csv line from the file
     * @param int offset
     */
-    public function getcsv(const var offset = false)
+    public function getcsv(const var offset = false) -> array|bool
     {
         var line;
 
@@ -251,6 +251,7 @@ class FileHandler extends \SplFileObject {
         if strlen(line) {
             return str_getcsv(line);
         }
+        return false;
     }
 
 }

@@ -140,8 +140,6 @@ zatabase/3__closure.lo: /home/tim/github/ZataBase/zatabase/ext/zatabase/3__closu
 	$(LIBTOOL) --mode=compile $(CC)  -I. -I/home/tim/github/ZataBase/zatabase/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /home/tim/github/ZataBase/zatabase/ext/zatabase/3__closure.zep.c -o zatabase/3__closure.lo 
 zatabase/4__closure.lo: /home/tim/github/ZataBase/zatabase/ext/zatabase/4__closure.zep.c
 	$(LIBTOOL) --mode=compile $(CC)  -I. -I/home/tim/github/ZataBase/zatabase/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /home/tim/github/ZataBase/zatabase/ext/zatabase/4__closure.zep.c -o zatabase/4__closure.lo 
-zatabase/5__closure.lo: /home/tim/github/ZataBase/zatabase/ext/zatabase/5__closure.zep.c
-	$(LIBTOOL) --mode=compile $(CC)  -I. -I/home/tim/github/ZataBase/zatabase/ext $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /home/tim/github/ZataBase/zatabase/ext/zatabase/5__closure.zep.c -o zatabase/5__closure.lo 
 $(phplibdir)/zatabase.la: ./zatabase.la
 	$(LIBTOOL) --mode=install cp ./zatabase.la $(phplibdir)
 

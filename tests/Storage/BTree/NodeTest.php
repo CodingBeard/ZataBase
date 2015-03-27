@@ -25,9 +25,9 @@ class NodeTest extends PHPUnit_Framework_TestCase
     public function testConstruct()
     {
         $elements = [
-            new Element([Element::KEY_INT, 1, 2]),
-            new Element([Element::KEY_INT, 3, 4, 5]),
-            new Element([Element::KEY_INT, 6, 7, 8, 9]),
+            new Element(Element::KEY_INT, 1, 2),
+            new Element(Element::KEY_INT, 3, 4, 5),
+            new Element(Element::KEY_INT, 6, 7, 8, 9),
         ];
 
         $node = new Node($elements);
@@ -45,15 +45,15 @@ class NodeTest extends PHPUnit_Framework_TestCase
         $file = new FileHandler('Load', 'w+');
 
         $elements = [
-            new Element([Element::KEY_INT, 1, 2]),
-            new Element([Element::KEY_INT, 3, 4, 5]),
-            new Element([Element::KEY_INT, 6, 7, 8, 9]),
+            new Element(Element::KEY_INT, 1, 2),
+            new Element(Element::KEY_INT, 3, 4, 5),
+            new Element(Element::KEY_INT, 6, 7, 8, 9),
         ];
 
-        $file->appendcsv(['node', 3]);
+        $file->appendcsv(['node', str_pad(3, 20)]);
 
         foreach ($elements as $element) {
-            $file->appendcsv($element->toArray());
+            $file->appendRaw($element->toString());
         }
 
         $file->fseek(0);
@@ -72,9 +72,9 @@ class NodeTest extends PHPUnit_Framework_TestCase
     public function testCount()
     {
         $node = new Node([
-            new Element([Element::KEY_INT, 1, 2]),
-            new Element([Element::KEY_INT, 3, 4, 5]),
-            new Element([Element::KEY_INT, 6, 7, 8, 9]),
+            new Element(Element::KEY_INT, 1, 2),
+            new Element(Element::KEY_INT, 3, 4, 5),
+            new Element(Element::KEY_INT, 6, 7, 8, 9),
         ]);
 
         $this->assertEquals(3, $node->count());
@@ -87,17 +87,17 @@ class NodeTest extends PHPUnit_Framework_TestCase
     public function testSortInt()
     {
         $node = new Node([
-            new Element([Element::KEY_INT, 2, 0]),
-            new Element([Element::KEY_INT, 0, 0]),
-            new Element([Element::KEY_INT, 1, 0]),
+            new Element(Element::KEY_INT, 2, 0),
+            new Element(Element::KEY_INT, 0, 0),
+            new Element(Element::KEY_INT, 1, 0),
         ]);
 
         $node->sort();
 
         $this->assertEquals([
-            new Element([Element::KEY_INT, 0, 0]),
-            new Element([Element::KEY_INT, 1, 0]),
-            new Element([Element::KEY_INT, 2, 0]),
+            new Element(Element::KEY_INT, 0, 0),
+            new Element(Element::KEY_INT, 1, 0),
+            new Element(Element::KEY_INT, 2, 0),
         ], $node->getElements());
     }
 
@@ -108,17 +108,17 @@ class NodeTest extends PHPUnit_Framework_TestCase
     public function testSortDate()
     {
         $node = new Node([
-            new Element([Element::KEY_DATE, '2015-01-03', 0]),
-            new Element([Element::KEY_DATE, '2015-01-01', 0]),
-            new Element([Element::KEY_DATE, '2015-01-02', 0]),
+            new Element(Element::KEY_DATE, '2015-01-03', 0),
+            new Element(Element::KEY_DATE, '2015-01-01', 0),
+            new Element(Element::KEY_DATE, '2015-01-02', 0),
         ]);
 
         $node->sort();
 
         $this->assertEquals([
-            new Element([Element::KEY_DATE, '2015-01-01', 0]),
-            new Element([Element::KEY_DATE, '2015-01-02', 0]),
-            new Element([Element::KEY_DATE, '2015-01-03', 0]),
+            new Element(Element::KEY_DATE, '2015-01-01', 0),
+            new Element(Element::KEY_DATE, '2015-01-02', 0),
+            new Element(Element::KEY_DATE, '2015-01-03', 0),
         ], $node->getElements());
     }
 
@@ -126,21 +126,20 @@ class NodeTest extends PHPUnit_Framework_TestCase
      * @covers            \ZataBase\Storage\BTree\Node::sort
      * @uses              \ZataBase\Storage\BTree\Node
      */
-    public function testSortString()
+    public function testSortDateTime()
     {
         $node = new Node([
-            new Element([Element::KEY_STRING, 'c', 0]),
-            new Element([Element::KEY_STRING, 'b', 0]),
-            new Element([Element::KEY_STRING, 'a', 0]),
+            new Element(Element::KEY_DATETIME, '2015-01-01 00:00:01', 0),
+            new Element(Element::KEY_DATETIME, '2015-01-01 00:00:03', 0),
+            new Element(Element::KEY_DATETIME, '2015-01-01 00:00:02', 0),
         ]);
-
 
         $node->sort();
 
         $this->assertEquals([
-            new Element([Element::KEY_STRING, 'a', 0]),
-            new Element([Element::KEY_STRING, 'b', 0]),
-            new Element([Element::KEY_STRING, 'c', 0]),
+            new Element(Element::KEY_DATETIME, '2015-01-01 00:00:01', 0),
+            new Element(Element::KEY_DATETIME, '2015-01-01 00:00:02', 0),
+            new Element(Element::KEY_DATETIME, '2015-01-01 00:00:03', 0),
         ], $node->getElements());
     }
 
@@ -150,11 +149,11 @@ class NodeTest extends PHPUnit_Framework_TestCase
      */
     public function testAddElement()
     {
-        $node = new Node([new Element([Element::KEY_INT, 1, 2])]);
+        $node = new Node([new Element(Element::KEY_INT, 1, 2)]);
 
-        $node->addElement(new Element([Element::KEY_INT, 3, 4, 5, 6]));
+        $node->addElement(new Element(Element::KEY_INT, 3, 4, 5, 6));
 
-        $this->assertEquals([new Element([Element::KEY_INT, 1, 2]), new Element([Element::KEY_INT, 3, 4, 5, 6])], $node->getElements());
+        $this->assertEquals([new Element(Element::KEY_INT, 1, 2), new Element(Element::KEY_INT, 3, 4, 5, 6)], $node->getElements());
     }
 
     /**
@@ -164,16 +163,16 @@ class NodeTest extends PHPUnit_Framework_TestCase
     public function testRemoveElement()
     {
         $node = new Node([
-            new Element([Element::KEY_INT, 1, 2]),
-            new Element([Element::KEY_INT, 3, 4]),
-            new Element([Element::KEY_INT, 5, 6]),
+            new Element(Element::KEY_INT, 1, 2),
+            new Element(Element::KEY_INT, 3, 4),
+            new Element(Element::KEY_INT, 5, 6),
         ]);
 
         $node->removeElement(3);
 
         $this->assertEquals([
-            0 => new Element([Element::KEY_INT, 1, 2]),
-            2 => new Element([Element::KEY_INT, 5, 6]),
+            0 => new Element(Element::KEY_INT, 1, 2),
+            2 => new Element(Element::KEY_INT, 5, 6),
         ], $node->getElements());
     }
 
@@ -184,19 +183,19 @@ class NodeTest extends PHPUnit_Framework_TestCase
     public function testKasKey()
     {
         $node = new Node([
-            new Element([Element::KEY_INT, 1, 2]),
+            new Element(Element::KEY_INT, 1, 2),
         ]);
 
         $this->assertEquals(false, $node->HasKey(6));
 
 
         $node = new Node([
-            new Element([Element::KEY_INT, 1, 2]),
-            new Element([Element::KEY_INT, 5, 6, 0, 10]),
-            new Element([Element::KEY_INT, 9, 10, 10, 20]),
+            new Element(Element::KEY_INT, 1, 2),
+            new Element(Element::KEY_INT, 5, 6, 0, 10),
+            new Element(Element::KEY_INT, 9, 10, 10, 20),
         ]);
 
-        $this->assertEquals(new Element([Element::KEY_INT, 5, 6, 0, 10]), $node->HasKey(5));
+        $this->assertEquals(new Element(Element::KEY_INT, 5, 6, 0, 10), $node->HasKey(5));
         $this->assertEquals(0, $node->HasKey(4));
         $this->assertEquals(10, $node->HasKey(6));
         $this->assertEquals(10, $node->HasKey(8));
@@ -210,12 +209,12 @@ class NodeTest extends PHPUnit_Framework_TestCase
     public function testGetFirst()
     {
         $node = new Node([
-            new Element([Element::KEY_INT, 1, 2]),
-            new Element([Element::KEY_INT, 3, 4]),
-            new Element([Element::KEY_INT, 5, 6]),
+            new Element(Element::KEY_INT, 1, 2),
+            new Element(Element::KEY_INT, 3, 4),
+            new Element(Element::KEY_INT, 5, 6),
         ]);
 
-        $this->assertEquals(new Element([Element::KEY_INT, 1, 2]), $node->getFirst());
+        $this->assertEquals(new Element(Element::KEY_INT, 1, 2), $node->getFirst());
     }
 
     /**
@@ -225,12 +224,12 @@ class NodeTest extends PHPUnit_Framework_TestCase
     public function testGetElement()
     {
         $node = new Node([
-            new Element([Element::KEY_INT, 1, 2]),
-            new Element([Element::KEY_INT, 3, 4]),
-            new Element([Element::KEY_INT, 5, 6]),
+            new Element(Element::KEY_INT, 1, 2),
+            new Element(Element::KEY_INT, 3, 4),
+            new Element(Element::KEY_INT, 5, 6),
         ]);
 
-        $this->assertEquals(new Element([Element::KEY_INT, 3, 4]), $node->getElement(1));
+        $this->assertEquals(new Element(Element::KEY_INT, 3, 4), $node->getElement(1));
     }
 
     /**
@@ -240,12 +239,31 @@ class NodeTest extends PHPUnit_Framework_TestCase
     public function testGetLast()
     {
         $node = new Node([
-            new Element([Element::KEY_INT, 1, 2]),
-            new Element([Element::KEY_INT, 3, 4]),
-            new Element([Element::KEY_INT, 5, 6]),
+            new Element(Element::KEY_INT, 1, 2),
+            new Element(Element::KEY_INT, 3, 4),
+            new Element(Element::KEY_INT, 5, 6),
         ]);
 
-        $this->assertEquals(new Element([Element::KEY_INT, 5, 6]), $node->getLast());
+        $this->assertEquals(new Element(Element::KEY_INT, 5, 6), $node->getLast());
+    }
+
+    /**
+     * @covers            \ZataBase\Storage\BTree\Node::toString
+     * @uses              \ZataBase\Storage\BTree\Node
+     */
+    public function testToString()
+    {
+        $node = new Node([
+            new Element(Element::KEY_INT, 1, 2),
+            new Element(Element::KEY_INT, 3, 4),
+        ]);
+
+        $this->assertEquals(
+            "node," . str_pad(2, 20)
+            . PHP_EOL
+            . "1," . str_pad(1, 20) . "," . str_pad(2, 20) . "," . str_pad('', 20) . "," . str_pad('', 20)
+            . PHP_EOL
+            . "1," . str_pad(3, 20) . "," . str_pad(4, 20) . "," . str_pad('', 20) . "," . str_pad('', 20), $node->toString());
     }
 
 }

@@ -13,6 +13,7 @@
 use ZataBase\Db;
 use ZataBase\Helper\ArrayToObject;
 use ZataBase\Storage\BTree;
+use ZataBase\Storage\BTree\Node\Element;
 use ZataBase\Tests\UnitUtils;
 
 class BTreeTest extends PHPUnit_Framework_TestCase
@@ -38,7 +39,7 @@ class BTreeTest extends PHPUnit_Framework_TestCase
             $this->btree->getData()->appendcsv([$row]);
         }
 
-        $this->btree->getIndex()->appendRaw("node,1\n1,15,33,21,57\nnode,2\n1,5,8,80,111\n1,10,18,111,146\nnode,1\n1,20,48,185,224\nnode,4\n1,1,0\n1,2,2\n1,3,4\n1,4,6\nnode,4\n1,6,10\n1,7,12\n1,8,14\n1,9,16\nnode,4\n1,11,21\n1,12,24\n1,13,27\n1,14,30\nnode,4\n1,16,36\n1,17,39\n1,18,42\n1,19,45\nnode,4\n1,21,51\n1,22,54\n1,23,57\n1,24,60");
+        $this->btree->getIndex()->appendRaw("node,1                   \n1,15                  ,33                  ,112                 ,310                 \nnode,2                   \n1,5                   ,8                   ,422                 ,792                 \n1,10                  ,18                  ,792                 ,1162                \nnode,1                   \n1,20                  ,48                  ,1532                ,1902                \nnode,4                   \n1,1                   ,0                   ,                    ,                    \n1,2                   ,2                   ,                    ,                    \n1,3                   ,4                   ,                    ,                    \n1,4                   ,6                   ,                    ,                    \nnode,4                   \n1,6                   ,10                  ,                    ,                    \n1,7                   ,12                  ,                    ,                    \n1,8                   ,14                  ,                    ,                    \n1,9                   ,16                  ,                    ,                    \nnode,4                   \n1,11                  ,21                  ,                    ,                    \n1,12                  ,24                  ,                    ,                    \n1,13                  ,27                  ,                    ,                    \n1,14                  ,30                  ,                    ,                    \nnode,4                   \n1,16                  ,36                  ,                    ,                    \n1,17                  ,39                  ,                    ,                    \n1,18                  ,42                  ,                    ,                    \n1,19                  ,45                  ,                    ,                    \nnode,4                   \n1,21                  ,51                  ,                    ,                    \n1,22                  ,54                  ,                    ,                    \n1,23                  ,57                  ,                    ,                    \n1,24                  ,60                  ,                    ,                    ");
 
     }
 
@@ -56,6 +57,7 @@ class BTreeTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf('ZataBase\Storage\BTree', $this->btree);
         $this->assertInstanceOf('ZataBase\Helper\FileHandler', $this->btree->getIndex());
         $this->assertInstanceOf('ZataBase\Helper\FileHandler', $this->btree->getData());
+        $this->assertEquals(Element::KEY_DETECT, $this->btree->getKeyType());
     }
 
     /**
@@ -79,6 +81,24 @@ class BTreeTest extends PHPUnit_Framework_TestCase
     public function testInsertException()
     {
         $this->btree->insert([15, 48]);
+    }
+
+    /**
+     * @covers            \ZataBase\Storage\BTree::insert
+     * @uses              \ZataBase\Storage\BTree
+     */
+    public function testInsertNew()
+    {
+        $this->btree->getIndex()->ftruncate(0);
+        $this->btree->getData()->ftruncate(0);
+        $this->btree->getData()->appendcsv(['a']);
+        $this->btree->insert([1, 0]);
+        $this->btree->getIndex()->fseek(0);
+
+        $this->assertEquals(
+            "node," . str_pad(1, 20) . PHP_EOL
+            . "1," . str_pad(1, 20) . "," . str_pad(0, 20) . "," . str_pad('', 20) . "," . str_pad('', 20) . PHP_EOL,
+            file_get_contents(__DIR__ . "/../database/index"));
     }
 
 }

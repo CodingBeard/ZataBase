@@ -59,8 +59,7 @@ if test "$PHP_ZATABASE" = "yes"; then
 	zatabase/1__closure.zep.c
 	zatabase/2__closure.zep.c
 	zatabase/3__closure.zep.c
-	zatabase/4__closure.zep.c
-	zatabase/5__closure.zep.c "
+	zatabase/4__closure.zep.c "
 	PHP_NEW_EXTENSION(zatabase, $zatabase_sources, $ext_shared,, )
 	PHP_SUBST(ZATABASE_SHARED_LIBADD)
 

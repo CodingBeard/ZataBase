@@ -33,17 +33,27 @@ class BTree extends Injectable
     };
 
     /**
-    * Number of children
+    * Max number of elements
+    * @var int
     */
-    public children = 4 {
+    public elements = 4 {
         set, get
     };
 
     /**
     * Whether the index is unique
+    * @var int
     */
     public unique = true {
         set, get
+    };
+
+    /**
+    * What the type of our key is
+    * @var int
+    */
+    public keyType {
+        get, set
     };
 
     /**
@@ -52,8 +62,18 @@ class BTree extends Injectable
     */
     public function __construct(const string! indexPath, const string! dataPath)
     {
+        var root;
         let this->index = this->{"storage"}->getHandle(indexPath);
         let this->data = this->{"storage"}->getHandle(dataPath);
+
+        let root = Node::load(this->index);
+
+        if !root {
+            let this->keyType = Element::KEY_DETECT;
+        }
+        else {
+            let this->keyType = root->getFirst()->getKeyType();
+        }
     }
 
     /**
@@ -62,33 +82,31 @@ class BTree extends Injectable
     */
     public function find(const var key) -> array|bool
     {
-        var element;
+        var result;
 
-        this->index->fseek(0);
-        if empty(this->index->fgetcsv()) {
+        if empty(this->index->getcsv(0)) {
             return false;
         }
 
-        let element = this->locate(0, key);
+        let result = this->locate(0, key);
 
-        if element {
-            this->data->fseek(element->getByte());
-            return this->data->fgetcsv();
+        if typeof result == "object" {
+            if result instanceof "\ZataBase\Storage\BTree\Node\Element" {
+                return this->data->getcsv(result->getByte());
+            }
         }
-        return false;
+        return result;
     }
 
     /**
     * Locate a node and search for the key's element
     * @param string|int key
     */
-    protected function locate(const int byte, const var key) -> <\ZataBase\Storage\BTree\Node\Element>|bool
+    protected function locate(const int byte, const var key) -> bool|<\ZataBase\Storage\BTree\Node>|<\ZataBase\Storage\BTree\Node\Element>
     {
         var csv, node, element;
 
-        this->index->fseek(byte);
-
-        let csv = this->index->fgetcsv();
+        let csv = this->index->getcsv(byte);
 
         if empty(csv) {
             return false;
@@ -107,6 +125,9 @@ class BTree extends Injectable
             elseif typeof element == "int" {
                 return self::locate(element, key);
             }
+            else {
+                return node;
+            }
         }
         return false;
     }
@@ -117,10 +138,28 @@ class BTree extends Injectable
     */
     public function insert(const array! index)
     {
-        if this->locate(0, index[0]) {
-            throw new Exception("The provided Key: '" . index[0] . "' must be unique.");
+        var result, newNode;
+
+        let result = this->locate(0, index[0]);
+
+        if !result {
+            let newNode = new Node([
+                new Element(Element::KEY_DETECT, index[0], index[1])
+            ]);
+            return this->index->appendRaw(newNode->toString());
+        }
+        elseif typeof result == "object" {
+            if result instanceof "\ZataBase\Storage\BTree\Node\Element" {
+                throw new Exception("The provided Key: '" . index[0] . "' must be unique.");
+            }
         }
 
+        if result->count() < this->elements {
+            result->addElement(new Element(Element::KEY_DETECT, index[0], index[1]));
+        }
+        else {
+
+        }
     }
 
 }

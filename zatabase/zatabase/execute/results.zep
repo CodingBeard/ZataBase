@@ -91,8 +91,7 @@ class Results implements \SeekableIterator, \ArrayAccess {
 
         if typeof this->rows == "array" {
             for offset in this->rows {
-                this->table->file->fseek(offset);
-                let arrayResults[] = this->table->file->fgetcsv();
+                let arrayResults[] = this->table->file->getcsv(offset);
             }
             return arrayResults;
         }
