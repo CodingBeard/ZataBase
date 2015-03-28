@@ -34,50 +34,50 @@ class BTreeTest extends PHPUnit_Framework_TestCase
         ]));
 
         file_put_contents(__DIR__ . "/../database/index",
-              "node,1                                                                               \n"
-            . "2,15                  ,33                  ,1                   ,2                   \n"
-            . "0,                    ,                    ,                    ,                    \n"
-            . "0,                    ,                    ,                    ,                    \n"
-            . "0,                    ,                    ,                    ,                    \n"
-            . "node,2                                                                               \n"
-            . "2,5                   ,8                   ,3                   ,4                   \n"
-            . "2,10                  ,18                  ,4                   ,5                   \n"
-            . "0,                    ,                    ,                    ,                    \n"
-            . "0,                    ,                    ,                    ,                    \n"
-            . "node,1                                                                               \n"
-            . "2,20                  ,48                  ,6                   ,7                   \n"
-            . "0,                    ,                    ,                    ,                    \n"
-            . "0,                    ,                    ,                    ,                    \n"
-            . "0,                    ,                    ,                    ,                    \n"
-            . "node,4                                                                               \n"
-            . "2,1                   ,0                   ,                    ,                    \n"
-            . "2,2                   ,2                   ,                    ,                    \n"
-            . "2,3                   ,4                   ,                    ,                    \n"
-            . "2,4                   ,6                   ,                    ,                    \n"
-            . "node,4                                                                               \n"
-            . "2,6                   ,10                  ,                    ,                    \n"
-            . "2,7                   ,12                  ,                    ,                    \n"
-            . "2,8                   ,14                  ,                    ,                    \n"
-            . "2,9                   ,16                  ,                    ,                    \n"
-            . "node,4                                                                               \n"
-            . "2,11                  ,21                  ,                    ,                    \n"
-            . "2,12                  ,24                  ,                    ,                    \n"
-            . "2,13                  ,27                  ,                    ,                    \n"
-            . "2,14                  ,30                  ,                    ,                    \n"
-            . "node,4                                                                               \n"
-            . "2,16                  ,36                  ,                    ,                    \n"
-            . "2,17                  ,39                  ,                    ,                    \n"
-            . "2,18                  ,42                  ,                    ,                    \n"
-            . "2,19                  ,45                  ,                    ,                    \n"
-            . "node,4                                                                               \n"
-            . "2,21                  ,51                  ,                    ,                    \n"
-            . "2,22                  ,54                  ,                    ,                    \n"
-            . "2,23                  ,57                  ,                    ,                    \n"
-            . "0,                    ,                    ,                    ,                    \n");
+              "node,1                   ,                                                           " . PHP_EOL
+            . "2,15                  ,28                  ,1                   ,2                   " . PHP_EOL
+            . "                                                                                     " . PHP_EOL
+            . "                                                                                     " . PHP_EOL
+            . "                                                                                     " . PHP_EOL
+            . "node,2                   ,0                                                          " . PHP_EOL
+            . "2,5                   ,8                   ,3                   ,4                   " . PHP_EOL
+            . "2,10                  ,18                  ,4                   ,5                   " . PHP_EOL
+            . "                                                                                     " . PHP_EOL
+            . "                                                                                     " . PHP_EOL
+            . "node,1                   ,0                                                          " . PHP_EOL
+            . "2,20                  ,38                  ,6                   ,7                   " . PHP_EOL
+            . "                                                                                     " . PHP_EOL
+            . "                                                                                     " . PHP_EOL
+            . "                                                                                     " . PHP_EOL
+            . "node,4                   ,1                                                          " . PHP_EOL
+            . "2,1                   ,0                   ,                    ,                    " . PHP_EOL
+            . "2,2                   ,2                   ,                    ,                    " . PHP_EOL
+            . "2,3                   ,4                   ,                    ,                    " . PHP_EOL
+            . "2,4                   ,6                   ,                    ,                    " . PHP_EOL
+            . "node,4                   ,1                                                          " . PHP_EOL
+            . "2,6                   ,10                  ,                    ,                    " . PHP_EOL
+            . "2,7                   ,12                  ,                    ,                    " . PHP_EOL
+            . "2,8                   ,14                  ,                    ,                    " . PHP_EOL
+            . "2,9                   ,16                  ,                    ,                    " . PHP_EOL
+            . "node,4                   ,1                                                          " . PHP_EOL
+            . "2,11                  ,20                  ,                    ,                    " . PHP_EOL
+            . "2,12                  ,22                  ,                    ,                    " . PHP_EOL
+            . "2,13                  ,24                  ,                    ,                    " . PHP_EOL
+            . "2,14                  ,26                  ,                    ,                    " . PHP_EOL
+            . "node,4                   ,2                                                          " . PHP_EOL
+            . "2,16                  ,30                  ,                    ,                    " . PHP_EOL
+            . "2,17                  ,32                  ,                    ,                    " . PHP_EOL
+            . "2,18                  ,34                  ,                    ,                    " . PHP_EOL
+            . "2,19                  ,36                  ,                    ,                    " . PHP_EOL
+            . "node,4                   ,2                                                          " . PHP_EOL
+            . "2,21                  ,40                  ,                    ,                    " . PHP_EOL
+            . "2,22                  ,42                  ,                    ,                    " . PHP_EOL
+            . "2,23                  ,44                  ,                    ,                    " . PHP_EOL
+            . "                                                                                     " . PHP_EOL);
 
         $this->btree = new BTree('index', 'data');
 
-        foreach (range(1, 23) as $row) {
+        foreach (range('a', 'w') as $row) {
             $this->btree->getData()->appendcsv([$row]);
         }
     }
@@ -97,6 +97,7 @@ class BTreeTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf('ZataBase\Helper\FileHandler', $this->btree->getIndex());
         $this->assertInstanceOf('ZataBase\Helper\FileHandler', $this->btree->getData());
         $this->assertEquals(Element::KEY_INT, $this->btree->getKeyType());
+        $this->assertEquals(strlen(str_pad('', 85) . PHP_EOL) * 5, $this->btree->getNodeLength());
     }
 
     /**
@@ -107,7 +108,7 @@ class BTreeTest extends PHPUnit_Framework_TestCase
     public function testFind()
     {
         foreach (range(1, 23) as $row) {
-            $this->assertEquals([$row], $this->btree->find($row));
+            $this->assertEquals([chr(96 + $row)], $this->btree->find($row));
         }
     }
 
@@ -128,12 +129,9 @@ class BTreeTest extends PHPUnit_Framework_TestCase
     {
 
         $this->assertEquals(
-              "node,1                                                                               \n"
-            . "2,20                  ,48                  ,6                   ,7                   \n"
-            . "0,                    ,                    ,                    ,                    \n"
-            . "0,                    ,                    ,                    ,                    \n"
-            . "0,                    ,                    ,                    ,                    \n",
-            UnitUtils::callMethod($this->btree, 'getParent', $this->btree->find(23))->toString());
+              "node,1                   ,0                                                          " . PHP_EOL
+            . "2,20                  ,38                  ,6                   ,7                   ",
+            UnitUtils::callMethod($this->btree, 'getParent', [$this->btree->find(24)])->toString());
     }
 
     /**
@@ -190,9 +188,43 @@ class BTreeTest extends PHPUnit_Framework_TestCase
      */
     public function testInsertIndexWithRoom()
     {
-        $this->btree->getData()->appendcsv([24]);
-        $this->btree->insertIndex([24, 60]);
-        $this->assertEquals([24], $this->btree->find(24));
+        $this->btree->getData()->appendcsv(['x']);
+        $this->btree->insertIndex([24, 46]);
+        $this->assertEquals(['x'], $this->btree->find(24));
+    }
+
+    /**
+     * @covers            \ZataBase\Storage\BTree::insertIndex
+     * @uses              \ZataBase\Storage\BTree
+     */
+    public function testInsertIndexWithoutRoom()
+    {
+        $this->btree->getData()->appendcsv(['x']);
+        $this->btree->insertIndex([24, 46]);
+
+        $this->btree->getData()->appendcsv(['y']);
+        $this->btree->insertIndex([25, 48]);
+
+        $this->assertEquals(['y'], $this->btree->find(25));
+    }
+
+    /**
+     * @covers            \ZataBase\Storage\BTree::insert
+     * @uses              \ZataBase\Storage\BTree
+     */
+    public function testInsert()
+    {
+        $this->btree->getIndex()->ftruncate(0);
+        $this->btree->getData()->ftruncate(0);
+
+        $this->btree->insert(['a'], 1);
+        $this->assertEquals(['a'], $this->btree->find(1));
+        $this->btree->insert(['b'], 2);
+        $this->assertEquals(['b'], $this->btree->find(2));
+        $this->btree->insert(['c'], 3);
+        $this->assertEquals(['c'], $this->btree->find(3));
+        $this->btree->insert(['d'], 4);
+        $this->assertEquals(['d'], $this->btree->find(4));
     }
 
 }

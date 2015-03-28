@@ -10,16 +10,22 @@
 
 namespace ZataBase\Helper;
 
-class FileHandler extends \SplFileObject {
+class FileHandler extends \SplFileObject
+{
 
     /**
     * Add a line to the end of the file
     * @param string content
     */
-    public function appendRaw(const var content)
+    public function appendRaw(const var content) -> int
     {
+        var current;
+
         this->fseek(0, SEEK_END);
+        let current = this->ftell();
         this->fwrite(content . PHP_EOL, strlen(content . PHP_EOL));
+
+        return current;
     }
 
     /**
@@ -32,6 +38,15 @@ class FileHandler extends \SplFileObject {
         let count = this->key();
         this->rewind();
         return count;
+    }
+
+    /**
+    * Get the length of the tile
+    */
+    public function length() -> int
+    {
+        this->fseek(0, SEEK_END);
+        return this->ftell();
     }
 
     /**

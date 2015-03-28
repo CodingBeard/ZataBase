@@ -133,25 +133,32 @@ class BTree extends Injectable
         let node = Node::load(this->index);
 
         if node {
+
+            if empty(path) {
+                let path[] = nodeNumber;
+            }
+
             if key === false {
+                if typeof node->getPath() == "array" {
+                    node->setParentId(end(node->getPath()));
+                }
                 node->setPath(path);
                 return node;
             }
 
             let element = node->hasKey(key);
 
-            if empty(path) {
-                let path[] = nodeNumber;
-            }
-
             if typeof element == "object" {
                 return element;
             }
             elseif typeof element == "int" {
                 let path[] = element;
-                return self::locate(element, key, path);
+                return this->locate(element, key, path);
             }
             else {
+                if typeof node->getPath() == "array" {
+                    node->setParentId(end(node->getPath()));
+                }
                 node->setPath(path);
                 return node;
             }
@@ -167,12 +174,34 @@ class BTree extends Injectable
     {
         var path;
 
-        let path = node->getPath();
+        let path = node->path;
         if count(path) > 1 {
             end(path);
             return this->locate(prev(path));
         }
         return false;
+    }
+
+    /**
+    * Insert a row to the data file and add an index pointer
+    * @param array index
+    */
+    public function insert(const array! row, const var key = false)
+    {
+        var location;
+
+        let location = this->data->length();
+        this->data->appendcsv(row);
+
+        if key === false {
+            if this->keyType != Element::KEY_INT {
+                throw new Exception("A key must be provided if the key type is not an int.");
+            }
+
+        }
+        else {
+            this->insertIndex([key, location]);
+        }
     }
 
     /**
@@ -200,10 +229,57 @@ class BTree extends Injectable
         if result->count() < this->elementCount {
             result->addElement(new Element(Element::KEY_DETECT, index[0], index[1]));
             this->index->fseek(result->getId() * this->nodeLength);
-            this->index->fwrite(result->toString());
+            this->index->fwrite(result->toString(this->elementCount));
         }
         else {
+            this->split(result, new Element(Element::KEY_DETECT, index[0], index[1]));
+        }
+    }
 
+    /**
+    * Add an element which splits a node
+    * @param \ZataBase\Storage\BTree\Node node
+    * @param \ZataBase\Storage\BTree\Node\Element element
+    */
+    public function split(<\ZataBase\Storage\BTree\Node> node, <\ZataBase\Storage\BTree\Node\Element> element)
+    {
+        var parent, left, right, rightByteLocation, median;
+
+        node->addElement(element);
+
+        let median = node->elements[ceil(count(node->elements) / 2) - 1];
+
+        unset(node->elements[ceil(count(node->elements) / 2) - 1]);
+
+        let right = array_slice(node->elements, ceil(count(node->elements) / 2));
+
+        let left = array_slice(node->elements, 0, ceil(count(node->elements) / 2) - 1);
+
+        node->setElements(left);
+
+        this->index->fseek(node->getId() * this->nodeLength);
+        this->index->fwrite(node->toString(this->elementCount), this->nodeLength - strlen(PHP_EOL));
+
+        median->setLess(node->getId());
+
+        let rightByteLocation = this->index->appendRaw(new Node(right)->toString(this->elementCount));
+
+        median->setMore(rightByteLocation / this->nodeLength);
+
+        let parent = this->getParent(node);
+
+        if parent {
+            if parent->count() < this->elementCount {
+                parent->addElement(median);
+                this->index->fseek(parent->getId() * this->nodeLength);
+                this->index->fwrite(parent->toString(this->elementCount), this->nodeLength - strlen(PHP_EOL));
+            }
+            else {
+                this->split(parent, median);
+            }
+        }
+        else {
+            //deal with root
         }
     }
 

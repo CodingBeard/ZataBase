@@ -66,7 +66,7 @@ class NodeTest extends PHPUnit_Framework_TestCase
             new Element(Element::KEY_INT, 6, 7, 8, 9),
         ];
 
-        $file->appendcsv(['node', str_pad(3, 20)]);
+        $file->appendRaw(str_pad("node," . str_pad(3, 20) . "," . str_pad(3, 20), 85));
 
         foreach ($elements as $element) {
             $file->appendRaw($element->toString());
@@ -76,6 +76,7 @@ class NodeTest extends PHPUnit_Framework_TestCase
         $node = Node::load($file);
 
         $this->assertInstanceOf('ZataBase\Storage\BTree\Node', $node);
+        $this->assertEquals(3, $node->getParentId());
         $this->assertEquals($elements, $node->getElements());
 
         unlink('Load');
@@ -274,8 +275,10 @@ class NodeTest extends PHPUnit_Framework_TestCase
             new Element(Element::KEY_INT, 3, 4),
         ]);
 
+        $node->setParentId(0);
+
         $this->assertEquals(
-            str_pad("node," . 2, 85)
+            str_pad("node," . str_pad(2, 20) . "," . str_pad(0, 20), 85)
             . PHP_EOL
             . "2," . str_pad(1, 20) . "," . str_pad(2, 20) . "," . str_pad('', 20) . "," . str_pad('', 20)
             . PHP_EOL

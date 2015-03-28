@@ -16,6 +16,14 @@ use ZataBase\Storage\Exception;
 class Node
 {
     /**
+    * Id of the parent node
+    * @var int
+    */
+    public parentId {
+        set, get
+    };
+
+    /**
     * Array of nodes traversed to get here
     * @var array
     */
@@ -53,7 +61,7 @@ class Node
     */
     public static function load(<\ZataBase\Helper\FileHandler> file) -> <\ZataBase\Storage\BTree\Node>|bool
     {
-        var nodeInfo, csv, elements;
+        var node, nodeInfo, csv, elements;
         int count = 0;
 
         let nodeInfo = file->fgetcsv();
@@ -67,11 +75,14 @@ class Node
         while count < trim(nodeInfo[1]) {
             file->next();
             let csv = file->fgetcsv();
-            let elements[] = new Element(csv[0], csv[1], csv[2], csv[3], csv[4]);
+            if isset csv[4] {
+                let elements[] = new Element(csv[0], csv[1], csv[2], csv[3], csv[4]);
+            }
             let count++;
         }
-
-        return new self(elements);
+        let node = new self(elements);
+        node->setParentId(trim(nodeInfo[2]));
+        return node;
     }
 
     /**
@@ -79,15 +90,7 @@ class Node
     */
     public function count() -> int
     {
-        var element, count = 0;
-
-        for element in this->elements {
-            if element->getKeyType() != Element::KEY_BLANK {
-                let count++;
-            }
-
-        }
-        return count;
+        return count(this->elements);
     }
 
     /**
@@ -130,19 +133,7 @@ class Node
     */
     public function addElement(const <\ZataBase\Storage\BTree\Node\Element> element)
     {
-        var key, forElement;
-        if count(this->elements) > this->count() {
-            for key, forElement in this->elements {
-                if forElement->getKeyType() == Element::KEY_BLANK {
-                    let this->elements[key] = element;
-                    break;
-                }
-
-            }
-        }
-        else {
-            let this->elements[] = element;
-        }
+        let this->elements[] = element;
         this->sort();
     }
 
@@ -243,7 +234,7 @@ class Node
     {
         var toString, element, count = 0;
 
-        let toString = str_pad("node," . this->count(), 85) . PHP_EOL;
+        let toString = str_pad("node," . str_pad(this->count(), 20) . "," . str_pad(this->parentId, 20), 85) . PHP_EOL;
 
         for element in this->elements {
             let toString .= element->toString() . PHP_EOL;
@@ -256,7 +247,7 @@ class Node
             }
         }
 
-        return substr(toString, 0, -1);
+        return substr(toString, 0, -strlen(PHP_EOL));
     }
 
 }
