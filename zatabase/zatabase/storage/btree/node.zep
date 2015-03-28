@@ -16,6 +16,14 @@ use ZataBase\Storage\Exception;
 class Node
 {
     /**
+    * Array of nodes traversed to get here
+    * @var array
+    */
+    public path {
+        set, get
+    };
+
+    /**
     * array of Element objects
     * @var int
     */
@@ -29,6 +37,14 @@ class Node
     public function __construct(const array! elements)
     {
         let this->elements = elements;
+    }
+
+    /**
+    * Get the location of this node
+    */
+    public function getId() -> int
+    {
+        return end(this->path);
     }
 
     /**
@@ -63,7 +79,15 @@ class Node
     */
     public function count() -> int
     {
-        return count(this->elements);
+        var element, count = 0;
+
+        for element in this->elements {
+            if element->getKeyType() != Element::KEY_BLANK {
+                let count++;
+            }
+
+        }
+        return count;
     }
 
     /**
@@ -85,7 +109,7 @@ class Node
                 }
             });
         }
-        elseif this->elements[0]->getKeyType() == Element::KEY_DATE {
+        elseif this->elements[0]->getKeyType() == Element::KEY_DATE || this->elements[0]->getKeyType() == Element::KEY_DATETIME {
 
             usort(this->elements, function (var a, var b) {
                 if strtotime(a->getKey()) == strtotime(b->getKey()) {
@@ -106,7 +130,19 @@ class Node
     */
     public function addElement(const <\ZataBase\Storage\BTree\Node\Element> element)
     {
-        let this->elements[] = element;
+        var key, forElement;
+        if count(this->elements) > this->count() {
+            for key, forElement in this->elements {
+                if forElement->getKeyType() == Element::KEY_BLANK {
+                    let this->elements[key] = element;
+                    break;
+                }
+
+            }
+        }
+        else {
+            let this->elements[] = element;
+        }
         this->sort();
     }
 
@@ -203,14 +239,21 @@ class Node
     /**
     * Convert self to a string for storage
     */
-    public function toString() -> string
+    public function toString(const int elementCount = 0) -> string
     {
-        var toString, element;
+        var toString, element, count = 0;
 
-        let toString = "node," . str_pad(this->count(), 20) . PHP_EOL;
+        let toString = str_pad("node," . this->count(), 85) . PHP_EOL;
 
         for element in this->elements {
             let toString .= element->toString() . PHP_EOL;
+        }
+
+        if count(this->elements) < elementCount {
+            while count < (elementCount - count(this->elements)) {
+                let toString .= Element::blankString() . PHP_EOL;
+                let count++;
+            }
         }
 
         return substr(toString, 0, -1);

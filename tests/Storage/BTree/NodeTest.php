@@ -37,6 +37,22 @@ class NodeTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers            \ZataBase\Storage\BTree\Node::getId
+     * @uses              \ZataBase\Storage\BTree\Node
+     */
+    public function testGetId()
+    {
+        $elements = [
+            new Element(Element::KEY_INT, 1, 2),
+        ];
+
+        $node = new Node($elements);
+        $node->setPath([0, 2, 7]);
+
+        $this->assertEquals(7, $node->getId());
+    }
+
+    /**
      * @covers            \ZataBase\Storage\BTree\Node::load
      * @uses              \ZataBase\Storage\BTree\Node
      */
@@ -259,11 +275,15 @@ class NodeTest extends PHPUnit_Framework_TestCase
         ]);
 
         $this->assertEquals(
-            "node," . str_pad(2, 20)
+            str_pad("node," . 2, 85)
             . PHP_EOL
-            . "1," . str_pad(1, 20) . "," . str_pad(2, 20) . "," . str_pad('', 20) . "," . str_pad('', 20)
+            . "2," . str_pad(1, 20) . "," . str_pad(2, 20) . "," . str_pad('', 20) . "," . str_pad('', 20)
             . PHP_EOL
-            . "1," . str_pad(3, 20) . "," . str_pad(4, 20) . "," . str_pad('', 20) . "," . str_pad('', 20), $node->toString());
+            . "2," . str_pad(3, 20) . "," . str_pad(4, 20) . "," . str_pad('', 20) . "," . str_pad('', 20)
+            . PHP_EOL
+            . Element::blankString()
+            . PHP_EOL
+            . Element::blankString(), $node->toString(4));
     }
 
 }

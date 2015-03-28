@@ -36,7 +36,7 @@ class BTree extends Injectable
     * Max number of elements
     * @var int
     */
-    public elements = 4 {
+    public elementCount = 4 {
         set, get
     };
 
@@ -57,6 +57,14 @@ class BTree extends Injectable
     };
 
     /**
+    * How many bytes each node is
+    * @var int
+    */
+    public nodeLength {
+        get, set
+    };
+
+    /**
     * @param string indexPath
     * @param string dataPath
     */
@@ -70,9 +78,13 @@ class BTree extends Injectable
 
         if !root {
             let this->keyType = Element::KEY_DETECT;
+            let this->nodeLength = 5 * (85 + strlen(PHP_EOL));
         }
         else {
             let this->keyType = root->getFirst()->getKeyType();
+            this->index->fseek(0);
+            let this->nodeLength = 5 * strlen(this->index->current());
+            this->index->fseek(0);
         }
     }
 
@@ -99,12 +111,16 @@ class BTree extends Injectable
     }
 
     /**
-    * Locate a node and search for the key's element
+    * Locate a node and potentially search for the key's element
+    * @param int nodeNumber
     * @param string|int key
+    * @param array path
     */
-    protected function locate(const int byte, const var key) -> bool|<\ZataBase\Storage\BTree\Node>|<\ZataBase\Storage\BTree\Node\Element>
+    protected function locate(const int nodeNumber, const var key = false, array path = []) -> bool|<\ZataBase\Storage\BTree\Node>|<\ZataBase\Storage\BTree\Node\Element>
     {
-        var csv, node, element;
+        var csv, node, element, byte;
+
+        let byte = nodeNumber * this->nodeLength;
 
         let csv = this->index->getcsv(byte);
 
@@ -117,17 +133,44 @@ class BTree extends Injectable
         let node = Node::load(this->index);
 
         if node {
+            if key === false {
+                node->setPath(path);
+                return node;
+            }
+
             let element = node->hasKey(key);
+
+            if empty(path) {
+                let path[] = nodeNumber;
+            }
 
             if typeof element == "object" {
                 return element;
             }
             elseif typeof element == "int" {
-                return self::locate(element, key);
+                let path[] = element;
+                return self::locate(element, key, path);
             }
             else {
+                node->setPath(path);
                 return node;
             }
+        }
+        return false;
+    }
+
+    /**
+    * Get the parent of a node, or false if it does not have one
+    * @param \ZataBase\Storage\BTree\Node node
+    */
+    protected function getParent(<\ZataBase\Storage\BTree\Node> node) -> <\ZataBase\Storage\BTree\Node>|bool
+    {
+        var path;
+
+        let path = node->getPath();
+        if count(path) > 1 {
+            end(path);
+            return this->locate(prev(path));
         }
         return false;
     }
@@ -136,7 +179,7 @@ class BTree extends Injectable
     * Add an index to the tree, array of [key, byteLocation]
     * @param array index
     */
-    public function insert(const array! index)
+    public function insertIndex(const array! index)
     {
         var result, newNode;
 
@@ -146,7 +189,7 @@ class BTree extends Injectable
             let newNode = new Node([
                 new Element(Element::KEY_DETECT, index[0], index[1])
             ]);
-            return this->index->appendRaw(newNode->toString());
+            return this->index->appendRaw(newNode->toString(this->elementCount));
         }
         elseif typeof result == "object" {
             if result instanceof "\ZataBase\Storage\BTree\Node\Element" {
@@ -154,8 +197,10 @@ class BTree extends Injectable
             }
         }
 
-        if result->count() < this->elements {
+        if result->count() < this->elementCount {
             result->addElement(new Element(Element::KEY_DETECT, index[0], index[1]));
+            this->index->fseek(result->getId() * this->nodeLength);
+            this->index->fwrite(result->toString());
         }
         else {
 

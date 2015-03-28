@@ -97,12 +97,12 @@ class ElementTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(Csv::arrayToCsv([Element::KEY_INT, str_pad(1, 20), str_pad(2, 20), str_pad('', 20), str_pad('', 20)]), $element->toString());
 
 
-        $element = new Element(Element::KEY_DATE, '2015-01-01', str_pad(2, 20), str_pad(3, 20), str_pad(4, 20));
-        $this->assertEquals(Csv::arrayToCsv([Element::KEY_DATE, '2015-01-01', str_pad(2, 20), str_pad(3, 20), str_pad(4, 20)]), $element->toString());
+        $element = new Element(Element::KEY_DATE, str_pad('2015-01-01', 20), str_pad(2, 20), str_pad(3, 20), str_pad(4, 20));
+        $this->assertEquals(Csv::arrayToCsv([Element::KEY_DATE, str_pad('2015-01-01', 20), str_pad(2, 20), str_pad(3, 20), str_pad(4, 20)]), $element->toString());
 
 
-        $element = new Element(Element::KEY_DATETIME, '2015-01-01 00:00:00', str_pad(2, 20), str_pad(3, 20), str_pad(4, 20));
-        $this->assertEquals(Csv::arrayToCsv([Element::KEY_DATETIME, '2015-01-01 00:00:00', str_pad(2, 20), str_pad(3, 20), str_pad(4, 20)]), $element->toString());
+        $element = new Element(Element::KEY_DATETIME, str_pad('2015-01-01 00:00:00', 20), str_pad(2, 20), str_pad(3, 20), str_pad(4, 20));
+        $this->assertEquals(Csv::arrayToCsv([Element::KEY_DATETIME, str_pad('2015-01-01 00:00:00', 20), str_pad(2, 20), str_pad(3, 20), str_pad(4, 20)]), $element->toString());
     }
 
 }

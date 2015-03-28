@@ -33,14 +33,53 @@ class BTreeTest extends PHPUnit_Framework_TestCase
             "databaseDir" => __DIR__ . "/../database"
         ]));
 
+        file_put_contents(__DIR__ . "/../database/index",
+              "node,1                                                                               \n"
+            . "2,15                  ,33                  ,1                   ,2                   \n"
+            . "0,                    ,                    ,                    ,                    \n"
+            . "0,                    ,                    ,                    ,                    \n"
+            . "0,                    ,                    ,                    ,                    \n"
+            . "node,2                                                                               \n"
+            . "2,5                   ,8                   ,3                   ,4                   \n"
+            . "2,10                  ,18                  ,4                   ,5                   \n"
+            . "0,                    ,                    ,                    ,                    \n"
+            . "0,                    ,                    ,                    ,                    \n"
+            . "node,1                                                                               \n"
+            . "2,20                  ,48                  ,6                   ,7                   \n"
+            . "0,                    ,                    ,                    ,                    \n"
+            . "0,                    ,                    ,                    ,                    \n"
+            . "0,                    ,                    ,                    ,                    \n"
+            . "node,4                                                                               \n"
+            . "2,1                   ,0                   ,                    ,                    \n"
+            . "2,2                   ,2                   ,                    ,                    \n"
+            . "2,3                   ,4                   ,                    ,                    \n"
+            . "2,4                   ,6                   ,                    ,                    \n"
+            . "node,4                                                                               \n"
+            . "2,6                   ,10                  ,                    ,                    \n"
+            . "2,7                   ,12                  ,                    ,                    \n"
+            . "2,8                   ,14                  ,                    ,                    \n"
+            . "2,9                   ,16                  ,                    ,                    \n"
+            . "node,4                                                                               \n"
+            . "2,11                  ,21                  ,                    ,                    \n"
+            . "2,12                  ,24                  ,                    ,                    \n"
+            . "2,13                  ,27                  ,                    ,                    \n"
+            . "2,14                  ,30                  ,                    ,                    \n"
+            . "node,4                                                                               \n"
+            . "2,16                  ,36                  ,                    ,                    \n"
+            . "2,17                  ,39                  ,                    ,                    \n"
+            . "2,18                  ,42                  ,                    ,                    \n"
+            . "2,19                  ,45                  ,                    ,                    \n"
+            . "node,4                                                                               \n"
+            . "2,21                  ,51                  ,                    ,                    \n"
+            . "2,22                  ,54                  ,                    ,                    \n"
+            . "2,23                  ,57                  ,                    ,                    \n"
+            . "0,                    ,                    ,                    ,                    \n");
+
         $this->btree = new BTree('index', 'data');
 
-        foreach (range(1, 24) as $row) {
+        foreach (range(1, 23) as $row) {
             $this->btree->getData()->appendcsv([$row]);
         }
-
-        $this->btree->getIndex()->appendRaw("node,1                   \n1,15                  ,33                  ,112                 ,310                 \nnode,2                   \n1,5                   ,8                   ,422                 ,792                 \n1,10                  ,18                  ,792                 ,1162                \nnode,1                   \n1,20                  ,48                  ,1532                ,1902                \nnode,4                   \n1,1                   ,0                   ,                    ,                    \n1,2                   ,2                   ,                    ,                    \n1,3                   ,4                   ,                    ,                    \n1,4                   ,6                   ,                    ,                    \nnode,4                   \n1,6                   ,10                  ,                    ,                    \n1,7                   ,12                  ,                    ,                    \n1,8                   ,14                  ,                    ,                    \n1,9                   ,16                  ,                    ,                    \nnode,4                   \n1,11                  ,21                  ,                    ,                    \n1,12                  ,24                  ,                    ,                    \n1,13                  ,27                  ,                    ,                    \n1,14                  ,30                  ,                    ,                    \nnode,4                   \n1,16                  ,36                  ,                    ,                    \n1,17                  ,39                  ,                    ,                    \n1,18                  ,42                  ,                    ,                    \n1,19                  ,45                  ,                    ,                    \nnode,4                   \n1,21                  ,51                  ,                    ,                    \n1,22                  ,54                  ,                    ,                    \n1,23                  ,57                  ,                    ,                    \n1,24                  ,60                  ,                    ,                    ");
-
     }
 
     protected function tearDown()
@@ -57,7 +96,7 @@ class BTreeTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf('ZataBase\Storage\BTree', $this->btree);
         $this->assertInstanceOf('ZataBase\Helper\FileHandler', $this->btree->getIndex());
         $this->assertInstanceOf('ZataBase\Helper\FileHandler', $this->btree->getData());
-        $this->assertEquals(Element::KEY_DETECT, $this->btree->getKeyType());
+        $this->assertEquals(Element::KEY_INT, $this->btree->getKeyType());
     }
 
     /**
@@ -67,9 +106,34 @@ class BTreeTest extends PHPUnit_Framework_TestCase
      */
     public function testFind()
     {
-        foreach (range(1, 24) as $row) {
+        foreach (range(1, 23) as $row) {
             $this->assertEquals([$row], $this->btree->find($row));
         }
+    }
+
+    /**
+     * @covers            \ZataBase\Storage\BTree::locate
+     * @uses              \ZataBase\Storage\BTree
+     */
+    public function testLocatePath()
+    {
+        $this->assertEquals([0, 2, 7], UnitUtils::callMethod($this->btree, 'locate', [0, 24])->getPath());
+    }
+
+    /**
+     * @covers            \ZataBase\Storage\BTree::locate
+     * @uses              \ZataBase\Storage\BTree
+     */
+    public function testgetParent()
+    {
+
+        $this->assertEquals(
+              "node,1                                                                               \n"
+            . "2,20                  ,48                  ,6                   ,7                   \n"
+            . "0,                    ,                    ,                    ,                    \n"
+            . "0,                    ,                    ,                    ,                    \n"
+            . "0,                    ,                    ,                    ,                    \n",
+            UnitUtils::callMethod($this->btree, 'getParent', $this->btree->find(23))->toString());
     }
 
     /**
@@ -80,25 +144,55 @@ class BTreeTest extends PHPUnit_Framework_TestCase
      */
     public function testInsertException()
     {
-        $this->btree->insert([15, 48]);
+        $this->btree->insertIndex([15, 48]);
     }
 
     /**
-     * @covers            \ZataBase\Storage\BTree::insert
+     * @covers            \ZataBase\Storage\BTree::insertIndex
      * @uses              \ZataBase\Storage\BTree
      */
-    public function testInsertNew()
+    public function testInsertIndexNew()
     {
         $this->btree->getIndex()->ftruncate(0);
         $this->btree->getData()->ftruncate(0);
         $this->btree->getData()->appendcsv(['a']);
-        $this->btree->insert([1, 0]);
-        $this->btree->getIndex()->fseek(0);
+        $this->btree->insertIndex([1, 0]);
 
-        $this->assertEquals(
-            "node," . str_pad(1, 20) . PHP_EOL
-            . "1," . str_pad(1, 20) . "," . str_pad(0, 20) . "," . str_pad('', 20) . "," . str_pad('', 20) . PHP_EOL,
-            file_get_contents(__DIR__ . "/../database/index"));
+        $this->assertEquals(['a'], $this->btree->find(1));
+    }
+
+    /**
+     * @covers            \ZataBase\Storage\BTree::insertIndex
+     * @uses              \ZataBase\Storage\BTree
+     */
+    public function testInsertIndexMultipleWithRoom()
+    {
+        $this->btree->getIndex()->ftruncate(0);
+        $this->btree->getData()->ftruncate(0);
+        $this->btree->getData()->appendcsv(['a']);
+        $this->btree->getData()->appendcsv(['b']);
+        $this->btree->getData()->appendcsv(['c']);
+        $this->btree->getData()->appendcsv(['d']);
+        $this->btree->insertIndex([1, 0]);
+        $this->btree->insertIndex([2, 2]);
+        $this->btree->insertIndex([3, 4]);
+        $this->btree->insertIndex([4, 6]);
+
+        $this->assertEquals(['a'], $this->btree->find(1));
+        $this->assertEquals(['b'], $this->btree->find(2));
+        $this->assertEquals(['c'], $this->btree->find(3));
+        $this->assertEquals(['d'], $this->btree->find(4));
+    }
+
+    /**
+     * @covers            \ZataBase\Storage\BTree::insertIndex
+     * @uses              \ZataBase\Storage\BTree
+     */
+    public function testInsertIndexWithRoom()
+    {
+        $this->btree->getData()->appendcsv([24]);
+        $this->btree->insertIndex([24, 60]);
+        $this->assertEquals([24], $this->btree->find(24));
     }
 
 }

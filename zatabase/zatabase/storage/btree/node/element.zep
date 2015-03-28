@@ -65,22 +65,27 @@ class Element
     /**
     * @var int
     */
-    const KEY_DETECT = 0;
+    const KEY_BLANK = 0;
 
     /**
     * @var int
     */
-    const KEY_INT = 1;
+    const KEY_DETECT = 1;
 
     /**
     * @var int
     */
-    const KEY_DATE = 2;
+    const KEY_INT = 2;
 
     /**
     * @var int
     */
-    const KEY_DATETIME = 2;
+    const KEY_DATE = 3;
+
+    /**
+    * @var int
+    */
+    const KEY_DATETIME = 4;
 
     /**
     * @param array element
@@ -100,7 +105,7 @@ class Element
             let this->key = (int) trim(key);
         }
         else {
-            let this->key = key;
+            let this->key = trim(key);
         }
 
         let this->byte = (int) trim(byte);
@@ -149,15 +154,18 @@ class Element
     }
 
     /**
-    * Return an array of the data stored in this object
+    * Return a string of the data stored in this object
     */
     public function toString() -> array
     {
-        if this->keyType == self::KEY_INT {
-            return Csv::arrayToCsv([this->keyType, str_pad(this->key, 20), str_pad(this->byte, 20), str_pad(this->less, 20), str_pad(this->more, 20)]);
-        }
-        else {
-            return Csv::arrayToCsv([this->keyType, this->key, str_pad(this->byte, 20), str_pad(this->less, 20), str_pad(this->more, 20)]);
-        }
+        return Csv::arrayToCsv([this->keyType, str_pad(this->key, 20), str_pad(this->byte, 20), str_pad(this->less, 20), str_pad(this->more, 20)]);
+    }
+
+    /**
+    * Return a blank string
+    */
+    public static function blankString() -> array
+    {
+        return str_pad("", 86);
     }
 }
