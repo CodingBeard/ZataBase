@@ -315,7 +315,6 @@ class BTreeTest extends PHPUnit_Framework_TestCase
 
         $this->btree->getData()->appendcsv(['y',]);
         $this->btree->insertIndex([25, 48,]);
-        echo PHP_EOL . file_get_contents(__DIR__ . "/../database/index");
 
         $this->assertEquals(['y',], $this->btree->find(25));
         $this->testFind();
@@ -332,33 +331,9 @@ class BTreeTest extends PHPUnit_Framework_TestCase
 
         foreach (range(1, 26) as $row) {
             $this->btree->insert([chr(96 + $row),]);
-            echo chr(96 + $row);
-            echo $row . '--------------' . PHP_EOL . file_get_contents(__DIR__ . "/../database/index") . PHP_EOL;
             foreach (range(1, $row) as $find) {
-                echo $find . ',';
                 $this->assertEquals([chr(96 + $find),], $this->btree->find($find));
             }
-        }
-    }
-
-    /**
-     * @covers            \ZataBase\Storage\BTree::insertIndex
-     * @uses              \ZataBase\Storage\BTree
-     */
-    public function testInsertNewRootLots()
-    {
-        $this->btree->getIndex()->ftruncate(0);
-        $this->btree->getData()->ftruncate(0);
-
-        foreach (range(1, 25) as $row) {
-            $this->btree->insert([chr(96 + $row),]);
-        }
-        //echo file_get_contents(__DIR__ . "/../database/index");
-        //print_r($this->btree->find(1));
-
-        foreach (range(1, 25) as $row) {
-            //echo chr(96 + $row) . PHP_EOL;
-            $this->assertEquals([chr(96 + $row),], $this->btree->find($row));
         }
     }
 

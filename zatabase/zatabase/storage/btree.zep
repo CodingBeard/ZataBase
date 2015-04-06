@@ -79,12 +79,12 @@ class BTree extends Injectable
 
         if !root {
             let this->keyType = Element::KEY_DETECT;
-            let this->nodeLength = 5 * (85 + strlen(PHP_EOL));
+            let this->nodeLength = (this->elementCount + 1) * (85 + strlen(PHP_EOL));
         }
         else {
             let this->keyType = root->getFirst()->getKeyType();
             this->index->fseek(0);
-            let this->nodeLength = 5 * strlen(this->index->current());
+            let this->nodeLength = (this->elementCount + 1) * strlen(this->index->current());
             this->index->fseek(0);
         }
     }
@@ -318,7 +318,7 @@ class BTree extends Injectable
     */
     public function splitNode(<\ZataBase\Storage\BTree\Node> node, <\ZataBase\Storage\BTree\Node\Element> element) -> array
     {
-        var left, right, median, rightElement, rightNode, csv;
+        var left, right, median, rightNode;
 
         node->addElement(element);
 
@@ -337,26 +337,6 @@ class BTree extends Injectable
         median->setMore(this->index->length() / this->nodeLength);
 
         median->setHasChildren(true);
-
-        for rightElement in right {
-            if rightElement->hasChildren {
-                if strlen(rightElement->less) {
-                    let csv = this->index->getcsv(rightElement->less * this->nodeLength);
-                    this->index->fseek(rightElement->less * this->nodeLength);
-
-                    let csv[2] = str_pad(median->getMore(), 20);
-                    this->index->fwrite(Csv::arrayToCsv([csv]), 85);
-                }
-
-                if strlen(rightElement->more) {
-                    let csv = this->index->getcsv(rightElement->more * this->nodeLength);
-                    this->index->fseek(rightElement->more * this->nodeLength);
-
-                    let csv[2] = str_pad(median->getMore(), 20);
-                    this->index->fwrite(Csv::arrayToCsv([csv]), 85);
-                }
-            }
-        }
 
         let rightNode = new Node(right, node->getParentId(), node->getPath());
         rightNode->setId(median->getMore());
@@ -395,34 +375,26 @@ class BTree extends Injectable
 
             let element = new \ZataBase\Storage\BTree\Node\Element(csv[0], csv[1], csv[2], csv[3], csv[4]);
 
-            element->incrementPointers(1);
+            element->incrementPointers(2);
             return element->toString() . PHP_EOL;
         });
-        this->index->fseek(26);
-        this->index->fwrite(" ");
 
-
-        let newRoot = new Node([], false, [0]);
-
-        this->index->prependRaw(newRoot->toString(this->elementCount));
-
-        this->index->fseek(this->nodeLength);
+        this->index->fseek(0);
         let oldRoot = Node::load(this->index);
-        oldRoot->setParentId(0);
         oldRoot->setPath([0, 1]);
 
         let nodeParts = this->splitNode(oldRoot, element);
-
         let left = nodeParts[0], median = nodeParts[1], right = nodeParts[2];
-        this->index->fseek(left->getId() * this->nodeLength);
-        this->index->fwrite(left->toString(this->elementCount), this->nodeLength - strlen(PHP_EOL));
 
-        right->setParentId(0);
-        this->index->appendRaw(right->toString(this->elementCount));
+        this->index->fseek(0);
+        this->index->fwrite(right->toString(this->elementCount), this->nodeLength - strlen(PHP_EOL));
 
-        newRoot->addElement(median);
-        this->index->fseek(newRoot->getId() * this->nodeLength);
-        this->index->fwrite(newRoot->toString(this->elementCount), this->nodeLength - strlen(PHP_EOL));
+        left->setParentId(0);
+        this->index->prependRaw(left->toString(this->elementCount));
+
+        median->setMore(2);
+        let newRoot = new Node([median], false, [0]);
+        this->index->prependRaw(newRoot->toString(this->elementCount));
     }
 
     /**
@@ -430,17 +402,16 @@ class BTree extends Injectable
     * @param \ZataBase\Storage\BTree\Node node
     * @param \ZataBase\Storage\BTree\Node\Element element
     */
-    public function split(<\ZataBase\Storage\BTree\Node> node, <\ZataBase\Storage\BTree\Node\Element> element)
+    public function split(<\ZataBase\Storage\BTree\Node> node, <\ZataBase\Storage\BTree\Node\Element> element, const bool doubleSplit = false)
     {
-        var parent, nodeParts, left, right, median;
+        var parent, nodeParts, left, right, median, rightElement, csv;
 
-        let nodeParts = this->splitNode(node, element);
-
-        let left = nodeParts[0], median = nodeParts[1], right = nodeParts[2];
-
-        let parent = this->getParent(left);
+        let parent = this->getParent(node);
 
         if parent {
+            let nodeParts = this->splitNode(node, element);
+            let left = nodeParts[0], median = nodeParts[1], right = nodeParts[2];
+
             if parent->count() < this->elementCount {
                 this->index->fseek(left->getId() * this->nodeLength);
                 this->index->fwrite(left->toString(this->elementCount), this->nodeLength - strlen(PHP_EOL));
@@ -451,13 +422,70 @@ class BTree extends Injectable
                 parent->addElement(median);
                 this->index->fseek(parent->getId() * this->nodeLength);
                 this->index->fwrite(parent->toString(this->elementCount), this->nodeLength - strlen(PHP_EOL));
+
+
+                for rightElement in right->getElements() {
+                    if rightElement->hasChildren {
+                        if strlen(rightElement->less) {
+                            let csv = this->index->getcsv(rightElement->less * this->nodeLength);
+                            let csv[2] = str_pad(median->getMore(), 20);
+
+                            this->index->fseek(rightElement->less * this->nodeLength);
+                            this->index->fwrite(Csv::arrayToCsv([csv]), 85);
+                        }
+
+                        if strlen(rightElement->more) {
+                            let csv = this->index->getcsv(rightElement->more * this->nodeLength);
+                            let csv[2] = str_pad(median->getMore(), 20);
+
+                            this->index->fseek(rightElement->more * this->nodeLength);
+                            this->index->fwrite(Csv::arrayToCsv([csv]), 85);
+                        }
+                    }
+                }
             }
             else {
-                this->split(parent, median);
+                this->index->fseek(left->getId() * this->nodeLength);
+                this->index->fwrite(left->toString(this->elementCount), this->nodeLength - strlen(PHP_EOL));
+
+                right->setParentId(parent->getId());
+                this->index->appendRaw(right->toString(this->elementCount));
+
+                this->split(parent, median, true);
             }
         }
         else {
             this->splitRoot(element);
+            if doubleSplit {
+                this->index->fseek(2 * this->nodeLength);
+                let node = Node::load(this->index);
+                node->getLast()->incrementPointers(2);
+
+                node->setPath([0, 2]);
+
+                this->index->fseek(node->getId() * this->nodeLength);
+                this->index->fwrite(node->toString(this->elementCount), this->nodeLength - strlen(PHP_EOL));
+
+                for rightElement in node->getElements() {
+                    if rightElement->hasChildren {
+                        if strlen(rightElement->less) {
+                            let csv = this->index->getcsv(rightElement->less * this->nodeLength);
+                            let csv[2] = str_pad(2, 20);
+
+                            this->index->fseek(rightElement->less * this->nodeLength);
+                            this->index->fwrite(Csv::arrayToCsv([csv]), 85);
+                        }
+
+                        if strlen(rightElement->more) {
+                            let csv = this->index->getcsv(rightElement->more * this->nodeLength);
+                            let csv[2] = str_pad(2, 20);
+
+                            this->index->fseek(rightElement->more * this->nodeLength);
+                            this->index->fwrite(Csv::arrayToCsv([csv]), 85);
+                        }
+                    }
+                }
+            }
         }
     }
 
