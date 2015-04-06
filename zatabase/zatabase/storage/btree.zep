@@ -11,6 +11,7 @@
 namespace ZataBase\Storage;
 
 use ZataBase\Di\Injectable;
+use ZataBase\Helper\Csv;
 use ZataBase\Storage\BTree\Node;
 use ZataBase\Storage\BTree\Node\Element;
 
@@ -172,12 +173,82 @@ class BTree extends Injectable
     */
     protected function getParent(<\ZataBase\Storage\BTree\Node> node) -> <\ZataBase\Storage\BTree\Node>|bool
     {
-        var path;
+        if node->getParentId() !== false {
+            return this->locate(node->getParentId());
+        }
+        return false;
+    }
 
-        let path = node->path;
-        if count(path) > 1 {
-            end(path);
-            return this->locate(prev(path));
+    /**
+    * Find the node containing the smallest/first key
+    * @param int nodeNumber
+    * @param array path
+    */
+    public function getFirstNode(var nodeNumber = false, array path = []) -> <\ZataBase\Storage\BTree\Node>|bool
+    {
+        var csv, node, element, byte;
+
+        if nodeNumber === false {
+            let nodeNumber = 0;
+        }
+
+        let byte = nodeNumber * this->nodeLength;
+
+        let csv = this->index->getcsv(byte);
+
+        if empty(csv) {
+            return false;
+        }
+
+        this->index->fseek(byte);
+
+        let node = Node::load(this->index);
+
+        if node {
+            let path[] = nodeNumber;
+            for element in node->getElements() {
+                if typeof element->getLess() == "int" {
+                    return this->getFirstNode(element->getLess(), path);
+                }
+            }
+            return node;
+        }
+        return false;
+    }
+
+    /**
+    * Find the node containing the largest/last key
+    * @param int nodeNumber
+    * @param array path
+    */
+    public function getLastNode(var nodeNumber = false, array path = []) -> <\ZataBase\Storage\BTree\Node>|bool
+    {
+        var csv, node, element, byte;
+
+        if nodeNumber === false {
+            let nodeNumber = 0;
+        }
+
+        let byte = nodeNumber * this->nodeLength;
+
+        let csv = this->index->getcsv(byte);
+
+        if empty(csv) {
+            return false;
+        }
+
+        this->index->fseek(byte);
+
+        let node = Node::load(this->index);
+
+        if node {
+            let path[] = nodeNumber;
+            for element in array_reverse(node->getElements()) {
+                if typeof element->getMore() == "int" {
+                    return this->getLastNode(element->getMore(), path);
+                }
+            }
+            return node;
         }
         return false;
     }
@@ -186,9 +257,9 @@ class BTree extends Injectable
     * Insert a row to the data file and add an index pointer
     * @param array index
     */
-    public function insert(const array! row, const var key = false)
+    public function insert(const array! row, var key = false)
     {
-        var location;
+        var location, lastNode;
 
         let location = this->data->length();
         this->data->appendcsv(row);
@@ -197,11 +268,15 @@ class BTree extends Injectable
             if this->keyType != Element::KEY_INT {
                 throw new Exception("A key must be provided if the key type is not an int.");
             }
-
+            let lastNode = this->getLastNode();
+            if lastNode {
+                let key = lastNode->getLast()->getKey() + 1;
+            }
+            else {
+                let key = 1;
+            }
         }
-        else {
-            this->insertIndex([key, location]);
-        }
+        this->insertIndex([key, location]);
     }
 
     /**
@@ -241,9 +316,9 @@ class BTree extends Injectable
     * @param \ZataBase\Storage\BTree\Node node
     * @param \ZataBase\Storage\BTree\Node\Element element
     */
-    public function split(<\ZataBase\Storage\BTree\Node> node, <\ZataBase\Storage\BTree\Node\Element> element)
+    public function splitNode(<\ZataBase\Storage\BTree\Node> node, <\ZataBase\Storage\BTree\Node\Element> element) -> array
     {
-        var parent, left, right, rightByteLocation, median;
+        var left, right, median, rightElement, rightNode, csv;
 
         node->addElement(element);
 
@@ -257,19 +332,122 @@ class BTree extends Injectable
 
         node->setElements(left);
 
-        this->index->fseek(node->getId() * this->nodeLength);
-        this->index->fwrite(node->toString(this->elementCount), this->nodeLength - strlen(PHP_EOL));
-
         median->setLess(node->getId());
 
-        let rightByteLocation = this->index->appendRaw(new Node(right)->toString(this->elementCount));
+        median->setMore(this->index->length() / this->nodeLength);
 
-        median->setMore(rightByteLocation / this->nodeLength);
+        median->setHasChildren(true);
 
-        let parent = this->getParent(node);
+        for rightElement in right {
+            if rightElement->hasChildren {
+                if strlen(rightElement->less) {
+                    let csv = this->index->getcsv(rightElement->less * this->nodeLength);
+                    this->index->fseek(rightElement->less * this->nodeLength);
+
+                    let csv[2] = str_pad(median->getMore(), 20);
+                    this->index->fwrite(Csv::arrayToCsv([csv]), 85);
+                }
+
+                if strlen(rightElement->more) {
+                    let csv = this->index->getcsv(rightElement->more * this->nodeLength);
+                    this->index->fseek(rightElement->more * this->nodeLength);
+
+                    let csv[2] = str_pad(median->getMore(), 20);
+                    this->index->fwrite(Csv::arrayToCsv([csv]), 85);
+                }
+            }
+        }
+
+        let rightNode = new Node(right, node->getParentId(), node->getPath());
+        rightNode->setId(median->getMore());
+
+        return [node, median, rightNode];
+    }
+
+    /**
+    * Add an element to the root node which causes it to split
+    * @param \ZataBase\Storage\BTree\Node\Element element
+    */
+    public function splitRoot(<\ZataBase\Storage\BTree\Node\Element> element)
+    {
+        var oldRoot, newRoot, nodeParts, left, right, median;
+
+        this->index->callback(function (var line) {
+            var csv, child, element;
+
+            if substr(line, 0, 4) == "node" {
+                let csv = str_getcsv(line);
+                if !strlen(trim(csv[2])) {
+                    let csv[2] = str_pad(0, 20);
+                }
+                else {
+                    let child = trim(csv[2]);
+                    let csv[2] = str_pad(child + 1, 20);
+                }
+                return str_pad(\ZataBase\Helper\Csv::arrayToCsv(csv), 85) . PHP_EOL;
+            }
+
+            let csv = str_getcsv(line);
+
+            if !isset csv[4] {
+                return line;
+            }
+
+            let element = new \ZataBase\Storage\BTree\Node\Element(csv[0], csv[1], csv[2], csv[3], csv[4]);
+
+            element->incrementPointers(1);
+            return element->toString() . PHP_EOL;
+        });
+        this->index->fseek(26);
+        this->index->fwrite(" ");
+
+
+        let newRoot = new Node([], false, [0]);
+
+        this->index->prependRaw(newRoot->toString(this->elementCount));
+
+        this->index->fseek(this->nodeLength);
+        let oldRoot = Node::load(this->index);
+        oldRoot->setParentId(0);
+        oldRoot->setPath([0, 1]);
+
+        let nodeParts = this->splitNode(oldRoot, element);
+
+        let left = nodeParts[0], median = nodeParts[1], right = nodeParts[2];
+        this->index->fseek(left->getId() * this->nodeLength);
+        this->index->fwrite(left->toString(this->elementCount), this->nodeLength - strlen(PHP_EOL));
+
+        right->setParentId(0);
+        this->index->appendRaw(right->toString(this->elementCount));
+
+        newRoot->addElement(median);
+        this->index->fseek(newRoot->getId() * this->nodeLength);
+        this->index->fwrite(newRoot->toString(this->elementCount), this->nodeLength - strlen(PHP_EOL));
+    }
+
+    /**
+    * Add an element which splits a node and can recursively split up the tree
+    * @param \ZataBase\Storage\BTree\Node node
+    * @param \ZataBase\Storage\BTree\Node\Element element
+    */
+    public function split(<\ZataBase\Storage\BTree\Node> node, <\ZataBase\Storage\BTree\Node\Element> element)
+    {
+        var parent, nodeParts, left, right, median;
+
+        let nodeParts = this->splitNode(node, element);
+
+        let left = nodeParts[0], median = nodeParts[1], right = nodeParts[2];
+
+        let parent = this->getParent(left);
 
         if parent {
             if parent->count() < this->elementCount {
+                this->index->fseek(left->getId() * this->nodeLength);
+                this->index->fwrite(left->toString(this->elementCount), this->nodeLength - strlen(PHP_EOL));
+
+                right->setParentId(parent->getId());
+                this->index->appendRaw(right->toString(this->elementCount));
+
                 parent->addElement(median);
                 this->index->fseek(parent->getId() * this->nodeLength);
                 this->index->fwrite(parent->toString(this->elementCount), this->nodeLength - strlen(PHP_EOL));
@@ -279,7 +457,7 @@ class BTree extends Injectable
             }
         }
         else {
-            //deal with root
+            this->splitRoot(element);
         }
     }
 

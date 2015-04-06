@@ -55,5 +55,6 @@
 #include "zatabase/2__closure.zep.h"
 #include "zatabase/3__closure.zep.h"
 #include "zatabase/4__closure.zep.h"
+#include "zatabase/5__closure.zep.h"
 
 #endif

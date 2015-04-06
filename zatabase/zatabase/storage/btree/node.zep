@@ -42,9 +42,15 @@ class Node
     /**
     * @param array elements
     */
-    public function __construct(const array! elements)
+    public function __construct(const array! elements, const var parentId = false, const var path = false)
     {
         let this->elements = elements;
+        if parentId !== false {
+            let this->parentId = parentId;
+        }
+        if path !== false {
+            let this->path = path;
+        }
     }
 
     /**
@@ -53,6 +59,20 @@ class Node
     public function getId() -> int
     {
         return end(this->path);
+    }
+
+    /**
+    * Get the location of this node
+    * @param int id
+    */
+    public function setId(const int id)
+    {
+        if typeof this->path == "array" {
+            let this->path[count(this->path) - 1] = id;
+        }
+        else {
+            let this->path[] = id;
+        }
     }
 
     /**
@@ -81,7 +101,13 @@ class Node
             let count++;
         }
         let node = new self(elements);
-        node->setParentId(trim(nodeInfo[2]));
+
+        if strlen(trim(nodeInfo[2])) {
+            node->setParentId(trim(nodeInfo[2]));
+        }
+        else {
+            node->setParentId(false);
+        }
         return node;
     }
 

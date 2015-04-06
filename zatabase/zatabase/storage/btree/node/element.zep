@@ -154,9 +154,28 @@ class Element
     }
 
     /**
+    * If existing, increment the less and more pointers by increment (can be negative)
+    * @param int increment
+    */
+    public function incrementPointers(const int! increment)
+    {
+        if !this->hasChildren {
+            return;
+        }
+
+        if strlen(this->less) {
+            let this->less = this->less + increment;
+        }
+
+        if strlen(this->more) {
+            let this->more = this->more + increment;
+        }
+    }
+
+    /**
     * Return a string of the data stored in this object
     */
-    public function toString() -> array
+    public function toString() -> string
     {
         return Csv::arrayToCsv([this->keyType, str_pad(this->key, 20), str_pad(this->byte, 20), str_pad(this->less, 20), str_pad(this->more, 20)]);
     }
@@ -166,6 +185,6 @@ class Element
     */
     public static function blankString() -> array
     {
-        return str_pad("", 86);
+        return str_pad("", 85);
     }
 }

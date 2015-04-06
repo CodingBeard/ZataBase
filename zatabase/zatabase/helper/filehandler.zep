@@ -14,6 +14,26 @@ class FileHandler extends \SplFileObject
 {
 
     /**
+    * Prepend a csv line to a file
+    * @param string content
+    */
+    public function prependRaw(const var content)
+    {
+        var rewrite;
+
+        let rewrite = new self(this->getRealPath() . ".write", "w");
+        rewrite->fwrite(content . PHP_EOL);
+        this->rewind();
+        while this->valid() {
+            rewrite->fwrite(this->current());
+            this->current();
+            this->next();
+        }
+        rename(this->getRealPath() . ".write", this->getRealPath());
+        parent::__construct(this->getRealPath(), "c+");
+    }
+
+    /**
     * Add a line to the end of the file
     * @param string content
     */
@@ -191,6 +211,26 @@ class FileHandler extends \SplFileObject
     {
         this->fseek(0, SEEK_END);
         return this->fputcsv(values, ",", "\"");
+    }
+
+    /**
+    * Prepend a csv line to a file
+    * @param string content
+    */
+    public function prependcsv(const array! values)
+    {
+        var rewrite;
+
+        let rewrite = new self(this->getRealPath() . ".write", "w");
+        rewrite->fputcsv(values, ",", "\"");
+        this->rewind();
+        while this->valid() {
+            rewrite->fwrite(this->current());
+            this->current();
+            this->next();
+        }
+        rename(this->getRealPath() . ".write", this->getRealPath());
+        parent::__construct(this->getRealPath(), "c+");
     }
 
     /**

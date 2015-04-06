@@ -166,7 +166,7 @@ class Table extends Injectable
             throw new Exception("You cannot add a relation to this table with a non-existent child column.");
         }
 
-        if strlen(relation->getChildTable()) == 0 {
+        if empty relation->getChildTable() {
             relation->setChildTable(this->name);
         }
 
